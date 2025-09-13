@@ -26,7 +26,7 @@ MineGuard/
 1. Clonar el repositorio:
 
 ```bash
-git clone <url_del_repo>
+git clone https://github.com/NessX4/MineGuard.git
 cd MineGuard/backend
 ```
 
@@ -39,7 +39,7 @@ python -m venv venv
 venv\Scripts\activate
 ```
 
-**Linux / Mac**
+**Linux**
 
 ```bash
 python3 -m venv venv
@@ -55,11 +55,11 @@ pip install -r requirements.txt
 4. Configurar las variables de entorno en `.env`:
 
 ```ini
-DB_USER=mineguardadmin
-DB_PASSWORD=TuPasswordSegura123!
-DB_HOST=dbmysql-mineg.mysql.database.azure.com
-DB_PORT=3306
-DB_NAME=mineguarddb
+DB_USER=DB_USER
+DB_PASSWORD=DB_PASSWORD!
+DB_HOST=DB_HOST
+DB_PORT=DB_PORT
+DB_NAME=DB_NAME
 ```
 ⚠️ No subir el .env al repositorio.
 
