@@ -1,0 +1,95 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24">
+    <div class="row justify-content-between">
+      <div class="col-lg-4">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <input
+            matInput
+            placeholder="Search User"
+            (keyup)="applyFilter($any($event.target).value)"
+          />
+          <mat-icon matSuffix>
+            <i-tabler name="search" class="icon-20"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="col-lg-4 d-flex align-items-center justify-content-end">
+        <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
+          Add User
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+<mat-card class="cardWithShadow">
+  <mat-card-content class="p-24">
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" class="w-100">
+        <ng-container matColumnDef="#">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
+          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Name
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.name }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Email
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">{{ element.email }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="created">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Register Date
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.created  | date : "fullDate" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="rol">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Rol
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.rol }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Action
+          </th>
+          <td mat-cell *matCellDef="let element" class="action-link">
+            <a
+              (click)="openDialog('Update', element)"
+              class="m-r-10 cursor-pointer"
+              ><i-tabler name="edit" class="icon-18"></i-tabler
+            ></a>
+            <a
+              (click)="openDialog('Delete', element)"
+              class="m-r-10 cursor-pointer"
+            >
+              <i-tabler name="trash" class="icon-18"></i-tabler>
+            </a>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons
+      ></mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>

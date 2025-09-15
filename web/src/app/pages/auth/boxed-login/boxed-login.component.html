@@ -1,0 +1,165 @@
+<div class="blank-layout-container justify-content-center align-items-center">
+  <div
+    class="position-relative overflow-hidden auth-bg min-vh-100 h-100 w-100 d-flex align-items-center justify-content-center"
+  >
+    <div class="d-flex align-items-center justify-content-center w-100">
+      <div class="row justify-content-center w-100 my-5 my-xl-0">
+        <div class="col-sm-11 d-flex flex-column justify-content-center">
+          <div
+            class="bg-white mb-0 rounded auth-login m-auto w-100 overflow-hidden"
+          >
+            <div class="row gx-0">
+              <!-- ------------------------------------------------- -->
+              <!-- Part 1 -->
+              <!-- ------------------------------------------------- -->
+              <div class="col-lg-6 b-r-1 p-r-0">
+                <div class="row justify-content-center p-y-24">
+                  <div class="col-lg-12">
+                    <div class="p-30">
+                      <h4 class="f-w-700 f-s-34 m-t-24 m-b-8">
+                        Continúa con tu experiencia de aprendizaje
+                      </h4>
+                      <form
+                        class="m-t-30"
+                        [formGroup]="form"
+                        (ngSubmit)="submit()"
+                      >
+                        <mat-label class="f-s-14 f-w-600 m-b-12 d-block"
+                          >Correo electrónico</mat-label
+                        >
+                        <mat-form-field
+                          appearance="outline"
+                          class="w-100"
+                          color="primary"
+                        >
+                          <input matInput formControlName="email" />
+                          @if(f['email'].touched && f['email'].invalid) {
+                          <mat-hint class="m-b-16 error-msg">
+                            @if(f['email'].errors &&
+                            f['email'].errors['required']) {
+                            <div class="text-error">
+                              El correo es requerido.
+                            </div>
+                            } @if(f['email'].errors &&
+                            f['email'].errors['minlength']) {
+                            <div class="text-error">
+                              El correo debe ser válido.
+                            </div>
+                            }
+                          </mat-hint>
+                          }
+                        </mat-form-field>
+
+                        <!-- password -->
+                        <div
+                          class="d-flex align-items-center justify-content-between m-b-12"
+                        >
+                          <mat-label class="f-s-14 f-w-600 d-block"
+                            >Contraseña</mat-label
+                          >
+                          <a
+                            [routerLink]="['/authentication/boxed-forgot-pwd']"
+                            class="text-primary f-w-600 text-decoration-none m-l-auto f-s-12"
+                            >Olvidé mi contraseña</a
+                          >
+                        </div>
+
+                        <mat-form-field
+                          appearance="outline"
+                          class="w-100"
+                          color="primary"
+                        >
+                          <input
+                            matInput
+                            type="password"
+                            formControlName="password"
+                          />
+                          @if(f['password'].touched && f['password'].invalid) {
+                          <mat-hint class="m-b-16 error-msg">
+                            @if( f['password'].errors &&
+                            f['password'].errors['required']) {
+                            <div class="text-error">
+                              La contraseña es requerida.
+                            </div>
+                            }
+                          </mat-hint>
+                          }
+                        </mat-form-field>
+
+                        <div class="m-b-12">
+                          <mat-checkbox color="primary"
+                            >Recordarme</mat-checkbox
+                          >
+                        </div>
+                        <button
+                          mat-flat-button
+                          color="primary"
+                          class="w-100"
+                          [disabled]="!form.valid"
+                        >
+                          Iniciar sesión
+                        </button>
+                        <!-- input -->
+                      </form>
+                      <div class="or-border m-t-30 text-muted">
+                        Otras opciones de inicio de sesión
+                      </div>
+                      <div class="row justify-content-center m-t-24">
+                        <div class="col-6">
+                          <button mat-stroked-button class="w-100">
+                            <div class="d-flex align-items-center">
+                              <img
+                                src="/assets/images/svgs/google-icon.svg"
+                                alt="google"
+                                width="16"
+                                class="m-r-8"
+                              />
+                              <span class="d-none d-lg-block m-r-4"
+                                >Entrar con
+                              </span>
+                              Google
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+
+                      <span class="d-block f-w-500 d-block m-t-24"
+                        >Nuevo en TeachU?
+                        <a
+                          [routerLink]="['/auth/boxed-register']"
+                          class="text-decoration-none text-primary f-w-500 f-s-14"
+                        >
+                          Crear una cuenta</a
+                        >
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- ------------------------------------------------- -->
+              <!-- Part 2 -->
+              <!-- ------------------------------------------------- -->
+              <div class="col-lg-6 d-none d-lg-block">
+                <div
+                  class="row justify-content-center align-items-center h-100"
+                >
+                  <div class="col-lg-12">
+                    <div
+                      class="d-flex align-items-center justify-content-center w-100 h-100 flex-column gap-9 text-center"
+                    >
+                      <img
+                        src="/assets/images/auth/login.svg"
+                        alt="login-side-img"
+                        class="img-fluid"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+.testimonials-section {
+  background-color: #f9f9f9;
+  border-radius: 1rem;
+  padding: 2rem 1rem;
+
+  .quote {
+    font-size: 1.1rem;
+    font-style: italic;
+    color: #333;
+    background-color: #ffffff;
+    border-left: 5px solid #3B6EA5; // RAL 5007
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    min-height: 160px;
+  }
+
+  .case-study {
+    color: #3B6EA5;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: inline-block;
+    margin-top: 0.5rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+
+    &:hover {
+      color: #2e5a88;
+      text-decoration: underline;
+    }
+  }
+
+  strong {
+    color: #222;
+    font-size: 1rem;
+  }
+
+  span.text-muted {
+    font-size: 0.9rem;
+    color: #777;
+  }
+}

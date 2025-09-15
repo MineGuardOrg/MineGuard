@@ -1,0 +1,215 @@
+<mat-card class="cardWithShadow theme-card">
+  <mat-card-header>
+    <mat-card-title class="m-b-0">Add a new Course</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="b-t-1">
+    <mat-stepper #stepper>
+      <mat-step [stepControl]="firstFormGroup">
+        <form class="m-t-24" [formGroup]="firstFormGroup">
+          <ng-template matStepLabel>Course</ng-template>
+          <div class="row g-3">
+            <!-- Campo Course Title -->
+            <div class="col-md-6">
+              <mat-label class="f-w-600 m-b-8 d-block">Course Title</mat-label>
+              <mat-form-field
+                appearance="outline"
+                class="w-100"
+                color="primary"
+              >
+                <input matInput formControlName="title" />
+              </mat-form-field>
+            </div>
+
+            <!-- Campo Portada -->
+            <div class="col-md-6">
+              <mat-label class="f-w-600 m-b-8 d-block">Cover Image</mat-label>
+              <mat-form-field
+                appearance="outline"
+                class="w-100"
+                color="primary"
+              >
+                <input matInput formControlName="imgUrl" />
+              </mat-form-field>
+              <!-- <mat-form-field
+                appearance="outline"
+                class="w-100"
+                color="primary"
+              >
+                <ngx-mat-file-input
+                  [formControl]="fileControl"
+                  accept=".jpg,.jpeg,.png"
+                ></ngx-mat-file-input>
+              </mat-form-field> -->
+            </div>
+          </div>
+
+          <!-- input -->
+          <mat-label class="f-w-600 m-b-8 d-block">Description</mat-label>
+          <mat-form-field appearance="outline" class="w-100" color="primary">
+            <textarea
+              matInput
+              rows="3"
+              formControlName="description"
+            ></textarea>
+          </mat-form-field>
+
+          <div class="row g-3">
+            <!-- Campo Level -->
+            <div class="col-md-6">
+              <mat-label class="f-w-600 m-b-8 d-block">Categories</mat-label>
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-select formControlName="categoryId" multiple>
+                  <mat-option
+                    *ngFor="let category of categories"
+                    [value]="category.id"
+                  >
+                    {{ category.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Campo Cost -->
+            <div class="col-md-6">
+              <mat-label class="f-w-600 m-b-8 d-block">Cost</mat-label>
+              <mat-form-field
+                appearance="outline"
+                class="w-100"
+                color="primary"
+              >
+                <input matInput type="number" formControlName="cost" />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <mat-label class="f-w-600 m-b-8 d-block">Level</mat-label>
+          <mat-radio-group formControlName="level">
+            <mat-radio-button color="primary" value="Beginner" class="me-3"
+              >Beginner</mat-radio-button
+            >
+            <mat-radio-button color="primary" value="Intermediate" class="me-3"
+              >Intermediate</mat-radio-button
+            >
+            <mat-radio-button color="primary" value="Advanced"
+              >Advanced</mat-radio-button
+            >
+          </mat-radio-group>
+
+          <div class="text-right">
+            <button mat-flat-button color="primary" matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="secondFormGroup">
+        <form class="m-t-24" [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Lesson</ng-template>
+          <div>
+            <div class="row g-3">
+              <div class="col-md-2">
+                <mat-label class="f-w-600 d-block m-b-16"
+                  >Orden de la lección</mat-label
+                >
+                <mat-form-field appearance="outline" class="w-100">
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="order"
+                    required
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-5">
+                <mat-label class="f-w-600 d-block m-b-16"
+                  >Lesson Title</mat-label
+                >
+                <mat-form-field
+                  appearance="outline"
+                  class="w-100"
+                  color="primary"
+                >
+                  <input
+                    matInput
+                    formControlName="lessonTitle"
+                    placeholder="Ej. Introducción al curso"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-5">
+                <mat-label class="f-w-600 d-block m-b-16"
+                  >Chapter Title</mat-label
+                >
+                <mat-form-field appearance="outline" class="w-100">
+                  <input matInput formControlName="chapterTitle" required />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- input -->
+            <mat-label class="f-w-600 d-block m-b-16">Description</mat-label>
+            <mat-form-field appearance="outline" class="w-100">
+              <textarea
+                rows="3"
+                matInput
+                formControlName="description"
+                required
+              ></textarea>
+            </mat-form-field>
+
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block text-dark"
+              >Video URL</mat-label
+            >
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input
+                matInput
+                formControlName="videoUrl"
+                placeholder="Ej. www.tuvideo.com"
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="d-flex align-items-center justify-content-between">
+            <button mat-flat-button color="warn" matStepperPrevious>
+              Back
+            </button>
+            <button mat-flat-button color="primary" matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Finish</ng-template>
+        <h4 class="mat-headline-6 m-t-24">Términos y condiciones</h4>
+        <p class="m-t-8 f-s-14">
+          Al continuar, confirmas que el contenido del curso que estás a punto
+          de publicar es original o cuentas con los derechos necesarios para
+          distribuirlo. No se permite la publicación de material que infrinja
+          derechos de autor, contenga contenido ofensivo, inapropiado o que
+          viole nuestras políticas de uso.
+          <br /><br />
+          Nos reservamos el derecho de revisar, suspender o eliminar cualquier
+          curso que no cumpla con estas condiciones. Asegúrate de que toda la
+          información proporcionada sea precisa y esté actualizada.
+        </p>
+        <mat-checkbox color="primary" [(ngModel)]="termsAccepted" required>
+          Acepto los términos y condiciones
+        </mat-checkbox>
+
+        <div class="d-flex justify-content-between m-t-16">
+          <button mat-flat-button color="warn" matStepperPrevious>
+            Volver
+          </button>
+          <button
+            mat-flat-button
+            color="primary"
+            [disabled]="!termsAccepted"
+            (click)="finish()"
+          >
+            Finalizar
+          </button>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </mat-card-content>
+</mat-card>

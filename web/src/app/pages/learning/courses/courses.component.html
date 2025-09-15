@@ -1,0 +1,94 @@
+<mat-card class="course-app cardWithShadow">
+  <mat-card-content class="p-24">
+    <div class="row justify-content-between">
+      <div class="col-lg-4">
+        <mat-form-field
+          appearance="outline"
+          class="w-100 hide-hint"
+          color="primary"
+        >
+          <input
+            matInput
+            (keyup)="applyFilter($event)"
+            placeholder="Search here"
+          />
+          <mat-icon matSuffix>
+            <i-tabler name="search" class="icon-20"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="col-lg-3 mt-xs-12 mt-lg-0">
+        <mat-form-field
+          appearance="outline"
+          class="w-100 hide-hint"
+          color="primary"
+        >
+          <mat-label>Category</mat-label>
+          <mat-select
+            required
+            [value]="selectedCategory"
+            (selectionChange)="ddlChange($event)"
+          >
+            <mat-option value="All" selected>All</mat-option>
+            <mat-option value="Web">Web</mat-option>
+            <mat-option value="Android">Android</mat-option>
+            <mat-option value="Angular">Angular</mat-option>
+            <mat-option value="Design">Design</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<div class="row justify-content-center">
+  <div
+    class="col-sm-6 col-lg-4"
+    *ngFor="let course of courseList; trackBy: trackByimgUrl"
+  >
+    <mat-card
+      class="cardWithShadow card2 position-relative card-hover"
+      (click)="DetailCourses(course.id)"
+    >
+      <img mat-card-image [src]="course.imgUrl" alt="{{ course.title }}" />
+
+      <mat-card-content class="p-b-24 p-t-12">
+        <mat-card-title>{{ course.title }}</mat-card-title>
+
+        <span class="text-muted f-s-14 f-w-600">
+          {{ course.teacherName }}
+        </span>
+
+        <div
+          class="d-flex align-items-center justify-content-between m-t-16 gap-3"
+        >
+          <!-- Estrellas dinámicas -->
+          <div class="d-flex gap-3 m-l-4">
+            <h6 class="text-warning mat-body-2 f-w-600 m-r-4">
+              {{ course.averageRating }}
+            </h6>
+            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+              <i-tabler
+                [name]="
+                  star <= Math.floor(course.averageRating)
+                    ? 'star'
+                    : star - course.averageRating <= 0.5
+                    ? 'star-half'
+                    : 'star'
+                "
+                [ngClass]="{
+                  'fill-warning': star <= course.averageRating,
+                  'fill-muted': star > course.averageRating
+                }"
+                class="icon-18"
+              ></i-tabler>
+            </ng-container>
+            <span class="text-muted f-s-14 m-l-4">
+              ({{ course.reviewCount }})
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

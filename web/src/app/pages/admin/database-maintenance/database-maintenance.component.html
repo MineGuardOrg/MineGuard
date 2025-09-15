@@ -1,0 +1,148 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content>
+    <div class="row justify-content-between m-b-8">
+      <div class="col-sm-6 col-lg-6">
+        <mat-card-title>Select tables for backup</mat-card-title>
+        <mat-card-subtitle class="mat-body-1">
+          Single or multiple selection
+        </mat-card-subtitle>
+      </div>
+      <div class="col-sm-6 col-lg-6">
+        <div style="display: flex; align-items: center; gap: 10px">
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="exportSelected('sql')"
+          >
+            Export SQL
+          </button>
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="exportSelected('csv')"
+          >
+            Export CSV
+          </button>
+
+          <mat-form-field
+            appearance="outline"
+            class="w-100 hide-hint"
+            style="flex: 1"
+          >
+            <input
+              matInput
+              (keyup)="applyFilter($event)"
+              placeholder="Search"
+              #input
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" class="w-100">
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef class="p-l-0">
+            <mat-checkbox
+              (change)="masterToggle()"
+              [checked]="isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()"
+              color="primary"
+              [aria-label]="checkboxLabel()"
+            ></mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row" class="p-l-0">
+            <mat-checkbox
+              (click)="$event.stopPropagation()"
+              (change)="selection.toggle(row)"
+              color="primary"
+              [checked]="selection.isSelected(row)"
+              [aria-label]="checkboxLabel(row)"
+            ></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Table Name -->
+        <ng-container matColumnDef="name">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="f-w-600 mat-subtitle-1 f-s-14"
+          >
+            Table Name
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
+
+        <!-- Column Count -->
+        <ng-container matColumnDef="columnCount">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="f-w-600 mat-subtitle-1 f-s-14"
+          >
+            Columns
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.columnCount }}</td>
+        </ng-container>
+
+        <!-- Row Count -->
+        <ng-container matColumnDef="rowsCount">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="f-w-600 mat-subtitle-1 f-s-14"
+          >
+            Rows
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.rowsCount }}</td>
+        </ng-container>
+
+        <!-- Size KB -->
+        <ng-container matColumnDef="sizeKb">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="f-w-600 mat-subtitle-1 f-s-14"
+          >
+            Size (KB)
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.sizeKb }}</td>
+        </ng-container>
+
+        <!-- Update Time -->
+        <ng-container matColumnDef="updateTime">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="f-w-600 mat-subtitle-1 f-s-14"
+          >
+            Last Updated
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{
+              element.updateTime ? (element.updateTime | date : "short") : "N/A"
+            }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          (click)="selection.toggle(row)"
+        ></tr>
+      </table>
+    </div>
+  </mat-card-content>
+  <div class="spinner-overlay" *ngIf="loading">
+    <mat-progress-spinner
+      mode="indeterminate"
+      diameter="50"
+      strokeWidth="5"
+      color="primary"
+    ></mat-progress-spinner>
+  </div>
+</mat-card>

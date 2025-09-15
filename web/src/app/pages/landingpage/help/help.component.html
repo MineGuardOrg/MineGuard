@@ -1,0 +1,275 @@
+<mat-sidenav-container>
+  <mat-sidenav-content class="">
+    <!-- ------------------------------------------------------------------
+    Header
+    ------------------------------------------------------------------ -->
+    <mat-toolbar class="topbar topbar-xl m-auto">
+      <div class="container full-width p-xs-6">
+        <!-- --------------------------------------------------------------- -->
+        <div class="branding p-x-0">
+          <img
+            src="../../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
+            class="align-middle m-2"
+            alt="logo"
+            width="170px"
+          />
+        </div>
+        <!-- --------------------------------------------------------------- -->
+
+        <!-- --------------------------------------------------------------- -->
+        <!--  Links -->
+        <!-- --------------------------------------------------------------- -->
+        <span class="flex-1-auto"></span>
+
+        <div class="d-none d-lg-flex">
+          <button
+            mat-button
+            class="m-x-8 f-s-16 f-w-500"
+            [routerLink]="['/landingpage']"
+          >
+            Inicio
+          </button>
+          <button
+            mat-button
+            class="m-x-8 f-s-16 f-w-500"
+            [routerLink]="['/teaching']"
+          >
+            Enseña en TeachU
+          </button>
+
+          <button
+            mat-stroked-button
+            class="m-x-8"
+            color="primary"
+            style="font-weight: bold"
+            [routerLink]="['/auth/boxed-login']"
+          >
+            Iniciar sesión
+          </button>
+
+          <button
+            mat-flat-button
+            class="m-x-8"
+            color="primary"
+            style="font-weight: bold"
+            [routerLink]="['/auth/boxed-register']"
+          >
+            Registrate
+          </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <button
+          mat-icon-button
+          (click)="filterNavRight.toggle()"
+          class="d-flex d-lg-none"
+        >
+          <i-tabler name="menu-2" class="icon-20 d-flex"></i-tabler>
+        </button>
+      </div>
+    </mat-toolbar>
+    <!-- ------------------------------------------------------------------
+    End Header
+    ------------------------------------------------------------------ -->
+
+    <!-- ------------------------------------------------------------------
+    Banner
+    ------------------------------------------------------------------ -->
+    <div class="overflow-hidden banner-section bg-light">
+      <div class="container">
+        <div class="row">
+          <div
+            class="col-lg-6 d-flex align-items-center justify-content-center"
+          >
+            <div class="text-center" style="padding: 80px 20px">
+              <h1 class="banner-title m-0">
+                <span class="text-primary">¿Cómo podemos ayudarte?</span>
+              </h1>
+            </div>
+          </div>
+          <div
+            class="col-lg-6 d-flex align-items-center justify-content-center"
+          >
+            <div class="flex-column gap-9 text-center">
+              <img
+                src="/assets/images/teaching/teaching.svg"
+                alt="teaching-img"
+                class="img-fluid"
+                style="height: 400px"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ------------------------------------------------------------------
+    End Banner
+    ------------------------------------------------------------------ -->
+
+    <!-- ------------------------------------------------------------------
+    Reasons
+    ------------------------------------------------------------------ -->
+    <div class="spacer-sm">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-6 col-sm-8">
+            <h1 class="section-title text-center m-t-16">
+              Preguntas Frecuentes
+            </h1>
+          </div>
+        </div>
+        <!-- reasons -->
+        <mat-card class="cardWithShadow">
+          <mat-card-content>
+            <div class="row justify-content-center m-t-16">
+              @for(reason of reasons; track reason.subtitle) {
+              <div class="col-lg-4 col-sm-6 m-b-16">
+                <mat-card class="shadow-none text-center m-b-0">
+                  <mat-card-content class="p-32">
+                    <span
+                      class="icon-48 m-auto m-b-16 d-flex align-items-center justify-content-center rounded bg-{{
+                        reason.color
+                      }}"
+                    >
+                      <span
+                        class="iconify text-white icon-27"
+                        [attr.data-icon]="reason.icon"
+                      ></span>
+                    </span>
+                    <h6 class="m-t-4 mat-subtitle-1 f-s-22 f-w-600 m-b-16">
+                      {{ reason.title }}
+                    </h6>
+                    <span class="f-s-14 d-block text-center f-w-500 m-t-8">
+                      {{ reason.subtitle }}
+                    </span>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    <!-- ------------------------------------------------------------------
+    End Reasons
+    ------------------------------------------------------------------ -->
+
+    <!-- ------------------------------------------------------------------
+    Become an instructor
+    ------------------------------------------------------------------ -->
+    <div class="overflow-hidden banner-section bg-light">
+      <div class="container">
+        <div class="row">
+          <div
+            class="col-lg-12 d-flex align-items-center justify-content-center"
+          >
+            <div class="text-center" style="padding: 80px 20px">
+              <h1 class="banner-title m-0">
+                <span class="text-primary"
+                  >¿Aún necesitas ayuda?
+                </span>
+              </h1>
+              <p class="f-s-18 m-t-12 m-0 banner-subtitle">
+                <!-- Únete a una de las tiendas virtuales de aprendizaje en línea más
+                grandes del mundo. -->
+                ¿Tienes más dudas? Nuestro equipo de soporte está listo para brindarte la ayuda que necesitas de forma rápida y personalizada.
+              </p>
+              <button
+                mat-flat-button
+                class="m-t-16"
+                color="primary"
+                style="font-weight: bold; width: 250px"
+              >
+                Obtener ayuda
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ------------------------------------------------------------------
+    End Become an instructor
+    ------------------------------------------------------------------ -->
+
+    <app-footer></app-footer>
+  </mat-sidenav-content>
+
+  <!-- ------------------------------------------------------------------
+    Mobile Sidebar
+    ------------------------------------------------------------------ -->
+  <mat-sidenav
+    #filterNavRight
+    mode="over"
+    position="end"
+    class="filter-sidebar"
+  >
+    <div>
+      <div class="branding">
+        <img
+          src="../../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
+          class="align-middle m-2"
+          alt="logo"
+          width="170px"
+        />
+      </div>
+      <div class="p-x-16">
+        <a
+          [routerLink]="['/authentication/boxed-login']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
+            >Iniciar sesión</span
+          >
+        </a>
+        <a
+          [routerLink]="['/authentication/boxed-register']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
+            >Registrar</span
+          >
+        </a>
+        <a
+          [routerLink]="['/views/aboutus']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">¿Quiénes somos?</span>
+        </a>
+        <a
+          [routerLink]="['/views/employment']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Empleo</span>
+        </a>
+        <a
+          [routerLink]="['/views/teaching']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Enseña en TeachU</span>
+        </a>
+        <a
+          [routerLink]="['/views/']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Invitar a amigos</span>
+        </a>
+        <a
+          [routerLink]="['/views/help']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Ayuda y asistencia</span>
+        </a>
+        <a
+          [routerLink]="['/views/privacy']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Política de privacidad</span>
+        </a>
+      </div>
+    </div>
+  </mat-sidenav>
+  <!-- ------------------------------------------------------------------
+    End mobile Sidebar
+    ------------------------------------------------------------------ -->
+</mat-sidenav-container>

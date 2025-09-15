@@ -1,0 +1,419 @@
+<mat-sidenav-container>
+  <mat-sidenav-content class="">
+    <!-- ------------------------------------------------------------------
+    Header
+    ------------------------------------------------------------------ -->
+    <mat-toolbar class="topbar topbar-xl m-auto">
+      <div class="container full-width p-xs-6">
+        <!-- --------------------------------------------------------------- -->
+        <div class="branding p-x-0">
+          <img
+            src="../../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
+            class="align-middle m-2"
+            alt="logo"
+            width="170px"
+          />
+        </div>
+        <!-- --------------------------------------------------------------- -->
+
+        <!-- --------------------------------------------------------------- -->
+        <!--  Links -->
+        <!-- --------------------------------------------------------------- -->
+        <span class="flex-1-auto"></span>
+
+        <div class="d-none d-lg-flex">
+          <button
+            mat-button
+            class="m-x-8 f-s-16 f-w-500"
+            [routerLink]="['/landingpage']"
+          >
+            Inicio
+          </button>
+          <button
+            mat-button
+            class="m-x-8 f-s-16 f-w-500"
+            [routerLink]="['/teaching']"
+          >
+            Enseña en TeachU
+          </button>
+
+          <button
+            mat-stroked-button
+            class="m-x-8"
+            color="primary"
+            style="font-weight: bold"
+            [routerLink]="['/auth/boxed-login']"
+          >
+            Iniciar sesión
+          </button>
+
+          <button
+            mat-flat-button
+            class="m-x-8"
+            color="primary"
+            style="font-weight: bold"
+            [routerLink]="['/auth/boxed-register']"
+          >
+            Registrate
+          </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <button
+          mat-icon-button
+          (click)="filterNavRight.toggle()"
+          class="d-flex d-lg-none"
+        >
+          <i-tabler name="menu-2" class="icon-20 d-flex"></i-tabler>
+        </button>
+      </div>
+    </mat-toolbar>
+    <!-- ------------------------------------------------------------------
+    End Header
+    ------------------------------------------------------------------ -->
+
+    <!-- ------------------------------------------------------------------
+    Banner
+    ------------------------------------------------------------------ -->
+    <div class="overflow-hidden banner-section bg-light">
+      <div class="container">
+        <div class="row">
+          <div
+            class="col-lg-6 d-flex align-items-center justify-content-center"
+          >
+            <div class="text-center" style="padding: 80px 20px">
+              <h1 class="banner-title m-0">
+                <span class="text-primary">Enseña con nosotros</span>
+              </h1>
+              <p class="f-s-18 m-t-12 m-0 banner-subtitle">
+                Conviértete en instructor y comparte tu conocimiento con los
+                demás
+              </p>
+            </div>
+          </div>
+          <div
+            class="col-lg-6 d-flex align-items-center justify-content-center"
+          >
+            <div
+              class="flex-column gap-9 text-center"
+            >
+              <img
+                src="/assets/images/teaching/teaching.svg"
+                alt="teaching-img"
+                class="img-fluid"
+                style="height: 400px"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ------------------------------------------------------------------
+    End Banner
+    ------------------------------------------------------------------ -->
+
+    <!-- ------------------------------------------------------------------
+    Reasons
+    ------------------------------------------------------------------ -->
+    <div class="spacer-sm">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-6 col-sm-8">
+            <h1 class="section-title text-center m-t-16">
+              Tu eliges de que manera empezar
+            </h1>
+          </div>
+        </div>
+        <!-- reasons -->
+        <mat-card class="cardWithShadow">
+          <mat-card-content>
+            <div class="row justify-content-center m-t-16">
+              @for(reason of reasons; track reason.subtitle) {
+              <div class="col-lg-4 col-sm-6 m-b-16">
+                <mat-card class="shadow-none text-center m-b-0">
+                  <mat-card-content class="p-32">
+                    <span
+                      class="icon-48 m-auto m-b-16 d-flex align-items-center justify-content-center rounded bg-{{ reason.color }}"
+                    >
+                      <span
+                        class="iconify text-white icon-27"
+                        [attr.data-icon]="reason.icon"
+                      ></span>
+                    </span>
+                    <h6 class="m-t-4 mat-subtitle-1 f-s-22 f-w-600 m-b-16">
+                      {{ reason.title }}
+                    </h6>
+                    <span class="f-s-14 d-block text-center f-w-500 m-t-8">
+                      {{ reason.subtitle }}
+                    </span>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    <!-- ------------------------------------------------------------------
+    End Reasons
+    ------------------------------------------------------------------ -->
+
+    <!-- ------------------------------------------------------------------
+    About the program
+    ------------------------------------------------------------------ -->
+    <div class="overflow-hidden banner-section bg-light py-5">
+      <div class="container">
+        <div class="row text-center justify-content-center g-4">
+          <div class="col-6 col-md-2">
+            <h2 class="banner-title m-0">
+              <span class="text-primary">200</span>
+            </h2>
+            <p class="f-s-16 m-t-5 m-0">Usuarios</p>
+          </div>
+          <div class="col-6 col-md-2">
+            <h2 class="banner-title m-0">
+              <span class="text-primary">150</span>
+            </h2>
+            <p class="f-s-16 m-t-5 m-0">Registros</p>
+          </div>
+          <div class="col-6 col-md-2">
+            <h2 class="banner-title m-0">
+              <span class="text-primary">Más de 60</span>
+            </h2>
+            <p class="f-s-16 m-t-5 m-0">Cursos</p>
+          </div>
+          <div class="col-6 col-md-2">
+            <h2 class="banner-title m-0">
+              <span class="text-primary">Más de 50</span>
+            </h2>
+            <p class="f-s-16 m-t-5 m-0">Instructores</p>
+          </div>
+          <div class="col-6 col-md-2">
+            <h2 class="banner-title m-0">
+              <span class="text-primary">Más de 20</span>
+            </h2>
+            <p class="f-s-16 m-t-5 m-0">Categorias</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ------------------------------------------------------------------
+    End about the program
+    ------------------------------------------------------------------ -->
+
+    <!-- ------------------------------------------------------------------
+    How to start
+    ------------------------------------------------------------------ -->
+    <div class="overflow-hidden banner-section">
+      <div class="container">
+        <div class="col-lg-10 justify-content-center m-auto">
+          <div class="text-center">
+            <h1 class="banner-title p-y-16 m-0">
+              <span class="text-dark">Cómo empezar</span>
+            </h1>
+          </div>
+          <mat-card class="shadow-none w-100">
+            <mat-card-content class="b-t-1">
+              <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+                <mat-tab label="Crea tu programa">
+                  <div
+                    class="d-flex align-items-center justify-content-between flex-wrap responsive-section"
+                  >
+                    <div
+                      class="bg-light-primary text-dark f-s-16 mat-body-1 p-16 rounded m-t-12"
+                      style="flex: 1 1 60%"
+                    >
+                      El proceso de creación inicia a partir del interés genuino
+                      y el dominio del conocimiento por parte del instructor.
+                      Posteriormente, es posible identificar una temática con
+                      alto potencial utilizando la herramienta Marketplace
+                      Insights. El diseño pedagógico y el enfoque didáctico
+                      quedan a cargo del docente,quien definirá la manera de
+                      impartir el contenido e imprimir su sello distintivo.
+                    </div>
+                    <img
+                      src="/assets/images/teaching/create-program.svg"
+                      alt="img"
+                      style="flex: 1 1 30%; max-width: 300px"
+                    />
+                  </div>
+                </mat-tab>
+
+                <mat-tab label="Graba tu video">
+                  <div
+                    class="d-flex align-items-center justify-content-between flex-wrap"
+                  >
+                    <div
+                      class="bg-light-primary text-dark f-s-16 mat-body-1 p-16 rounded m-t-12"
+                      style="flex: 1 1 60%"
+                    >
+                      A partir del compromiso personal con el conocimiento y la
+                      vocación por compartirlo, el instructor puede seleccionar
+                      una temática con alto potencial utilizando la herramienta
+                      Marketplace Insights. La definición del enfoque pedagógico
+                      y del estilo de enseñanza queda en manos del creador,
+                      quien podrá imprimir su sello personal en el desarrollo
+                      del contenido.
+                    </div>
+                    <img
+                      src="/assets/images/teaching/record-video.svg"
+                      alt="img"
+                      style="flex: 1 1 30%; max-width: 300px"
+                    />
+                  </div>
+                </mat-tab>
+
+                <mat-tab label="Publica tu curso">
+                  <div
+                    class="d-flex align-items-center justify-content-between flex-wrap"
+                  >
+                    <div
+                      class="bg-light-primary text-dark mat-body-1 p-16 rounded m-t-12"
+                      style="flex: 1 1 60%"
+                    >
+                      Promocionar el curso a través de redes sociales y canales
+                      profesionales es una estrategia efectiva para obtener las
+                      primeras valoraciones y reseñas. El curso estará
+                      disponible en nuestra plataforma virtual, lo que permitirá
+                      generar ingresos por cada inscripción realizada bajo
+                      modalidad de pago.
+                    </div>
+                    <img
+                      src="/assets/images/teaching/post-your-course.svg"
+                      alt="img"
+                      style="flex: 1 1 30%; max-width: 300px"
+                    />
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+    <!-- ------------------------------------------------------------------
+    End How to start
+    ------------------------------------------------------------------ -->
+
+    <!-- ------------------------------------------------------------------
+    Become an instructor
+    ------------------------------------------------------------------ -->
+    <div class="overflow-hidden banner-section bg-light">
+      <div class="container">
+        <div class="row">
+          <div
+            class="col-lg-12 d-flex align-items-center justify-content-center"
+          >
+            <div class="text-center" style="padding: 80px 20px">
+              <h1 class="banner-title m-0">
+                <span class="text-primary"
+                  >Conviértete en instructor ahora
+                </span>
+              </h1>
+              <p class="f-s-18 m-t-12 m-0 banner-subtitle">
+                <!-- Únete a una de las tiendas virtuales de aprendizaje en línea más
+                grandes del mundo. -->
+                Únete al grupo de instructores y ayudalos dandoles una mano en algo 
+                que te apaciona.
+              </p>
+              <button
+                mat-flat-button
+                class="m-t-16"
+                color="primary"
+                style="font-weight: bold; width: 250px"
+                [routerLink]="['/authentication/boxed-register']"
+              >
+                Empezar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ------------------------------------------------------------------
+    End Become an instructor
+    ------------------------------------------------------------------ -->
+
+    <app-footer></app-footer>
+  </mat-sidenav-content>
+
+  <!-- ------------------------------------------------------------------
+    Mobile Sidebar
+    ------------------------------------------------------------------ -->
+  <mat-sidenav
+    #filterNavRight
+    mode="over"
+    position="end"
+    class="filter-sidebar"
+  >
+    <div>
+      <div class="branding">
+        <img
+          src="../../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
+          class="align-middle m-2"
+          alt="logo"
+          width="170px"
+        />
+      </div>
+      <div class="p-x-16">
+        <a
+          [routerLink]="['/authentication/boxed-login']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
+            >Iniciar sesión</span
+          >
+        </a>
+        <a
+          [routerLink]="['/authentication/boxed-register']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
+            >Registrar</span
+          >
+        </a>
+        <a
+          [routerLink]="['/views/aboutus']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">¿Quiénes somos?</span>
+        </a>
+        <a
+          [routerLink]="['/views/employment']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Empleo</span>
+        </a>
+        <a
+          [routerLink]="['/views/teaching']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Enseña en TeachU</span>
+        </a>
+        <a
+          [routerLink]="['/views/']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Invitar a amigos</span>
+        </a>
+        <a
+          [routerLink]="['/views/help']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Ayuda y asistencia</span>
+        </a>
+        <a
+          [routerLink]="['/views/privacy']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Política de privacidad</span>
+        </a>
+      </div>
+    </div>
+  </mat-sidenav>
+  <!-- ------------------------------------------------------------------
+    End mobile Sidebar
+    ------------------------------------------------------------------ -->
+</mat-sidenav-container>
