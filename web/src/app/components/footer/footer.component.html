@@ -1,0 +1,82 @@
+<!-- ------------------------------------------------------------------
+    footer
+    ------------------------------------------------------------------ -->
+    <footer class="p-b-30 bg-dark">
+      <div class="container">
+        <div class="row text-center text-md-start">
+          <!-- Columna: logo -->
+          <div
+            class="col-12 col-md-6 d-flex flex-column align-items-center justify-content-center m-t-24"
+          >
+            <div class="branding">
+              <img
+                src="../../../../assets/images/logos/TeachU_SVG/5-cropped.svg"
+                class="align-middle m-2"
+                alt="logo"
+                width="200px"
+              />
+            </div>
+            <div class="f-s-14 m-t-8 text-light">© 2025 TeachU, Inc.</div>
+          </div>
+
+          <!-- Columna: Acerca de -->
+          <div class="col-12 col-md-6 m-t-24">
+            <h6 class="m-0 f-s-20 f-w-600 m-b-8 m-t-24 text-light">
+              <strong>{{ "footer.title" | translate }}</strong>
+            </h6>
+
+            <div class="f-s-14 m-t-8">
+              <a
+                [routerLink]="['/aboutus']"
+                class="text-light text-decoration-none"
+                >{{ "footer.option1" | translate }}</a
+              >
+            </div>
+
+            <div class="f-s-14 m-t-8">
+              <a
+                [routerLink]="['/employment']"
+                class="text-light text-decoration-none"
+                >{{ "footer.option2" | translate }}</a
+              >
+            </div>
+
+            <div class="f-s-14 m-t-8">
+              <a
+                [routerLink]="['/teaching']"
+                class="text-light text-decoration-none"
+                >{{ "footer.option3" | translate }}</a
+              >
+            </div>
+
+            <div class="f-s-14 m-t-8">
+              <a
+                [routerLink]="['/views']"
+                class="text-light text-decoration-none"
+                >{{ "footer.option4" | translate }}</a
+              >
+            </div>
+
+            <div class="f-s-14 m-t-8">
+              <a
+                [routerLink]="['/help']"
+                class="text-light text-decoration-none"
+                >{{ "footer.option5" | translate }}</a
+              >
+            </div>
+
+            <div class="f-s-14 m-t-8">
+              <a
+                [routerLink]="['/privacy']"
+                class="text-light text-decoration-none"
+                >{{ "footer.option6" | translate }}</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ------------------------------------------------------------------
+    end footer
+    ------------------------------------------------------------------ -->

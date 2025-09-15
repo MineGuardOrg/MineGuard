@@ -1,0 +1,224 @@
+<!-- ------------------------------------------------------------------
+    Banner
+    ------------------------------------------------------------------ -->
+<div class="overflow-hidden banner-section bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 d-flex align-items-center justify-content-center">
+        <div class="text-center" style="padding: 80px 20px">
+          <h1 class="banner-title m-0">
+            <span class="text-primary">
+              {{ "landing.header.title" | translate }}
+            </span>
+          </h1>
+          <p class="f-s-18 p-y-24 m-t-12 m-0 banner-subtitle">
+            {{ "landing.description" | translate }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ------------------------------------------------------------------
+    End Banner
+    ------------------------------------------------------------------ -->
+
+<!-- ------------------------------------------------------------------
+    Features
+    ------------------------------------------------------------------ -->
+<div class="spacer-sm">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-sm-8">
+        <h1 class="section-title text-center m-t-16">
+          {{ "landing.features.subtitle" | translate }}
+        </h1>
+      </div>
+    </div>
+    <span class="f-s-16 d-block lh-base text-center">
+      {{ "landing.features.description" | translate }}
+    </span>
+    <!-- features -->
+    <mat-card class="cardWithShadow">
+      <mat-card-content>
+        <div class="row justify-content-center m-t-16">
+          @for(topcard of topcards; track topcard.subtitle) {
+          <div class="col-lg-4 col-sm-6 m-b-16">
+            <mat-card
+              class="shadow-none text-center {{
+                topcard.color
+              }}-gt shadow-none m-b-0"
+            >
+              <mat-card-content class="p-32">
+                <span
+                  class="icon-48 m-auto m-b-16 d-flex align-items-center justify-content-center rounded bg-{{
+                    topcard.color
+                  }}"
+                >
+                  <span
+                    class="iconify text-white icon-27"
+                    [attr.data-icon]="topcard.icon"
+                  ></span>
+                </span>
+                <h6 class="m-t-4 mat-subtitle-1 f-s-22 f-w-600 m-b-16">
+                  {{ topcard.subtitle | translate }}
+                </h6>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<!-- ------------------------------------------------------------------
+    End Features
+    ------------------------------------------------------------------ -->
+<!-- ------------------------------------------------------------------
+    Courses
+    ------------------------------------------------------------------ -->
+<div class="bg-light spacer-sm" id="demos">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h1 class="section-title">
+          {{ "landing.courses.title" | translate }}
+        </h1>
+        <span class="f-s-16 m-b-24 d-block lh-base">
+          {{ "landing.courses.description" | translate }}
+        </span>
+      </div>
+    </div>
+    <!-- courses -->
+    <div class="row m-t-24 justify-content-center">
+      @for(course of courses; track course.name) {
+      <div class="col-lg-4 col-sm-6 m-b-16">
+        <div>
+          <div class="img-overlay rounded">
+            <img [src]="course.imgSrc" alt="courses" class="rounded w-80" />
+          </div>
+          <span class="f-s-14 d-block text-center f-w-500 m-t-8">{{
+            course.name | translate
+          }}</span>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+<!-- ------------------------------------------------------------------
+    End Courses
+    ------------------------------------------------------------------ -->
+
+<!-- ------------------------------------------------------------------
+    facts section
+    ------------------------------------------------------------------ -->
+<div class="bg-white spacer-sm">
+  <div class="container">
+    <div class="row justify-content-between">
+      <div class="col-lg-6 d-flex align-items-center m-b-24">
+        <div>
+          <h3 class="m-t-0 section-title m-b-24">
+            {{ "landing.facts.title" | translate }}
+          </h3>
+          <span class="f-s-16 m-b-24 d-block lh-base">
+            {{ "landing.facts.description" | translate }}
+          </span>
+        </div>
+      </div>
+      <div class="col-lg-6 d-flex justify-content-between flex-wrap">
+        <div class="col-sm-6">
+          @for(fact of facts; track fact.title) {
+          <div class="hstack align-items-center m-t-20">
+            <div
+              class="rounded icon-48 bg-light-{{
+                fact.color
+              }} d-flex align-items-center flex-shrink-0 justify-content-center"
+            >
+              <span
+                class="iconify f-s-24 text-{{ fact.color }}"
+                [attr.data-icon]="fact.icon"
+              ></span>
+            </div>
+            <div>
+              <h6 class="mat-subtitle-1 f-s-15 f-w-600 text-nowrap">
+                {{ fact.title | translate }}
+              </h6>
+              <span class="mat-body-1">{{ fact.subtext | translate}}</span>
+            </div>
+          </div>
+          }
+        </div>
+        <div class="col-sm-6">
+          @for(fact2 of facts2; track fact2.title) {
+          <div class="hstack align-items-center m-t-20">
+            <div
+              class="rounded icon-48 bg-light-{{
+                fact2.color
+              }} d-flex align-items-center flex-shrink-0 justify-content-center"
+            >
+              <span
+                class="iconify f-s-24 text-{{ fact2.color }}"
+                [attr.data-icon]="fact2.icon"
+              ></span>
+            </div>
+            <div>
+              <h6 class="mat-subtitle-1 f-s-15 f-w-600 text-nowrap">
+                {{ fact2.title | translate}}
+              </h6>
+              <span class="mat-body-1">{{ fact2.subtext | translate}}</span>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ------------------------------------------------------------------
+    end facts section
+    ------------------------------------------------------------------ -->
+
+<!-- ------------------------------------------------------------------
+    Banner
+    ------------------------------------------------------------------ -->
+<div class="bg-light overflow-hidden banner-section spacer-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 d-flex align-items-center">
+        <div>
+          <h1 class="banner-title m-0">
+            TeachU:
+            <span class="text-primary">
+              {{ "landing.banner.title" | translate }}
+            </span>
+          </h1>
+          <p class="f-s-16 p-y-24 m-t-12 m-0 banner-subtitle">
+            {{ "landing.banner.description" | translate }}
+          </p>
+        </div>
+      </div>
+      <div
+        class="col-lg-4 d-none d-lg-flex justify-content-center align-items-center"
+      >
+        <div class="text-center">
+          <div class="m-t-24 hstack">
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="openDialog('0ms', '0ms')"
+              class="btn-custom"
+            >
+            {{ "buttons.view_more" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ------------------------------------------------------------------
+    End Banner
+    ------------------------------------------------------------------ -->

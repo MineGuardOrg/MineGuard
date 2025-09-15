@@ -1,0 +1,57 @@
+<mat-card class="cardWithShadow mb-4">
+  <mat-card-content class="p-3">
+    <div class="row justify-content-between">
+      <div class="col-lg-4">
+        <mat-form-field appearance="outline" class="w-100 hide-hint">
+          <input
+            matInput
+            placeholder="Search Course"
+            (keyup)="applyFilter($any($event.target).value)"
+          />
+          <mat-icon matSuffix>
+            <i-tabler name="search" class="icon-20"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<div class="row justify-content-start g-4">
+  <!-- Cambia esta línea -->
+  <div class="col-sm-6 col-lg-4 mb-4" *ngFor="let element of dataSource">
+    <mat-card class="cardWithShadow card-hover d-flex flex-column">
+      <!--Luego poner element.imgUrl-->
+      <img
+        mat-card-image
+        [src]="element.imgUrl || '/assets/images/courses/course-default.webp'"
+        alt="Imagen del curso"
+        class="card-image"
+      />
+
+      <mat-card-content class="p-3 d-flex flex-column flex-grow-1">
+        <mat-card-title class="f-s-16 f-w-600">{{
+          element.title
+        }}</mat-card-title>
+        <div class="d-flex justify-content-end gap-2 mt-auto">
+          <button
+            mat-icon-button
+            (click)="openDialog('Update', element)"
+            class="action-icon-btn"
+            matTooltip="Editar"
+          >
+            <i-tabler name="edit" class="icon-md"></i-tabler>
+          </button>
+          <button
+            mat-icon-button
+            (click)="openDialog('Delete', element)"
+            class="action-icon-btn"
+            matTooltip="Eliminar"
+          >
+            <i-tabler name="trash" class="icon-md text-danger"></i-tabler>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

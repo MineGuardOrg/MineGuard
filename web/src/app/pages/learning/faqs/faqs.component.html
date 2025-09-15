@@ -1,0 +1,34 @@
+<div class="row justify-content-center">
+  <div class="col-lg-8 text-center">
+    <mat-card-title class="d-block f-s-28 m-b-12">{{
+      "FREQUENTLY_ASKED_QUESTIONS" | translate
+    }}</mat-card-title>
+    <mat-card-subtitle class="mat-body-1 m-b-30 p-b-12 d-block f-s-16"
+      >{{ "GET_TO_KNOW_MORE_ABOUT_TEACHU_PLATFORM" | translate }}
+    </mat-card-subtitle>
+
+    <mat-accordion class="theme-expansion">
+      <mat-expansion-panel
+        class="cardWithShadow b-b-1"
+        *ngFor="let faq of faqs"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title class="f-s-16 f-w-600">{{ faq.q }}</mat-panel-title>
+        </mat-expansion-panel-header>
+        <p class="mat-body-1 lh-base text-left">{{ faq.a }}</p>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+  <div class="col-12 m-t-30 p-t-30">
+    <mat-card class="bg-light-primary cardWithShadow">
+      <mat-card-content class="text-center">
+        <h4 class="f-s-28 f-w-600 m-y-12">{{ "STILL_HAVE_QUESTIONS" | translate }}</h4>
+        <span class="d-block m-b-16 text-primary">
+          {{ "CANT_FIND_ANSWER" | translate }}
+        </span>
+        <button mat-flat-button color="primary">{{ "SEND_US_YOUR_QUESTION" | translate }}</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

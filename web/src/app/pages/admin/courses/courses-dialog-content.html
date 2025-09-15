@@ -1,0 +1,175 @@
+<h2 class="f-w-500 m-b-24" mat-dialog-title><strong>{{ action }}</strong></h2>
+
+@if (action !== 'Delete') {
+<mat-dialog-content style="max-width: 600px">
+  <form #userForm="ngForm">
+    <div class="row">
+      <!-- TITLE -->
+      <div class="col-lg-6 m-b-16">
+        <mat-label class="f-w-600 m-b-8 d-block">Title</mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="text"
+            matInput
+            required
+            id="title"
+            name="title"
+            [(ngModel)]="local_data.title"
+            placeholder="Title"
+          />
+          <mat-icon matPrefix>
+            <i-tabler name="book" class="icon-20 d-flex"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+
+      <!-- IMG URL -->
+      <div class="col-lg-6 m-b-16">
+        <mat-label class="f-w-600 m-b-8 d-block">Image URL</mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="text"
+            matInput
+            required
+            id="imgurl"
+            name="imgurl"
+            [(ngModel)]="local_data.imgurl"
+            placeholder="https://example.com/photo"
+          />
+          <mat-icon matPrefix>
+            <i-tabler name="video" class="icon-20 d-flex"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="col-lg-12 m-b-16">
+        <mat-label class="f-w-600 m-b-8 d-block">Description</mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="text"
+            matInput
+            required
+            id="description"
+            name="description"
+            [(ngModel)]="local_data.description"
+            placeholder="Description"
+          />
+          <mat-icon matPrefix>
+            <i-tabler name="text-recognition" class="icon-20 d-flex"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+
+      <!-- TEACHER ID -->
+      <div class="col-lg-6 m-b-16">
+        <mat-label class="f-w-600 m-b-8 d-block">Teacher ID</mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="number"
+            matInput
+            required
+            id="teacherId"
+            name="teacherId"
+            [(ngModel)]="local_data.teacherId"
+            placeholder="Teacher ID"
+          />
+          <mat-icon matPrefix>
+            <i-tabler name="id" class="icon-20 d-flex"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+
+      <!-- LEVEL -->
+      <div class="col-lg-6 m-b-16">
+        <mat-label class="f-w-600 m-b-8 d-block">Level</mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select
+            [(ngModel)]="local_data.level"
+            name="level"
+            required
+            placeholder="Selecciona nivel"
+          >
+            <mat-option value="Beginner">Beginner</mat-option>
+            <mat-option value="Intermediate">Intermediate</mat-option>
+            <mat-option value="Advanced">Advanced</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- COST -->
+      <div class="col-lg-6 m-b-16">
+        <mat-label class="f-w-600 m-b-8 d-block">Cost</mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="number"
+            matInput
+            required
+            id="cost"
+            name="cost"
+            [(ngModel)]="local_data.cost"
+            placeholder="Cost"
+          />
+          <mat-icon matPrefix>
+            <i-tabler name="currency-dollar" class="icon-20 d-flex"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+      <!-- CATEGORY MULTISELECT -->
+      <div class="col-lg-6 m-b-16">
+        <mat-label class="f-w-600 m-b-8 d-block">Categorías</mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select
+            [(ngModel)]="local_data.selectedCategoryIds"
+            name="selectedCategoryIds"
+            multiple
+            placeholder="Selecciona una o más categorías"
+            required
+          >
+            <mat-option
+              *ngFor="let category of categories"
+              [value]="category.id"
+            >
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="mt-3 d-flex justify-content-end">
+      <button
+        mat-flat-button
+        (click)="doAction()"
+        color="primary"
+        [disabled]="!userForm.valid"
+      >
+        {{ action }}
+      </button>
+      <button
+        mat-stroked-button
+        color="warn"
+        class="m-l-8"
+        (click)="closeDialog()"
+      >
+        Cancel
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>
+} @else {
+<div class="p-x-24">
+  <p>
+    Are you sure you want to delete <strong>{{ local_data.title }}</strong>?
+  </p>
+</div>
+<div mat-dialog-actions class="p-x-24 p-b-24">
+  <button mat-flat-button color="warn" (click)="doAction()">
+    {{ action }}
+  </button>
+  <button mat-stroked-button (click)="closeDialog()" class="m-l-8">
+    Cancel
+  </button>
+</div>
+}

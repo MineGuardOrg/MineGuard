@@ -1,0 +1,85 @@
+<mat-card class="cardWithShadow overflow-hidden bg-primary">
+  <mat-card-content class="text-white p-y-10">
+    <mat-card-title class="d-flex align-items-center">
+      <a
+        mat-icon-button
+        (click)="goBack()"
+        class="d-flex justify-content-center m-r-10"
+      >
+        <i-tabler name="chevron-left" class="icon-18 d-flex"></i-tabler>
+      </a>
+      {{ courseDetail.title }}
+    </mat-card-title>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="cardWithShadow">
+  <mat-card-content>
+    <mat-vertical-stepper #stepper>
+      <mat-step
+        *ngFor="let module of courseDetail.lessonCourseDtos; let i = index"
+      >
+        <ng-template matStepLabel>
+          {{ module.title }}
+        </ng-template>
+        <div *ngIf="module.lessonDtos && module.lessonDtos.length > 0">
+          <div
+            *ngFor="let lesson of module.lessonDtos; let j = index"
+            style="margin-bottom: 1rem"
+          >
+            <h4>{{ lesson.title }}</h4>
+            <p>{{ lesson.description }}</p>
+
+            <div *ngIf="lesson.resources && lesson.resources.length > 0">
+              <ul>
+                <li *ngFor="let resource of lesson.resources">
+                  <div *ngIf="isVideo(resource.fileUrl); else showLink">
+                    <video
+                      width="100%"
+                      height="auto"
+                      controls
+                      controlsList="nodownload"
+                      style="margin-top: 0.5rem; border-radius: 8px"
+                    >
+                      <source [src]="resource.fileUrl" type="video/mp4" />
+                      Tu navegador no soporta la reproducción de video.
+                    </video>
+                  </div>
+                  <ng-template #showLink>
+                    <a
+                      [href]="resource.fileUrl"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {{ resource.fileName }}
+                    </a>
+                  </ng-template>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="stepper-buttons" style="margin-top: 1rem">
+          <button
+            mat-flat-button
+            color="primary"
+            matStepperPrevious
+            *ngIf="i > 0"
+            style="margin-right: 1rem"
+          >
+            Atrás
+          </button>
+          <button
+            mat-flat-button
+            color="primary"
+            matStepperNext
+            *ngIf="i < (courseDetail.lessonCourseDtos?.length ?? 0) - 1"
+          >
+            Siguiente
+          </button>
+        </div>
+      </mat-step>
+    </mat-vertical-stepper>
+  </mat-card-content>
+</mat-card>
