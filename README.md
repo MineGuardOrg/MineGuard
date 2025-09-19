@@ -26,7 +26,7 @@ MineGuard/
 1. Clonar el repositorio:
 
 ```bash
-git clone https://github.com/NessX4/MineGuard.git
+git clone https://github.com/MineGuardOrg/MineGuard.git
 cd MineGuard/backend
 ```
 
@@ -74,7 +74,28 @@ uvicorn app.main:app --reload
 http://127.0.0.1:8000/docs
 
 ## 🔹 Web (Angular)
-A completar según la configuración del proyecto web
+
+1. Entrar al proyecto Web
+
+```bash
+cd MineGuard/web
+```
+
+2. Instalar dependencias
+
+```bash
+npm install
+```
+
+3. Una vez terminado de descargar las dependencias del proyecto, ejecutar:
+
+```bash
+ng serve 
+```
+
+4. Acceder al proyecto de Web:
+
+http://localhost:4200/
 
 ## 🔹 Mobile (Android/Kotlin)
 A completar según la configuración del proyecto móvil
