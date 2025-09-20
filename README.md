@@ -102,6 +102,43 @@ A completar según la configuración del proyecto móvil
 
 ---
 
+## 🔒 Certificado SSL para conexión a MySQL (Azure)
+
+Para conectar el backend con Azure Database for MySQL usando SSL:
+
+1. Descarga el certificado raíz `BaltimoreCyberTrustRoot.crt.pem` desde:
+   https://www.digicert.com/kb/digicert-root-certificates.htm
+   (Busca "Baltimore CyberTrust Root" y descarga el archivo en formato PEM)
+
+2. Crea la carpeta `certs/` dentro de `backend/` y coloca ahí el archivo descargado.
+
+3. Agrega la ruta relativa al archivo en tu `.env`:
+   ```
+   DB_SSL_CERT=certs/BaltimoreCyberTrustRoot.crt.pem
+   ```
+
+4. **No subas la carpeta `certs/` ni el certificado al repositorio.**
+   Cada colaborador debe descargarlo y colocarlo localmente.
+
+---
+
+## 🧪 Probar conexión a la base de datos
+
+Para verificar que la configuración y el certificado SSL funcionan correctamente, ejecuta el siguiente comando desde la carpeta `backend`:
+
+```bash
+python app/infrastructure/test_db_connection.py
+```
+
+Si la conexión es exitosa, verás:
+```
+✅ Conexión exitosa a la base de datos.
+```
+
+Si hay algún error, revisa las variables en `.env`, la ruta del certificado y la configuración de tu servidor MySQL en Azure.
+
+---
+
 ## 📝 Notas
 
 El backend ya incluye una estructura Clean / Layered Architecture:
@@ -109,10 +146,8 @@ El backend ya incluye una estructura Clean / Layered Architecture:
 - `app/api/` → Endpoints
 - `app/application/` → Lógica de negocio (services)
 - `app/domain/` → Entidades y schemas
-- `app/infrastructure/` → Repositorios, base de datos, adaptadores externos
+- `app/infrastructure/` → DAOs, base de datos, adaptadores externos
 - `app/core/` → Configuración general y seguridad
 - `app/tests/` → Pruebas unitarias
 
 El proyecto utiliza `.gitignore` global en la raíz para todos los subproyectos.
-
-Para futuras versiones de la API, se recomienda usar versionado (`v1`, `v2`) en `api/`.
