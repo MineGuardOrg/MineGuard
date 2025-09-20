@@ -1,7 +1,8 @@
+# Endpoints de usuarios
 from fastapi import APIRouter
 
-router = APIRouter()
+user_router = APIRouter()
 
-@router.get("/")
-def list_users():
-    return {"message": "Lista de usuarios (demo)"}
+@user_router.get("/users")
+def get_users():
+    return {"message": "Lista de usuarios"}

@@ -1,7 +1,8 @@
+# Endpoints de autenticación
 from fastapi import APIRouter
 
-router = APIRouter()
+auth_router = APIRouter()
 
-@router.post("/login")
+@auth_router.post("/login")
 def login():
-    return {"message": "Login exitoso (demo)"}
+    return {"message": "Login"}

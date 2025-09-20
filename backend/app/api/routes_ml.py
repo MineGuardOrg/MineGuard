@@ -1,7 +1,8 @@
+# Endpoints para modelos ML
 from fastapi import APIRouter
 
-router = APIRouter()
+ml_router = APIRouter()
 
-@router.get("/predict")
+@ml_router.post("/predict")
 def predict():
-    return {"prediction": "Este es un resultado de ML (demo)"}
+    return {"message": "Predicción ML"}
