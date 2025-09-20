@@ -13,17 +13,23 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST")     # ej: dbmysql-mineg.mysql.database.azure.com
 DB_PORT = os.getenv("DB_PORT", "3306")
 DB_NAME = os.getenv("DB_NAME")
+DB_SSL_CERT = os.getenv("DB_SSL_CERT")  # Ruta al certificado SSL
 
 # URL de conexion (pymysql se usa mucho en FastAPI)
 DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
-# Crear engine
+# Crear engine con conexión segura (SSL)
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
     pool_size=10,
     max_overflow=20,
-    echo=False  # Cambiar a True para debug de queries
+    echo=False,  # Cambiar a True para debug de queries
+    connect_args={
+        "ssl": {
+            "ssl_ca": DB_SSL_CERT
+        }
+    }
 )
 
 # SessionLocal para manejar sesiones con la BD
