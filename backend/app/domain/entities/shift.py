@@ -1,13 +1,13 @@
-# Entidad Rol ORM para SQLAlchemy
-from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP
+# Entidad Shift ORM para SQLAlchemy
+from sqlalchemy import Column, Integer, Boolean, TIMESTAMP, Time
 from app.infrastructure.database import Base
 
-class Role(Base):
-    __tablename__ = "role"
+class Shift(Base):
+    __tablename__ = "shift"
 
     id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
-    name = Column(String(15), nullable=False)
-    description = Column(String(255), nullable=False)
+    start_time = Column(Time, nullable=False)
+    end_time = Column(Time, nullable=False)
     is_active = Column(Boolean, nullable=False, default=True)
     created_at = Column(TIMESTAMP, nullable=False)
     updated_at = Column(TIMESTAMP, nullable=False)
