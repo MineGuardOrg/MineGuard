@@ -1,9 +1,11 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class ConnectionSchema(BaseModel):
     id: int
     device_id: int
     status: str
-    is_active: bool
-    created_at: str
-    updated_at: str
+    timestamp: datetime
+
+    class Config:
+        orm_mode = True

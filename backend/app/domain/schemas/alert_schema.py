@@ -1,9 +1,12 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class AlertSchema(BaseModel):
     id: int
-    type: str
-    description: str
-    is_active: bool
-    created_at: str
-    updated_at: str
+    alert_type: str
+    severity: str
+    reading_id: int
+    timestamp: datetime
+
+    class Config:
+        orm_mode = True

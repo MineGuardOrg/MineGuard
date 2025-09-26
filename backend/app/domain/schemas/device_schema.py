@@ -1,9 +1,14 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class DeviceSchema(BaseModel):
     id: int
-    name: str
-    serial_number: str
+    model: str
+    user_id: int
     is_active: bool
-    created_at: str
-    updated_at: str
+    assigned_at: datetime
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        orm_mode = True
