@@ -1,9 +1,11 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class MLTrainingDataSchema(BaseModel):
     id: int
-    data: str
+    reading_id: int
     label: str
-    is_active: bool
-    created_at: str
-    updated_at: str
+    created_at: datetime
+
+    class Config:
+        orm_mode = True

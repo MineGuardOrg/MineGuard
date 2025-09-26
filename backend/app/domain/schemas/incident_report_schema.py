@@ -1,9 +1,15 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class IncidentReportSchema(BaseModel):
     id: int
-    title: str
     description: str
-    is_active: bool
-    created_at: str
-    updated_at: str
+    severity: str
+    user_id: int
+    device_id: int
+    reading_id: int
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        orm_mode = True

@@ -1,9 +1,12 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class MLPredictionSchema(BaseModel):
     id: int
+    reading_id: int
     prediction: str
-    confidence: float
-    is_active: bool
-    created_at: str
-    updated_at: str
+    probability: float
+    created_at: datetime
+
+    class Config:
+        orm_mode = True

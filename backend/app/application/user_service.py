@@ -1,5 +1,4 @@
 # Lógica de negocio para usuarios
-
 from app.infrastructure.dao.user_dao import UserDAO
 from app.domain.schemas.user_schema import UserSchema
 
@@ -7,38 +6,11 @@ class UserService:
     @staticmethod
     def get_all_users():
         users = UserDAO.get_all()
-        return [UserSchema(
-            id=u.id,
-            first_name=u.first_name,
-            last_name=u.last_name,
-            email=u.email,
-            role_id=u.role_id,
-            area_id=u.area_id,
-            position_id=u.position_id,
-            supervisor_id=u.supervisor_id,
-            is_active=u.is_active,
-            created_at=str(u.created_at),
-            updated_at=str(u.updated_at)
-        ) for u in users]
+        return [UserSchema.from_orm(user) for user in users]
     
     @staticmethod
     def get_user_by_id(user_id: int):
-        user = UserDAO.get_by_id(user_id)
-        if user:
-            return UserSchema(
-                id=user.id,
-                first_name=user.first_name,
-                last_name=user.last_name,
-                email=user.email,
-                role_id=user.role_id,
-                area_id=user.area_id,
-                position_id=user.position_id,
-                supervisor_id=user.supervisor_id,
-                is_active=user.is_active,
-                created_at=str(user.created_at),
-                updated_at=str(user.updated_at)
-            )
-        return None
+        return UserDAO.get_by_id(user_id)
 
     @staticmethod
     def create_user(user_data: dict):

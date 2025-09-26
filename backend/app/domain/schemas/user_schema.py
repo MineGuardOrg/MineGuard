@@ -1,5 +1,6 @@
 # Schemas de usuario para distintos endpoints
 from pydantic import BaseModel
+from datetime import datetime
 
 class UserCreateSchema(BaseModel):
     first_name: str
@@ -11,6 +12,7 @@ class UserCreateSchema(BaseModel):
     position_id: int | None = None
     supervisor_id: int | None = None
 
+
 class UserSchema(BaseModel):
     id: int
     first_name: str
@@ -21,8 +23,11 @@ class UserSchema(BaseModel):
     position_id: int | None = None
     supervisor_id: int | None = None
     is_active: bool
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime | None = None
+
+    class Config:
+        orm_mode = True
 
 class UserUpdateSchema(BaseModel):
     first_name: str | None = None
@@ -33,3 +38,4 @@ class UserUpdateSchema(BaseModel):
     area_id: int | None = None
     position_id: int | None = None
     supervisor_id: int | None = None
+    is_active: bool | None = None
