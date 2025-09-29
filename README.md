@@ -73,6 +73,37 @@ uvicorn app.main:app --reload
 
 http://127.0.0.1:8000/docs
 
+## 🧑‍💻 Flujo de trabajo con Git y ramas
+
+⚠️ La rama `main` está protegida. NO hagas push directo a `main`. Usa ramas y Pull Requests.
+
+### Flujo de trabajo para el equipo:
+1. **Crear una nueva rama desde `develop`:**
+   ```bash
+   git checkout develop
+   git pull origin develop
+   git checkout -b user/cambio-realizado
+   ```
+
+2. **Hacer commits:**
+   ```bash
+   git add .
+   git commit -m "Descripción clara del cambio"
+   git pull origin develop
+   ```
+
+3. **Subir la rama al repositorio remoto:**
+   - Sube tu rama al repositorio remoto:
+     ```bash
+     git push origin user/app-o-crud-realizado (nombre de tu rama creada)
+     ```
+4. **Crear un Pull Request hacia `develop`:**
+   - Ve a [GitHub](https://github.com/MineGuardOrg/MineGuard/pulls).
+   - Crea un Pull Request
+   - Base: develop  |  compare: Tu rama de trabajo (por ejemplo, user/app-o-crud-realizado)
+   - Escribe un título y descripción claros para el Pull Request.
+   - Solicita la revisión del owner y espera su aprobación.
+
 ## 🔹 Web (Angular)
 
 1. Entrar al proyecto Web
