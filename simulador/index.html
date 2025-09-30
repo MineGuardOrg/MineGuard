@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulador de Ritmo Cardíaco</title>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <!-- IZQUIERDA: Gráfico -->
+      <div class="main card">
+        <div class="header">
+          <div class="title">Simulador de Ritmo Cardíaco</div>
+        </div>
+        <div id="chart" style="height: 550px"></div>
+      </div>
+
+      <!-- DERECHA: Tabla y controles -->
+      <div class="sidebar card">
+        <div class="sidebar-header">
+          <h2>Identificadores</h2>
+          <p id="bpmLabel">Esperando inicio...</p>
+
+          <!-- BOTONES DE INICIO/DETENER -->
+          <div class="controls">
+            <button id="startBtn" class="btn">Iniciar</button>
+            <button id="stopBtn" class="btn stop">Detener</button>
+          </div>
+
+          <!-- RELOJ SIMULADO -->
+          <div class="time-display">
+            <h3>Hora Simulada:</h3>
+            <p id="modeIndicator">En espera...</p>
+            <small>15 minutos simulados cada 2 segundos reales</small>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Persona</th>
+              <th>Perfil</th>
+              <th>BPM</th>
+              <th>Actividad Actual</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="adulto-mayor">
+              <td>
+                <div class="persona-info">
+                  <strong>Adulto Mayor</strong>
+                  <small>Roberto, 80 años</small>
+                </div>
+              </td>
+              <td>
+                <div class="perfil">
+                  <small>Sedentario</small>
+                </div>
+              </td>
+              <td id="bpmMayor" class="bpm-value">--</td>
+              <td id="estadoMayor" class="estado">--</td>
+            </tr>
+            <tr class="gymbro">
+              <td>
+                <div class="persona-info">
+                  <strong>Atleta</strong>
+                  <small>Miguel, 28 años</small>
+                </div>
+              </td>
+              <td>
+                <div class="perfil">
+                  <small>Deportista</small>
+                </div>
+              </td>
+              <td id="bpmGym" class="bpm-value">--</td>
+              <td id="estadoGym" class="estado">--</td>
+            </tr>
+            <tr class="estudiante">
+              <td>
+                <div class="persona-info">
+                  <strong>Estudiante</strong>
+                  <small>Ana, 14 años</small>
+                </div>
+              </td>
+              <td>
+                <div class="perfil">
+                  <small>Adolescente</small>
+                </div>
+              </td>
+              <td id="bpmEst" class="bpm-value">--</td>
+              <td id="estadoEst" class="estado">--</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
