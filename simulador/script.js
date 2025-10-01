@@ -8,9 +8,21 @@ const chart = Highcharts.chart("chart", {
   xAxis: { 
     type: "datetime",
     title: { text: "Hora del Día" },
-    min: 5 * 60 * 60 * 1000, // 5:00 AM (inicio de simulación)
-    max: 29 * 60 * 60 * 1000, // 5:00 AM del día siguiente (24 horas completas)
+    min: 5 * 60 * 60 * 1000, // 5:00 AM (inicio)
+    max: 22 * 60 * 60 * 1000, // 10:00 PM (final)
     tickInterval: 2 * 60 * 60 * 1000, // Cada 2 horas
+    tickPositions: [
+      5 * 60 * 60 * 1000,   // 5:00 AM
+      7 * 60 * 60 * 1000,   // 7:00 AM
+      9 * 60 * 60 * 1000,   // 9:00 AM
+      11 * 60 * 60 * 1000,  // 11:00 AM
+      13 * 60 * 60 * 1000,  // 1:00 PM
+      15 * 60 * 60 * 1000,  // 3:00 PM
+      17 * 60 * 60 * 1000,  // 5:00 PM
+      19 * 60 * 60 * 1000,  // 7:00 PM
+      21 * 60 * 60 * 1000,  // 9:00 PM
+      22 * 60 * 60 * 1000   // 10:00 PM
+    ],
     labels: {
       formatter: function() {
         const hours = Math.floor(this.value / (60 * 60 * 1000));
@@ -47,9 +59,9 @@ const chart = Highcharts.chart("chart", {
     },
   },
   series: [
-    { name: "Adulto Mayor", data: [], color: "#8B4513" }, // Cafe para el adulto mayor
-    { name: "Atleta", data: [], color: "#FF6B35" }, // Naranja para el gymbro
-    { name: "Estudiante", data: [], color: "#4A90E2" }, // Azul para el estudiante
+    { name: "Adulto Mayor", data: [], color: "#8B4513" },
+    { name: "Atleta", data: [], color: "#FF6B35" },
+    { name: "Estudiante", data: [], color: "#4A90E2" },
   ],
 });
 
@@ -76,7 +88,7 @@ let dailySchedules = null;
 
 // Rutinas diarias de cada personaje (horarios en minutos desde medianoche)
 const DAILY_ROUTINES = {
-  mayor: [ // Roberto (Adulto Mayor) - Se despierta MUY tarde
+  mayor: [ // Roberto (Adulto Mayor)
     { time: 300, activity: "dormido", description: "💤 Durmiendo profundamente" }, // 5:00 AM
     { time: 360, activity: "dormido", description: "💤 Todavía durmiendo" },    // 6:00 AM
     { time: 420, activity: "dormido", description: "💤 Sigue durmiendo" },     // 7:00 AM
@@ -92,7 +104,7 @@ const DAILY_ROUTINES = {
     { time: 1280, activity: "dormido", description: "💤 A dormir temprano" } // 9:00 PM
   ],
   
-  gym: [ // Miguel (Atleta) - Madrugador extremo
+  gym: [ // Miguel (Atleta)
     { time: 300, activity: "dormido", description: "💤 Durmiendo" },          // 5:00 AM
     { time: 330, activity: "reposo", description: "Despertando temprano" }, // 5:30 AM
     { time: 360, activity: "caminar", description: "Calentamiento" },      // 6:00 AM
@@ -108,7 +120,7 @@ const DAILY_ROUTINES = {
     { time: 1320, activity: "dormido", description: "💤 Descanso muscular" }  // 10:00 PM
   ],
 
-  est: [ // Ana (Estudiante) - Horario escolar típico
+  est: [ // Ana (Estudiante)
     { time: 300, activity: "dormido", description: "💤 Durmiendo" },          // 5:00 AM
     { time: 360, activity: "dormido", description: "💤 Todavía durmiendo" },  // 6:00 AM
     { time: 390, activity: "reposo", description: "Despertando" },       // 6:30 AM
@@ -213,20 +225,28 @@ function updateData() {
   advanceSimulatedTime();
   
   // Convertir el tiempo simulado a milisegundos para Highcharts
-  // Ajustar para que el eje X vaya de 5:00 AM a 5:00 AM del día siguiente
+  // Solo mostrar datos entre 5:00 AM y 10:00 PM
   let adjustedTime = currentSimulatedTime;
-  if (adjustedTime < 5 * 60) { // Si es antes de las 5:00 AM, es el día siguiente
-    adjustedTime += 24 * 60; // Agregar 24 horas
+  
+  // Si el tiempo está fuera del rango de visualización (10:00 PM a 5:00 AM), no agregamos puntos
+  const isInDisplayRange = (adjustedTime >= 5 * 60 && adjustedTime <= 22 * 60); // 5:00 AM a 10:00 PM
+  
+  if (isInDisplayRange) {
+    const simulatedTimeMs = adjustedTime * 60 * 1000; // Convertir minutos a milisegundos
+    const mayor = getBPM("mayor");
+    const gym = getBPM("gym");
+    const est = getBPM("est");
+
+    //Guarda 120 puntos
+    chart.series[0].addPoint([simulatedTimeMs, mayor], true, chart.series[0].data.length >= 120);
+    chart.series[1].addPoint([simulatedTimeMs, gym], true, chart.series[1].data.length >= 120);
+    chart.series[2].addPoint([simulatedTimeMs, est], true, chart.series[2].data.length >= 120);
   }
-  const simulatedTimeMs = adjustedTime * 60 * 1000; // Convertir minutos a milisegundos
+  
+  // Siempre obtener los BPM y actividades para actualizar la interfaz
   const mayor = getBPM("mayor");
   const gym = getBPM("gym");
   const est = getBPM("est");
-
- //Guarda 120 puntos
-  chart.series[0].addPoint([simulatedTimeMs, mayor], true, chart.series[0].data.length >= 120);
-  chart.series[1].addPoint([simulatedTimeMs, gym], true, chart.series[1].data.length >= 120);
-  chart.series[2].addPoint([simulatedTimeMs, est], true, chart.series[2].data.length >= 120);
 
   // Obtener actividades actuales
   const mayorActivity = getCurrentActivity("mayor", currentSimulatedTime);
