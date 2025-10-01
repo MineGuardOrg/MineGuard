@@ -19,10 +19,10 @@ body {
 
 .layout {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-rows: auto 1fr;
   gap: 20px;
   width: 100%;
-  max-width: 1300px;
+  max-width: 1400px;
 }
 
 .card {
@@ -46,19 +46,29 @@ body {
   color: var(--accent);
 }
 
-.sidebar-header {
-  padding: 16px;
-  border-bottom: 1px solid var(--border);
+/* Sección de controles arriba */
+.controls-section {
+  padding: 20px;
 }
 
-.sidebar-header h2 {
-  margin: 0 0 6px;
-  font-size: 18px;
-  color: var(--accent);
+.controls-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
-.sidebar-header p {
-  margin: 0 0 12px;
+.status-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.status-controls p {
+  margin: 0;
   font-weight: bold;
   font-size: 14px;
 }
@@ -106,113 +116,123 @@ body {
   background: #005fa3;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 15px;
-}
+/* Estilos removidos - ahora usando layout horizontal */
 
-thead th {
-  background: #e6f2ff;
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid var(--border);
-}
-
-tbody td {
-  padding: 12px;
-  border-bottom: 1px solid var(--border);
-}
-
-tbody tr:hover {
-  background: #f8f8f8;
-}
-
-.right {
-  text-align: right;
-}
-
-/* Estilos para la nueva tabla mejorada */
-.persona-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.persona-info strong {
-  font-size: 14px;
-}
-
-.persona-info small {
-  color: #666;
-  font-size: 12px;
-}
-
-.perfil {
+/* Estilos para el reloj simulado compacto */
+.time-display {
   display: flex;
   align-items: center;
-  gap: 6px;
-}
-
-.emoji {
-  font-size: 18px;
-}
-
-.perfil small {
-  color: #666;
-  font-size: 11px;
-}
-
-.bpm-value {
-  text-align: right;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.estado {
-  font-size: 13px;
-  font-weight: 500;
-}
-
-/* Colores distintivos para cada persona */
-.adulto-mayor .bpm-value {
-  color: #8B4513;
-}
-
-.gymbro .bmp-value {
-  color: #FF6B35;
-}
-
-.estudiante .bpm-value {
-  color: #4A90E2;
-}
-
-/* Estilos para el reloj simulado */
-.time-display {
+  gap: 8px;
   background: linear-gradient(135deg, #f0f8ff, #e6f3ff);
-  padding: 15px;
-  border-radius: 12px;
-  margin: 15px 0;
-  border: 2px solid var(--accent);
-  text-align: center;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--accent);
 }
 
-.time-display h3 {
-  margin: 0 0 8px 0;
-  font-size: 16px;
+.time-display span:first-child {
+  font-size: 12px;
   color: var(--accent);
+  font-weight: bold;
 }
 
-.time-display p {
-  margin: 0 0 5px 0;
+.time-display #modeIndicator {
   font-weight: bold;
-  font-size: 20px;
+  font-size: 14px;
   color: #333;
   font-family: 'Courier New', monospace;
 }
 
 .time-display small {
   color: #666;
-  font-size: 11px;
+  font-size: 10px;
   font-style: italic;
+}
+
+/* Tabla horizontal de personas */
+.horizontal-table {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+}
+
+.person-card {
+  background: #f8f9fa;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.person-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.person-header {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.person-header strong {
+  font-size: 16px;
+  color: #333;
+}
+
+.person-header small {
+  color: #666;
+  font-size: 12px;
+}
+
+.person-header .perfil {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.person-data {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.person-data .bpm-value {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.person-data .estado {
+  font-size: 12px;
+  font-weight: 500;
+  text-align: right;
+}
+
+/* Colores distintivos para cada persona */
+.adulto-mayor {
+  border-color: #8B4513;
+}
+
+.adulto-mayor .bpm-value {
+  color: #8B4513;
+}
+
+.gymbro {
+  border-color: #FF6B35;
+}
+
+.gymbro .bpm-value {
+  color: #FF6B35;
+}
+
+.estudiante {
+  border-color: #4A90E2;
+}
+
+.estudiante .bpm-value {
+  color: #4A90E2;
 }

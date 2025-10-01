@@ -9,91 +9,66 @@
   </head>
   <body>
     <div class="layout">
-      <!-- IZQUIERDA: Gráfico -->
-      <div class="main card">
-        <div class="header">
+      <!-- ARRIBA: Tabla y controles horizontales -->
+      <div class="controls-section card">
+        <div class="controls-header">
           <div class="title">Simulador de Ritmo Cardíaco</div>
+          <div class="status-controls">
+            <p id="bpmLabel">Esperando inicio...</p>
+            <div class="controls">
+              <button id="startBtn" class="btn">Iniciar</button>
+              <button id="stopBtn" class="btn stop">Detener</button>
+            </div>
+            <div class="time-display">
+              <span>Hora Simulada: </span>
+              <span id="modeIndicator">En espera...</span>
+              <small>(15 min simulados cada 2s reales)</small>
+            </div>
+          </div>
         </div>
-        <div id="chart" style="height: 550px"></div>
+        
+        <!-- Tabla horizontal de identificadores -->
+        <div class="horizontal-table">
+          <div class="person-card adulto-mayor">
+            <div class="person-header">
+              <strong>Adulto Mayor</strong>
+              <small>Roberto, 80 años</small>
+              <span class="perfil">Sedentario</span>
+            </div>
+            <div class="person-data">
+              <span class="bpm-value" id="bpmMayor">--</span>
+              <span class="estado" id="estadoMayor">--</span>
+            </div>
+          </div>
+          
+          <div class="person-card gymbro">
+            <div class="person-header">
+              <strong>Atleta</strong>
+              <small>Miguel, 28 años</small>
+              <span class="perfil">Deportista</span>
+            </div>
+            <div class="person-data">
+              <span class="bpm-value" id="bpmGym">--</span>
+              <span class="estado" id="estadoGym">--</span>
+            </div>
+          </div>
+          
+          <div class="person-card estudiante">
+            <div class="person-header">
+              <strong>Estudiante</strong>
+              <small>Ana, 14 años</small>
+              <span class="perfil">Adolescente</span>
+            </div>
+            <div class="person-data">
+              <span class="bpm-value" id="bpmEst">--</span>
+              <span class="estado" id="estadoEst">--</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- DERECHA: Tabla y controles -->
-      <div class="sidebar card">
-        <div class="sidebar-header">
-          <h2>Identificadores</h2>
-          <p id="bpmLabel">Esperando inicio...</p>
-
-          <!-- BOTONES DE INICIO/DETENER -->
-          <div class="controls">
-            <button id="startBtn" class="btn">Iniciar</button>
-            <button id="stopBtn" class="btn stop">Detener</button>
-          </div>
-
-          <!-- RELOJ SIMULADO -->
-          <div class="time-display">
-            <h3>Hora Simulada:</h3>
-            <p id="modeIndicator">En espera...</p>
-            <small>15 minutos simulados cada 2 segundos reales</small>
-          </div>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Persona</th>
-              <th>Perfil</th>
-              <th>BPM</th>
-              <th>Actividad Actual</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="adulto-mayor">
-              <td>
-                <div class="persona-info">
-                  <strong>Adulto Mayor</strong>
-                  <small>Roberto, 80 años</small>
-                </div>
-              </td>
-              <td>
-                <div class="perfil">
-                  <small>Sedentario</small>
-                </div>
-              </td>
-              <td id="bpmMayor" class="bpm-value">--</td>
-              <td id="estadoMayor" class="estado">--</td>
-            </tr>
-            <tr class="gymbro">
-              <td>
-                <div class="persona-info">
-                  <strong>Atleta</strong>
-                  <small>Miguel, 28 años</small>
-                </div>
-              </td>
-              <td>
-                <div class="perfil">
-                  <small>Deportista</small>
-                </div>
-              </td>
-              <td id="bpmGym" class="bpm-value">--</td>
-              <td id="estadoGym" class="estado">--</td>
-            </tr>
-            <tr class="estudiante">
-              <td>
-                <div class="persona-info">
-                  <strong>Estudiante</strong>
-                  <small>Ana, 14 años</small>
-                </div>
-              </td>
-              <td>
-                <div class="perfil">
-                  <small>Adolescente</small>
-                </div>
-              </td>
-              <td id="bpmEst" class="bpm-value">--</td>
-              <td id="estadoEst" class="estado">--</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="chart-section card">
+        <div id="chart" style="height: 550px"></div>
       </div>
     </div>
 
