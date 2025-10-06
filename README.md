@@ -1,16 +1,29 @@
 # MineGuard
 
-Repositorio principal de la aplicación **MineGuard**, con backend (FastAPI), web (Angular) y mobile (Android/Kotlin).
+Sistema integral de **supervisión y seguridad minera** con cascos inteligentes IoT y dashboards en tiempo real.
+
+**Stack tecnológico:**
+- 🐍 **Backend:** FastAPI + Python + MySQL
+- 🌐 **Web:** Angular + TypeScript  
+- 📱 **Mobile:** Kotlin + Jetpack Compose + Retrofit
 
 ---
 
 ## 🗂 Estructura del repositorio
 
+```
 MineGuard/
-├── backend/ # FastAPI backend
-├── web/ # Angular frontend
-├── mobile/ # Kotlin/Android app
-└── README.md
+├── backend/          # 🐍 API FastAPI + Python + MySQL
+├── web/              # 🌐 Frontend Angular + TypeScript  
+├── mobile/           # 📱 App Android + Kotlin + Jetpack Compose
+│   ├── app/src/main/java/com/example/mobile/
+│   │   ├── core/     # Configuraciones y utilidades
+│   │   ├── data/     # APIs, repositorios, base de datos
+│   │   ├── model/    # Modelos de dominio
+│   │   └── ui/       # Pantallas, componentes, ViewModels
+│   └── build.gradle.kts
+└── README.md         # 📚 Documentación principal
+```
 
 ---
 
@@ -129,9 +142,90 @@ ng serve
 http://localhost:4200/
 
 ## 🔹 Mobile (Android/Kotlin)
-A completar según la configuración del proyecto móvil
 
----
+Aplicación móvil para **supervisión de mineros** desarrollada con tecnologías modernas de Android.
+
+### 🛠️ Stack Tecnológico
+- **Lenguaje:** Kotlin
+- **UI Framework:** Jetpack Compose
+- **Networking:** Retrofit + OkHttp
+- **Arquitectura:** MVVM Modular
+- **Navegación:** Navigation Compose
+- **Injection:** Hilt (próximo)
+
+### 🏗️ Arquitectura MVVM Modular
+
+```
+com.example.mobile/
+├── MainActivity.kt              # Punto de entrada
+├── core/                       # Configuraciones esenciales
+│   └── utils/                  # Extensions, Constants, Helpers
+├── data/                       # Capa de datos unificada
+│   ├── api/                   # Services de API (Retrofit)
+│   ├── database/              # Room entities y DAOs
+│   └── repository/            # Repositories (patrón Repository)
+├── model/                     # Modelos de dominio
+│   └── *.kt                   # User, Alert, Device, etc.
+└── ui/                        # Capa de presentación
+    ├── components/            # Componentes Compose reutilizables
+    ├── navigation/            # Navegación entre pantallas
+    ├── screens/               # Pantallas principales
+    ├── theme/                 # Temas, colores, tipografías
+    └── viewmodel/             # ViewModels (MVVM)
+```
+
+### 🚀 Configuración del proyecto
+
+#### Requisitos
+- **Android Studio** Arctic Fox o superior
+- **JDK 11** o superior
+- **Gradle 8.13**
+- **Android API Level:** Min 24, Target 36
+
+#### Primeros pasos
+
+1. **Clonar el repositorio:**
+```bash
+git clone https://github.com/MineGuardOrg/MineGuard.git
+cd MineGuard/mobile
+```
+
+2. **Abrir en Android Studio:**
+   - Abrir Android Studio
+   - File → Open → Seleccionar carpeta `MineGuard/mobile`
+   - Esperar sincronización de Gradle
+
+3. **Compilar el proyecto:**
+```bash
+./gradlew assembleDebug
+```
+
+4. **Ejecutar en dispositivo/emulador:**
+   - Conectar dispositivo Android o iniciar emulador
+   - Presionar botón "Run" en Android Studio
+   - O usar comando: `./gradlew installDebug`
+
+#### 🔧 Variables de entorno
+
+Crear archivo `local.properties` en la raíz del proyecto mobile:
+```properties
+# API Backend
+API_BASE_URL=http://127.0.0.1:8000/
+# Firebase (para notificaciones push)
+FIREBASE_PROJECT_ID=mineguard-project
+```
+
+⚠️ **No subir `local.properties` al repositorio.**
+
+### 🧪 Testing
+
+```bash
+# Tests unitarios
+./gradlew test
+
+# Tests de interfaz
+./gradlew connectedAndroidTest
+```
 
 ## 🔒 Certificado SSL para conexión a MySQL (Azure)
 
@@ -176,9 +270,9 @@ El backend ya incluye una estructura Clean / Layered Architecture:
 
 - `app/api/` → Endpoints
 - `app/application/` → Lógica de negocio (services)
+- `app/core/` → Configuración general y seguridad
 - `app/domain/` → Entidades y schemas
 - `app/infrastructure/` → DAOs, base de datos, adaptadores externos
-- `app/core/` → Configuración general y seguridad
 - `app/tests/` → Pruebas unitarias
 
 El proyecto utiliza `.gitignore` global en la raíz para todos los subproyectos.
