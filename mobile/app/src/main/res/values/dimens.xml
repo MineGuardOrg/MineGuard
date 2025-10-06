@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dimens específicos para tablets -->
+    
+    <!-- Padding y márgenes -->
+    <dimen name="padding_small">12dp</dimen>
+    <dimen name="padding_medium">24dp</dimen>
+    <dimen name="padding_large">32dp</dimen>
+    <dimen name="padding_xlarge">48dp</dimen>
+    
+    <!-- Card spacing para dashboard -->
+    <dimen name="card_spacing">16dp</dimen>
+    <dimen name="card_elevation">8dp</dimen>
+    <dimen name="card_corner_radius">16dp</dimen>
+    
+    <!-- Dashboard específico -->
+    <dimen name="dashboard_card_min_width">300dp</dimen>
+    <dimen name="dashboard_card_min_height">200dp</dimen>
+    <dimen name="dashboard_grid_spacing">24dp</dimen>
+    
+    <!-- Text sizes optimizados para tablet -->
+    <dimen name="text_heading_large">32sp</dimen>
+    <dimen name="text_heading_medium">24sp</dimen>
+    <dimen name="text_body_large">18sp</dimen>
+    <dimen name="text_body_medium">16sp</dimen>
+    <dimen name="text_caption">14sp</dimen>
+    
+    <!-- Botones y controles -->
+    <dimen name="button_height">56dp</dimen>
+    <dimen name="button_width_min">120dp</dimen>
+    <dimen name="fab_size">64dp</dimen>
+    
+    <!-- Navigation específico para tablet -->
+    <dimen name="nav_rail_width">80dp</dimen>
+    <dimen name="content_max_width">1200dp</dimen>
+</resources>
