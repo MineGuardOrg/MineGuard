@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "com.example.mobile"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.mobile"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -21,6 +21,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Optimizaciones para desarrollo más rápido
+            isMinifyEnabled = false
+            isShrinkResources = false
+            isDebuggable = true
+        }
+        
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -51,13 +58,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
     // ===== NETWORKING & API =====
     // Retrofit (para consumir FastAPI backend)
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
@@ -102,7 +102,7 @@ dependencies {
     // Charts para dashboard de métricas
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
-    // Tests
+    // ===== TESTS =====
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

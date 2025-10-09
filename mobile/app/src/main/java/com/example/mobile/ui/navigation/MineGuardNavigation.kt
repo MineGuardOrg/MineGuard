@@ -20,8 +20,10 @@ import com.example.mobile.ui.screens.DashboardScreen
 import com.example.mobile.ui.screens.AlertsScreen
 import com.example.mobile.ui.screens.MinersScreen
 import com.example.mobile.ui.screens.SettingsScreen
+import com.example.mobile.ui.screens.LoginScreen
 
-sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
+sealed class Screen(val route: String, val title: String, val icon: ImageVector? = null) {
+    data object Login : Screen("login", "Login")
     data object Dashboard : Screen("dashboard", "Panel Principal", Icons.Default.Dashboard)
     data object Alerts : Screen("alerts", "Alertas", Icons.Default.Warning)
     data object Miners : Screen("miners", "Mineros", Icons.Default.Person)
@@ -31,6 +33,35 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MineGuardApp() {
+    val navController = rememberNavController()
+    
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Login.route
+    ) {
+        // Pantalla de Login
+        composable(Screen.Login.route) {
+            LoginScreen(
+                onLoginClick = {
+                    navController.navigate("main") {
+                        popUpTo(Screen.Login.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+        
+        // Navegación principal con bottom bar
+        composable("main") {
+            MainNavigationScreen()
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainNavigationScreen() {
     val navController = rememberNavController()
     
     Scaffold(
@@ -48,7 +79,7 @@ fun MineGuardApp() {
                 
                 screens.forEach { screen ->
                     NavigationBarItem(
-                        icon = { Icon(screen.icon, contentDescription = null) },
+                        icon = { Icon(screen.icon!!, contentDescription = null) },
                         label = { Text(screen.title) },
                         selected = currentRoute == screen.route,
                         onClick = {
