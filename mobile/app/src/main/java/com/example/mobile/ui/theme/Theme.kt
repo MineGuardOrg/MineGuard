@@ -6,8 +6,8 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.example.mobile.presentation.theme.Typography
 
-// Colores específicos para MineGuard - tema minero industrial
 private val mineOrange = Color(0xFFFF8C00)
 private val mineDeepOrange = Color(0xFFFF6B00)
 private val mineGray = Color(0xFF424242)
@@ -57,7 +57,8 @@ fun MineGuardTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        content = content
+        content = content,
+        typography = Typography,
     )
 }
 
