@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mobile.ui.theme.MobileTheme
 import com.example.mobile.R
-import com.example.mobile.presentation.theme.Yellow80
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,7 +39,7 @@ fun LoginScreen(
     ) {
         // Fondo de imagen
         Image(
-            painter = painterResource(id = R.drawable.login_background2), // <-- CAMBIA "login_background" por el nombre de tu imagen
+            painter = painterResource(id = R.drawable.login_background2),
             contentDescription = "Fondo de pantalla de inicio de sesión",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop // Esto hace que la imagen cubra completamente el espacio
@@ -63,7 +62,7 @@ fun LoginScreen(
             // Espaciador superior para centrar mejor
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Card principal del loginj
+            // Card principal del login
             Card(
                 modifier = Modifier
                     .widthIn(min = 300.dp, max = 400.dp)
@@ -114,11 +113,11 @@ fun LoginScreen(
                     )
 
                     Text(
-                        text = "Sistema de Monitoreo Minero",
+                        text = "Monitoreo Integral de Minería Segura",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(bottom = 32.dp)
+                        modifier = Modifier.padding(bottom = 20.dp)
                     )
 
                     // Campo de usuario
@@ -171,8 +170,8 @@ fun LoginScreen(
                     ) {
                         Text(
                             text = "Iniciar Sesión",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold
                         )
                     }
 
@@ -183,7 +182,8 @@ fun LoginScreen(
                         text = "Versión 1.0 - Demo",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Light
                     )
                 }
             }
