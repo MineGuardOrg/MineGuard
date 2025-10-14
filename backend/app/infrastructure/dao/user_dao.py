@@ -14,6 +14,16 @@ class UserDAO:
             return db.query(User).filter(User.id == user_id, User.is_active == True).first()
 
     @staticmethod
+    def get_by_employee_number(employee_number: str):
+        with SessionLocal() as db:
+            return db.query(User).filter(User.employee_number == employee_number, User.is_active == True).first()
+
+    @staticmethod
+    def get_by_email(email: str):
+        with SessionLocal() as db:
+            return db.query(User).filter(User.email == email, User.is_active == True).first()
+
+    @staticmethod
     def soft_delete(user_id: int):
         with SessionLocal() as db:
             user = db.query(User).filter(User.id == user_id, User.is_active == True).first()

@@ -11,6 +11,7 @@ class User(Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
+    employee_number = Column(String(20), nullable=False, unique=True)
     first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
     email = Column(String(150), nullable=False, unique=True)
