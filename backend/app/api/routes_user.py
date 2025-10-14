@@ -1,13 +1,16 @@
 # Endpoints de usuarios
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from app.application.user_service import UserService
 from app.domain.schemas.user_schema import UserSchema, UserCreateSchema
+from app.domain.entities.user import User
+from app.core.security import get_current_user
 
 user_router = APIRouter()
 
 @user_router.get("/", response_model=list[UserSchema])
-def get_all_users():
+def get_all_users(current_user: User = Depends(get_current_user)):
+    """Obtener todos los usuarios (requiere autenticación)"""
     return UserService.get_all_users()
 
 @user_router.get("/{user_id}", response_model=UserSchema)
