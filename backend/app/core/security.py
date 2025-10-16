@@ -3,15 +3,14 @@ from typing import Union
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from app.core.config import settings
-from app.infrastructure.dao.user_dao import UserDAO
 
 # Configuración de hash de contraseñas
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Configuración OAuth2
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+# Configuración Bearer Token (más simple para Swagger)
+security = HTTPBearer()
 
 def get_password_hash(password: str) -> str:
     """Genera un hash seguro de la contraseña usando bcrypt"""
@@ -39,7 +38,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded_jwt
 
-def get_current_user(token: str = Depends(oauth2_scheme)):
+def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Obtiene el usuario actual desde el JWT token"""
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -48,6 +47,8 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
     )
     
     try:
+        # Extraer el token de las credenciales
+        token = credentials.credentials
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         user_id: str = payload.get("sub")
         if user_id is None:
@@ -55,7 +56,10 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
     except JWTError:
         raise credentials_exception
     
-    user = UserDAO.get_by_id(int(user_id))
+    # Importar aquí para evitar dependencias circulares
+    from app.modules.auth.repository import AuthRepository
+    auth_repo = AuthRepository()
+    user = auth_repo.get_by_id(int(user_id))
     if user is None:
         raise credentials_exception
     
