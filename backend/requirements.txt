@@ -3,6 +3,8 @@ uvicorn[standard]
 sqlalchemy
 pymysql
 python-dotenv
-passlib[bcrypt]
+# Fijamos versiones para compatibilidad entre passlib y bcrypt
+passlib[bcrypt]==1.7.4
+bcrypt==3.2.2
 python-jose[cryptography]
 python-multipart

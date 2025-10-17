@@ -87,6 +87,9 @@ class UserSchema(BaseModel):
     updated_at: Optional[datetime] = None
 
     class Config:
+        # Compatibilidad Pydantic v1 (requerido por from_orm)
+        orm_mode = True
+        # Sugerencia para v2 (inocuo en v1)
         from_attributes = True
 
 class UserUpdateSchema(BaseModel):
