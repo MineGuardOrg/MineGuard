@@ -14,24 +14,31 @@ class BaseRepository(Generic[T]):
         self.model = model
     
     def get_all(self, db: Optional[Session] = None) -> List[T]:
-        """Obtiene todos los registros activos"""
+        """Obtiene todos los registros (solo activos si el modelo tiene is_active)"""
+        def _query(session: Session):
+            q = session.query(self.model)
+            # Aplicar filtro is_active solo si existe el atributo
+            if hasattr(self.model, "is_active"):
+                q = q.filter(self.model.is_active == True)
+            return q.all()
+
         if db is None:
             with SessionLocal() as db:
-                return db.query(self.model).filter(self.model.is_active == True).all()
-        return db.query(self.model).filter(self.model.is_active == True).all()
+                return _query(db)
+        return _query(db)
     
     def get_by_id(self, id: int, db: Optional[Session] = None) -> Optional[T]:
-        """Obtiene un registro por ID"""
+        """Obtiene un registro por ID (solo activos si el modelo tiene is_active)"""
+        def _query(session: Session):
+            q = session.query(self.model).filter(self.model.id == id)
+            if hasattr(self.model, "is_active"):
+                q = q.filter(self.model.is_active == True)
+            return q.first()
+
         if db is None:
             with SessionLocal() as db:
-                return db.query(self.model).filter(
-                    self.model.id == id, 
-                    self.model.is_active == True
-                ).first()
-        return db.query(self.model).filter(
-            self.model.id == id, 
-            self.model.is_active == True
-        ).first()
+                return _query(db)
+        return _query(db)
     
     def create(self, data: Dict[str, Any], db: Optional[Session] = None) -> T:
         """Crea un nuevo registro"""
@@ -83,14 +90,18 @@ class BaseRepository(Generic[T]):
             return instance
     
     def soft_delete(self, id: int, db: Optional[Session] = None) -> Optional[T]:
-        """Eliminación lógica (soft delete) marcando is_active = False"""
+        """Eliminación lógica si existe is_active; de lo contrario, elimina físicamente."""
         if db is None:
             with SessionLocal() as db:
                 try:
                     instance = self.get_by_id(id, db)
                     if instance:
-                        instance.is_active = False
-                        db.commit()
+                        if hasattr(instance, "is_active"):
+                            instance.is_active = False
+                            db.commit()
+                        else:
+                            db.delete(instance)
+                            db.commit()
                     return instance
                 except SQLAlchemyError as e:
                     db.rollback()
@@ -98,7 +109,10 @@ class BaseRepository(Generic[T]):
         else:
             instance = self.get_by_id(id, db)
             if instance:
-                instance.is_active = False
+                if hasattr(instance, "is_active"):
+                    instance.is_active = False
+                else:
+                    db.delete(instance)
             return instance
     
     def hard_delete(self, id: int, db: Optional[Session] = None) -> bool:

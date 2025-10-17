@@ -191,3 +191,5 @@ CREATE TABLE `ml_prediction` (
     PRIMARY KEY(`id`),
     FOREIGN KEY (`reading_id`) REFERENCES reading(`id`)
 ) COMMENT='Resultados de predicciones ML';
+
+INSERT INTO `role` VALUES (1,'Admin','Tiene todos los permisos, puede gestionar usuarios, dispositivos, turnos, alertas, reportes, ML, etc.',1,'2025-09-22 01:41:27','2025-09-22 01:41:27'),(2,'User','Acceso normal a la plataforma según su puesto, sin permisos administrativos.',1,'2025-09-22 01:41:28','2025-09-22 01:41:28');
