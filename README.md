@@ -16,12 +16,6 @@ MineGuard/
 ├── backend/          # 🐍 API FastAPI + Python + MySQL
 ├── web/              # 🌐 Frontend Angular + TypeScript  
 ├── mobile/           # 📱 App Android + Kotlin + Jetpack Compose
-│   ├── app/src/main/java/com/example/mobile/
-│   │   ├── core/     # Configuraciones y utilidades
-│   │   ├── data/     # APIs, repositorios, base de datos
-│   │   ├── model/    # Modelos de dominio
-│   │   └── ui/       # Pantallas, componentes, ViewModels
-│   └── build.gradle.kts
 └── README.md         # 📚 Documentación principal
 ```
 
