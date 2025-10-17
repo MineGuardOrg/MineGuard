@@ -93,7 +93,7 @@ class AuthService(BaseService[User, UserCreateSchema, UserUpdateSchema, UserSche
             # Usar el método create heredado
             user_schema = self.create(create_data)
             
-            logger.info(f"✅ Usuario registrado exitosamente - Employee: {user_data.employee_number}")
+            logger.info(f"Usuario registrado exitosamente - Employee: {user_data.employee_number}")
             return user_schema
             
         except (ValidationError, DuplicateError) as e:
@@ -102,7 +102,7 @@ class AuthService(BaseService[User, UserCreateSchema, UserUpdateSchema, UserSche
                 detail=str(e)
             )
         except Exception as e:
-            logger.error(f"❌ Error al registrar usuario: {str(e)}")
+            logger.error(f"Error al registrar usuario: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Error interno del servidor al registrar usuario"
@@ -120,7 +120,7 @@ class AuthService(BaseService[User, UserCreateSchema, UserUpdateSchema, UserSche
             if not verify_password(password, user.password):
                 raise AuthenticationError("Credenciales incorrectas")
             
-            logger.info(f"✅ Login exitoso - Employee: {user.employee_number}")
+            logger.info(f"Login exitoso - Employee: {user.employee_number}")
             return user
             
         except AuthenticationError as e:
@@ -129,7 +129,7 @@ class AuthService(BaseService[User, UserCreateSchema, UserUpdateSchema, UserSche
                 detail=str(e)
             )
         except Exception as e:
-            logger.error(f"❌ Error al autenticar usuario: {str(e)}")
+            logger.error(f"Error al autenticar usuario: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Error interno del servidor al autenticar usuario"
@@ -153,7 +153,7 @@ class AuthService(BaseService[User, UserCreateSchema, UserUpdateSchema, UserSche
         except HTTPException:
             raise
         except Exception as e:
-            logger.error(f"❌ Error en proceso de login: {str(e)}")
+            logger.error(f"Error en proceso de login: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Error interno del servidor en el proceso de login"

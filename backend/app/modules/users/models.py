@@ -36,6 +36,7 @@ class UserSchema(BaseModel):
     updated_at: Optional[datetime] = None
 
     class Config:
+        orm_mode = True
         from_attributes = True
 
 class UserUpdateSchema(BaseModel):
@@ -62,4 +63,5 @@ class UserListSchema(BaseModel):
     is_active: bool
 
     class Config:
+        orm_mode = True
         from_attributes = True

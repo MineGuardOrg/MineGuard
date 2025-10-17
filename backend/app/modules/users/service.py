@@ -41,7 +41,7 @@ class UserService(BaseService[User, UserCreateSchema, UserUpdateSchema, UserSche
         # Si no se proporciona role_id, usar "User" por defecto (id=2)
         if user_data.get("role_id") is None:
             user_data["role_id"] = 2
-            logger.info(f"🔹 Role asignado por defecto: User (id=2) para employee: {user_data['employee_number']}")
+            logger.info(f"Role asignado por defecto: User (id=2) para employee: {user_data['employee_number']}")
         
         # Limpiar campos opcionales
         optional_fields = ["area_id", "position_id", "supervisor_id"]
@@ -88,7 +88,7 @@ class UserService(BaseService[User, UserCreateSchema, UserUpdateSchema, UserSche
             entities = self.repository.get_all()
             return [UserListSchema.from_orm(entity) for entity in entities]
         except Exception as e:
-            logger.error(f"❌ Error al obtener usuarios simplificados: {str(e)}")
+            logger.error(f"Error al obtener usuarios simplificados: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Error interno del servidor al obtener usuarios"
@@ -107,7 +107,7 @@ class UserService(BaseService[User, UserCreateSchema, UserUpdateSchema, UserSche
                 detail=str(e)
             )
         except Exception as e:
-            logger.error(f"❌ Error al obtener usuario por employee_number {employee_number}: {str(e)}")
+            logger.error(f"Error al obtener usuario por employee_number {employee_number}: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Error interno del servidor al obtener usuario"
@@ -126,7 +126,7 @@ class UserService(BaseService[User, UserCreateSchema, UserUpdateSchema, UserSche
                 detail=str(e)
             )
         except Exception as e:
-            logger.error(f"❌ Error al obtener usuario por email {email}: {str(e)}")
+            logger.error(f"Error al obtener usuario por email {email}: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Error interno del servidor al obtener usuario"
@@ -138,7 +138,7 @@ class UserService(BaseService[User, UserCreateSchema, UserUpdateSchema, UserSche
             users = self.repository.get_by_role(role_id)
             return [self._to_response_schema(user) for user in users]
         except Exception as e:
-            logger.error(f"❌ Error al obtener usuarios por rol {role_id}: {str(e)}")
+            logger.error(f"Error al obtener usuarios por rol {role_id}: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Error interno del servidor al obtener usuarios por rol"
@@ -150,7 +150,7 @@ class UserService(BaseService[User, UserCreateSchema, UserUpdateSchema, UserSche
             users = self.repository.get_by_area(area_id)
             return [self._to_response_schema(user) for user in users]
         except Exception as e:
-            logger.error(f"❌ Error al obtener usuarios por área {area_id}: {str(e)}")
+            logger.error(f"Error al obtener usuarios por área {area_id}: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Error interno del servidor al obtener usuarios por área"
@@ -162,7 +162,7 @@ class UserService(BaseService[User, UserCreateSchema, UserUpdateSchema, UserSche
             users = self.repository.get_subordinates(supervisor_id)
             return [self._to_response_schema(user) for user in users]
         except Exception as e:
-            logger.error(f"❌ Error al obtener subordinados del supervisor {supervisor_id}: {str(e)}")
+            logger.error(f"Error al obtener subordinados del supervisor {supervisor_id}: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Error interno del servidor al obtener subordinados"
@@ -182,7 +182,7 @@ class UserService(BaseService[User, UserCreateSchema, UserUpdateSchema, UserSche
                 detail=str(e)
             )
         except Exception as e:
-            logger.error(f"❌ Error al buscar usuarios con término '{search_term}': {str(e)}")
+            logger.error(f"Error al buscar usuarios con término '{search_term}': {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Error interno del servidor al buscar usuarios"
