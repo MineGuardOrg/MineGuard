@@ -16,7 +16,7 @@ venv/
 *.sqlite3
 alembic/versions/
 # Ignorar .env para desarrollo compartido
-.env
+#.env
 certs/
 
 # Node / Angular Web 
