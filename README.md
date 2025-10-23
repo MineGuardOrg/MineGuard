@@ -61,13 +61,6 @@ pip install -r requirements.txt
 
 4. Configurar las variables de entorno en `.env`:
 
-```ini
-DB_USER=DB_USER
-DB_PASSWORD=DB_PASSWORD!
-DB_HOST=DB_HOST
-DB_PORT=DB_PORT
-DB_NAME=DB_NAME
-```
 ⚠️ No subir el .env al repositorio.
 
 5. Ejecutar la API:
