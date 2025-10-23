@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy.exc import SQLAlchemyError
+from urllib.parse import quote_plus
 import os
 from dotenv import load_dotenv
 
@@ -15,8 +16,11 @@ DB_PORT = os.getenv("DB_PORT", "3306")
 DB_NAME = os.getenv("DB_NAME")
 DB_SSL_CERT = os.getenv("DB_SSL_CERT")  # Ruta al certificado SSL
 
+# Codificar la contraseña para URL (maneja caracteres especiales como !, @, etc.)
+encoded_password = quote_plus(DB_PASSWORD)
+
 # URL de conexion (pymysql se usa mucho en FastAPI)
-DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+DATABASE_URL = f"mysql+pymysql://{DB_USER}:{encoded_password}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 # Crear engine con conexión segura (SSL)
 engine = create_engine(
