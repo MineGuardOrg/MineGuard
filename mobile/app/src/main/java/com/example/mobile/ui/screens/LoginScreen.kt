@@ -21,16 +21,39 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mobile.ui.theme.MobileTheme
+import com.example.mobile.ui.viewmodel.LoginViewModel
 import com.example.mobile.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    onLoginClick: () -> Unit = {}
+    onLoginSuccess: () -> Unit = {},
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
-    var username by remember { mutableStateOf("") }
+    var employeeNumber by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    
+    // Manejar login exitoso
+    LaunchedEffect(uiState.isLoginSuccessful) {
+        if (uiState.isLoginSuccessful) {
+            onLoginSuccess()
+        }
+    }
+    
+    // Mostrar error si existe
+    uiState.error?.let { error ->
+        LaunchedEffect(error) {
+            // Aquí podrías mostrar un Snackbar o Toast
+            // Por ahora solo limpiaremos el error después de un tiempo
+            kotlinx.coroutines.delay(3000)
+            viewModel.clearError()
+        }
+    }
     val scrollState = rememberScrollState()
 
     Box(
@@ -122,8 +145,8 @@ fun LoginScreen(
 
                     // Campo de usuario
                     OutlinedTextField(
-                        value = username,
-                        onValueChange = { username = it },
+                        value = employeeNumber,
+                        onValueChange = { employeeNumber = it },
                         label = { Text("Usuario") },
                         leadingIcon = {
                             Icon(
@@ -157,9 +180,22 @@ fun LoginScreen(
                         shape = RoundedCornerShape(12.dp)
                     )
 
+                    // Mostrar error si existe
+                    uiState.error?.let { error ->
+                        Text(
+                            text = error,
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                    }
+
                     // Botón de iniciar sesión
                     Button(
-                        onClick = onLoginClick,
+                        onClick = { 
+                            viewModel.login(employeeNumber, password)
+                        },
+                        enabled = !uiState.isLoading,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(50.dp),
@@ -168,11 +204,18 @@ fun LoginScreen(
                             containerColor = MaterialTheme.colorScheme.primary
                         )
                     ) {
-                        Text(
-                            text = "Iniciar Sesión",
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Bold
-                        )
+                        if (uiState.isLoading) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        } else {
+                            Text(
+                                text = "Iniciar Sesión",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))

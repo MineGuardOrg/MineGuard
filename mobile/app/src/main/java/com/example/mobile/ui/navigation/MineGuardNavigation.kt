@@ -42,7 +42,7 @@ fun MineGuardApp() {
         // Pantalla de Login
         composable(Screen.Login.route) {
             LoginScreen(
-                onLoginClick = {
+                onLoginSuccess = {
                     navController.navigate("main") {
                         popUpTo(Screen.Login.route) {
                             inclusive = true
