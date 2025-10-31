@@ -1,5 +1,6 @@
-
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 from app.core import logging_config  # Cargar configuración de logs
 
 # Importar todos los routers de módulos
@@ -22,6 +23,20 @@ from app.modules.ml_prediction.router import ml_prediction_router
 from app.modules.dashboard.router import dashboard_router
 
 app = FastAPI(title="MineGuard API", version="1.0.0")
+
+# Configurar CORS
+origins = [
+    "http://localhost",
+    "http://localhost:4200"  # Angular por defecto corre en este puerto
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Registrar routers (orden alfabético por tag)
 app.include_router(alert_router, prefix="/alerts", tags=["Alerts"])

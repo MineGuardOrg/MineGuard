@@ -2,6 +2,7 @@
 from typing import Optional
 from app.shared.base_repository import BaseRepository
 from app.modules.auth.models import User
+from sqlalchemy.orm import joinedload
 
 class AuthRepository(BaseRepository[User]):
     """Repositorio específico para operaciones de autenticación"""
@@ -13,7 +14,7 @@ class AuthRepository(BaseRepository[User]):
         """Obtiene un usuario por número de empleado"""
         from app.core.database import SessionLocal
         with SessionLocal() as db:
-            return db.query(self.model).filter(
+            return db.query(self.model).options(joinedload(self.model.role)).filter(
                 self.model.employee_number == employee_number,
                 self.model.is_active == True
             ).first()

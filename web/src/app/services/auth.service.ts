@@ -16,18 +16,49 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(credentials: { email: string; password: string }): Observable<any> {
-    return this.http
-      .post<{ token: string }>(`${this.apiUrl}/Auth/login`, credentials)
-      .pipe(
-        tap((response) => {
-          if (response && response.token) {
-            this.setToken(response.token);
-            this.loggedIn.next(true);
-          }
-        })
-      );
+  // Login compatible con diferentes backends (ASP.NET o FastAPI/OAuth2).
+  // Intenta usar la ruta actual `/auth/login` y acepta respuestas con `token` o `access_token`.
+  login(credentials: { employee_number: string; password: string }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/login`, credentials).pipe(
+      tap((response) => {
+        // soportar ambos formatos: { token } o { access_token }
+        const token = response?.token ?? response?.access_token;
+        const role = response?.role; // Extraer el rol de la respuesta
+        if (token) {
+          this.setToken(token);
+          this.loggedIn.next(true);
+        }
+        if (role) {
+          localStorage.setItem('role', role); // Almacenar el rol en localStorage
+        }
+      })
+    );
   }
+
+  /*
+  Si tu FastAPI usa el flujo OAuth2 (endpoint `/token` que espera
+  `application/x-www-form-urlencoded` y devuelve `access_token`),
+  puedes usar este método en su lugar:
+
+  loginOAuth2(credentials: { username: string; password: string }): Observable<any> {
+    const body = new URLSearchParams();
+    body.set('username', credentials.username);
+    body.set('password', credentials.password);
+    body.set('grant_type', 'password');
+
+    return this.http.post<any>(`${this.apiUrl}/token`, body.toString(), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    }).pipe(
+      tap((response) => {
+        const token = response?.access_token;
+        if (token) {
+          this.setToken(token);
+          this.loggedIn.next(true);
+        }
+      })
+    );
+  }
+  */
 
   register(user: {
     name: string;

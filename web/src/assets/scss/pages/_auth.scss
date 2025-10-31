@@ -136,11 +136,28 @@
   height: calc(100vh - 80px);
 }
 
-// .auth-bg {
-//   background: url(/assets/images/backgrounds/login-bg.jpg);
-//   background-size: cover;
-//   background-repeat: no-repeat;
-// }
+.auth-bg {
+  background: url(/assets/images/auth/login-bg.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0; 
+    background: rgba(0, 0, 0, 0.6); 
+    z-index: 0; // por debajo del contenido de la card
+    pointer-events: none;
+  }
+
+  // Asegurar que la card blanca y el contenido queden por encima del overlay
+  .auth-login,
+  .bg-white {
+    position: relative;
+    z-index: 1;
+  }
+}
 
 .auth-login {
   max-width: 1160px;

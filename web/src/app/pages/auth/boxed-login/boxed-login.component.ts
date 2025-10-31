@@ -8,6 +8,8 @@ import {
   Validators,
   FormsModule,
   ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
@@ -26,17 +28,28 @@ import { MaterialModule } from '../../../material.module';
 })
 export class AppBoxedLoginComponent {
   options = this.settings.getOptions();
+  form: FormGroup;
+
+  private employeeNumberValidator = (
+    control: AbstractControl
+  ): ValidationErrors | null => {
+    const val = control.value;
+    if (val === null || val === undefined || val === '') return null;
+    const num = Number(val);
+    if (isNaN(num) || num < 10) return { employeeNumberInvalid: true };
+    return null;
+  };
 
   constructor(
     private settings: CoreService,
     private router: Router,
     private authService: AuthService
-  ) {}
-  form = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required]),
-  });
-
+  ) {
+    this.form = new FormGroup({
+      employeeNumber: new FormControl('', [Validators.required, this.employeeNumberValidator]),
+      password: new FormControl('', [Validators.required]),
+    });
+  }
   get f() {
     return this.form.controls;
   }
@@ -44,8 +57,10 @@ export class AppBoxedLoginComponent {
   submit() {
     if (this.form.invalid) return;
 
+    // Nota: el backend espera la propiedad 'email' en credentials; aquí usamos
+    // el número de empleado en su lugar para mantener compatibilidad.
     const credentials = {
-      email: this.form.value.email!,
+      employee_number: this.form.value.employeeNumber!,
       password: this.form.value.password!,
     };
 

@@ -33,7 +33,7 @@ class User(Base):
     updated_at = Column(TIMESTAMP, nullable=True, onupdate=func.now())
 
     # Relaciones (opcional - solo si necesitas usar las relaciones)
-    # role = relationship("Role", backref="users")
+    role = relationship("Role", backref="users")
     # area = relationship("Area", backref="users")
     # position = relationship("Position", backref="users")
     # supervisor = relationship("User", remote_side=[id], backref="subordinates")
