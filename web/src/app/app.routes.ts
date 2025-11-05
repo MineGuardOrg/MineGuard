@@ -25,9 +25,9 @@ export const routes: Routes = [
           import('./pages/admin/admin.routes').then((m) => m.AdminRoutes),
       },
       {
-        path: 'learning',
+        path: 'main',
         loadChildren: () =>
-          import('./pages/learning/learning.routes').then((m) => m.LearningRoutes),
+          import('./pages/main/main.routes').then((m) => m.MainRoutes),
       },
       {
         path: 'ui-components',

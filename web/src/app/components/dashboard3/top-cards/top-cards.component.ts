@@ -46,12 +46,5 @@ export class AppTopCardsComponent {
       title: 'Cancel Orders',
       subtitle: '64',
     },
-    {
-      id: 5,
-      color: 'success',
-      icon: 'ic:outline-forest',
-      title: 'Total Income',
-      subtitle: '$36,715',
-    },
   ];
 }

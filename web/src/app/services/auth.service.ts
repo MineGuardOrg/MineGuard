@@ -16,56 +16,28 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  // Login compatible con diferentes backends (ASP.NET o FastAPI/OAuth2).
-  // Intenta usar la ruta actual `/auth/login` y acepta respuestas con `token` o `access_token`.
   login(credentials: { employee_number: string; password: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/auth/login`, credentials).pipe(
       tap((response) => {
-        // soportar ambos formatos: { token } o { access_token }
         const token = response?.token ?? response?.access_token;
-        const role = response?.role; // Extraer el rol de la respuesta
+        const role = response?.role;
         if (token) {
           this.setToken(token);
           this.loggedIn.next(true);
         }
         if (role) {
-          localStorage.setItem('role', role); // Almacenar el rol en localStorage
+          localStorage.setItem('role', role);
         }
       })
     );
   }
-
-  /*
-  Si tu FastAPI usa el flujo OAuth2 (endpoint `/token` que espera
-  `application/x-www-form-urlencoded` y devuelve `access_token`),
-  puedes usar este método en su lugar:
-
-  loginOAuth2(credentials: { username: string; password: string }): Observable<any> {
-    const body = new URLSearchParams();
-    body.set('username', credentials.username);
-    body.set('password', credentials.password);
-    body.set('grant_type', 'password');
-
-    return this.http.post<any>(`${this.apiUrl}/token`, body.toString(), {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    }).pipe(
-      tap((response) => {
-        const token = response?.access_token;
-        if (token) {
-          this.setToken(token);
-          this.loggedIn.next(true);
-        }
-      })
-    );
-  }
-  */
 
   register(user: {
     name: string;
     email: string;
     password: string;
   }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/Auth/register`, user);
+    return this.http.post(`${this.apiUrl}/auth/register`, user);
   }
 
   logout() {
@@ -96,7 +68,7 @@ export class AuthService {
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       //console.log('Payload:', payload);
-      return payload.rol || null; // Aquí accede a la propiedad 'rol'
+      return payload.role || payload.rol || null; // Buscar tanto 'role' como 'rol'
     } catch (e) {
       console.error('Error decoding token', e);
       return null;

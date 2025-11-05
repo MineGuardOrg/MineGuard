@@ -49,6 +49,7 @@ class TokenResponse(BaseModel):
     """Schema para respuesta de token JWT"""
     access_token: str
     token_type: str
+    role: str
 
 class UserCreateSchema(BaseModel):
     """Schema para crear usuario (uso interno)"""

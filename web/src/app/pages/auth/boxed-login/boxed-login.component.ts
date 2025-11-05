@@ -57,8 +57,6 @@ export class AppBoxedLoginComponent {
   submit() {
     if (this.form.invalid) return;
 
-    // Nota: el backend espera la propiedad 'email' en credentials; aquí usamos
-    // el número de empleado en su lugar para mantener compatibilidad.
     const credentials = {
       employee_number: this.form.value.employeeNumber!,
       password: this.form.value.password!,
@@ -66,13 +64,11 @@ export class AppBoxedLoginComponent {
 
     this.authService.login(credentials).subscribe({
       next: (res) => {
-        // console.log('Login exitoso', res);
-        localStorage.setItem('token', res.token);
+        //console.log('Login exitoso', res);
+        
+        const role = localStorage.getItem('role') || this.authService.getUserRole();
+        //console.log('Rol del usuario:', role);
 
-        const role = this.authService.getUserRole();
-        console.log('Rol del usuario:', role);
-
-        // Redirigir según rol
         if (role === 'Admin') {
           this.router.navigate(['/admin/maintenance']);
         } else {
