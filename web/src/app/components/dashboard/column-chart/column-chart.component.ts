@@ -14,7 +14,8 @@ import {
   ApexFill,
   NgApexchartsModule,
 } from 'ng-apexcharts';
-import { MaterialModule } from '../../../../material.module';
+import { MaterialModule } from 'src/app/material.module';
+import { TablerIconsModule } from 'angular-tabler-icons';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -35,10 +36,10 @@ export type ChartOptions = {
 };
 
 @Component({
-  selector: 'app-column',
+  selector: 'app-column-chart',
   standalone: true,
-  imports: [NgApexchartsModule, MaterialModule],
-  templateUrl: './column.component.html',
+  imports: [NgApexchartsModule, MaterialModule, TablerIconsModule],
+  templateUrl: './column-chart.component.html',
 })
 
 export class AppColumnChartComponent {

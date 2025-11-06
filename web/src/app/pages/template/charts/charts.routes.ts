@@ -3,7 +3,6 @@ import { Routes } from '@angular/router';
 // components
 import { AppAreaChartComponent } from './area/area.component';
 import { AppCandlestickChartComponent } from './candlestick/candlestick.component';
-import { AppColumnChartComponent } from './column/column.component';
 import { AppDoughnutpieChartComponent } from './doughnut-pie/doughnut-pie.component';
 import { AppGredientChartComponent } from './gredient/gredient.component';
 import { AppLineChartComponent } from './line/line.component';
@@ -34,18 +33,6 @@ export const ChartsRoutes: Routes = [
           urls: [
             { title: 'Dashboard', url: '/dashboards/dashboard1' },
             { title: 'Candlestick' },
-          ],
-        },
-      },
-      {
-        path: 'column',
-        component: AppColumnChartComponent,
-        data: {
-          title: 'Column Chart',
-          breadcrumb: true,
-          urls: [
-            { title: 'Dashboard', url: '/dashboards/dashboard1' },
-            { title: 'Column Chart' },
           ],
         },
       },

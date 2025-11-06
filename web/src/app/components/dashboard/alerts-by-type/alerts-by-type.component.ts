@@ -14,7 +14,7 @@ import {
   ApexFill,
 } from 'ng-apexcharts';
 
-export interface revenueForecastChart {
+export interface alertsByTypeChart {
   series: ApexAxisChartSeries;
   chart: ApexChart;
   dataLabels: ApexDataLabels;
@@ -26,49 +26,50 @@ export interface revenueForecastChart {
 }
 
 @Component({
-  selector: 'app-revenue-forecast',
+  selector: 'app-alerts-by-type',
   standalone: true,
   imports: [MaterialModule, TablerIconsModule, NgApexchartsModule],
-  templateUrl: './revenue-forecast.component.html',
+  templateUrl: './alerts-by-type.component.html',
 })
-export class AppRevenueForecastComponent {
+
+export class AppAlertsByTypeComponent {
   @ViewChild('chart') chart: ChartComponent = Object.create(null);
-  public revenueForecastChart!: Partial<revenueForecastChart> | any;
+  public alertsByTypeChart!: Partial<alertsByTypeChart> | any;
 
   constructor() {
-    this.revenueForecastChart = {
+    this.alertsByTypeChart = {
       series: [
         {
-          name: '2023',
-          data: [50, 60, 30, 55, 75, 60, 100, 120],
-        },
-
-        {
-          name: '2022',
-          data: [35, 45, 40, 50, 35, 55, 40, 45],
-        },
-        {
           name: '2024',
-          data: [100, 75, 80, 40, 20, 40, 0, 25],
+          data: [1.2, 2.7, 1, 3.6, 2.1, 2.7, 2.2, 1.3, 2.5],
+        },
+        {
+          name: '2023',
+          data: [-2.8, -1.1, -2.5, -1.5, -2.3, -1.9, -1, -2.1, -1.3],
         },
       ],
 
       chart: {
-        type: 'area',
+        type: 'bar',
         fontFamily: 'inherit',
         foreColor: '#adb0bb',
+        height: 295,
+        stacked: true,
+        offsetX: -15,
         toolbar: {
           show: false,
         },
-        height: 300,
-        width: '100%',
-        stacked: false,
-        offsetX: -10,
       },
-      colors: ['rgb(255, 102, 146)', '#16cdc7', 'rgb(99, 91, 255)'],
-      stroke: {
-        width: 2,
-        curve: 'monotoneCubic',
+      colors: ['rgba(99, 91, 255, 1)', 'rgba(255, 102, 146,1)'],
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          barHeight: '60%',
+          columnWidth: '15%',
+          borderRadius: [6],
+          borderRadiusApplication: 'end',
+          borderRadiusWhenStacked: 'all',
+        },
       },
       dataLabels: {
         enabled: false,
@@ -81,6 +82,7 @@ export class AppRevenueForecastComponent {
         padding: {
           top: 0,
           bottom: 0,
+          right: 0,
         },
         borderColor: 'rgba(0,0,0,0.05)',
         xaxis: {
@@ -94,15 +96,11 @@ export class AppRevenueForecastComponent {
           },
         },
       },
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shadeIntensity: 0,
-          inverseColors: false,
-          opacityFrom: 0.45,
-          opacityTo: 0,
-          stops: [20, 180],
-        },
+
+      yaxis: {
+        min: -5,
+        max: 5,
+        tickAmount: 4,
       },
       xaxis: {
         axisBorder: {
@@ -111,11 +109,20 @@ export class AppRevenueForecastComponent {
         axisTicks: {
           show: false,
         },
-        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug'],
-      },
-      markers: {
-        strokeColor: ['rgba(255, 102, 146, 1)', '#16cdc7', 'rgba(99, 91, 255, 1)'],
-        strokeWidth: 2,
+        categories: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'July',
+          'Aug',
+          'Sep',
+        ],
+        labels: {
+          style: { fontSize: '13px', colors: '#adb0bb', fontWeight: '400' },
+        },
       },
       tooltip: {
         theme: 'dark',

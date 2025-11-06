@@ -1,0 +1,27 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content>
+    <div class="hstack align-items-center flex-column flex-lg-row">
+      <div class="hstack w-100">
+        <div>
+          <mat-card-title>Promedios biometricos por area</mat-card-title>
+        </div>
+      </div>
+    </div>
+    <div class="m-t-16" style="height: 300px">
+      <apx-chart
+        [series]="columnChartOptions.series"
+        [chart]="columnChartOptions.chart"
+        [xaxis]="columnChartOptions.xaxis"
+        [yaxis]="columnChartOptions.yaxis"
+        [grid]="columnChartOptions.grid"
+        [stroke]="columnChartOptions.stroke"
+        [tooltip]="columnChartOptions.tooltip"
+        [plotOptions]="columnChartOptions.plotOptions"
+        [dataLabels]="columnChartOptions.dataLabels"
+        [legend]="columnChartOptions.legend"
+        [colors]="columnChartOptions.colors"
+        [markers]="columnChartOptions.markers"
+      ></apx-chart>
+    </div>
+  </mat-card-content>
+</mat-card>

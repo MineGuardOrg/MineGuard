@@ -1,0 +1,25 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content>
+    <div class="hstack align-items-center flex-column flex-lg-row">
+      <div class="w-100">
+        <mat-card-title>Alertas por tipo - Ultimo mes</mat-card-title>
+      </div>
+    </div>
+
+    <!-- chart -->
+    <div class="m-t-16 rounded-bars" style="height: 300px">
+      <apx-chart
+        [series]="alertsByTypeChart.series"
+        [chart]="alertsByTypeChart.chart"
+        [colors]="alertsByTypeChart.colors"
+        [plotOptions]="alertsByTypeChart.plotOptions"
+        [dataLabels]="alertsByTypeChart.dataLabels"
+        [legend]="alertsByTypeChart.legend"
+        [grid]="alertsByTypeChart.grid"
+        [yaxis]="alertsByTypeChart.yaxis"
+        [xaxis]="alertsByTypeChart.xaxis"
+        [tooltip]="alertsByTypeChart.tooltip"
+      ></apx-chart>
+    </div>
+  </mat-card-content>
+</mat-card>
