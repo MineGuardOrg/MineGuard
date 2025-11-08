@@ -1,0 +1,25 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content>
+    <div class="hstack align-items-center flex-column flex-lg-row">
+      <div class="w-100">
+        <mat-card-title>Promedio biométrico por Area</mat-card-title>
+      </div>
+    </div>
+
+    <!-- chart -->
+    <div class="m-t-16 rounded-bars" style="width: 100%; overflow: hidden;">
+      <apx-chart
+        [series]="biometricAvgChart.series"
+        [chart]="biometricAvgChart.chart"
+        [colors]="biometricAvgChart.colors"
+        [plotOptions]="biometricAvgChart.plotOptions"
+        [dataLabels]="biometricAvgChart.dataLabels"
+        [legend]="biometricAvgChart.legend"
+        [grid]="biometricAvgChart.grid"
+        [yaxis]="biometricAvgChart.yaxis"
+        [xaxis]="biometricAvgChart.xaxis"
+        [tooltip]="biometricAvgChart.tooltip"
+      ></apx-chart>
+    </div>
+  </mat-card-content>
+</mat-card>

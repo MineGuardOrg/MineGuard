@@ -12,9 +12,11 @@ import {
   ApexPlotOptions,
   NgApexchartsModule,
   ApexFill,
+  ApexYAxis,
+  ApexXAxis,
 } from 'ng-apexcharts';
 
-export interface alertsByTypeChart {
+export interface biometricAvgChart {
   series: ApexAxisChartSeries;
   chart: ApexChart;
   dataLabels: ApexDataLabels;
@@ -23,37 +25,30 @@ export interface alertsByTypeChart {
   stroke: ApexStroke;
   legend: ApexLegend;
   fill: ApexFill;
+  yaxis: ApexYAxis | ApexYAxis[];
+  xaxis: ApexXAxis;
 }
 
 @Component({
-  selector: 'app-alerts-by-type',
+  selector: 'app-biometric-avg',
   standalone: true,
   imports: [MaterialModule, TablerIconsModule, NgApexchartsModule],
-  templateUrl: './alerts-by-type.component.html',
+  templateUrl: './biometric-avg.component.html',
 })
-
-export class AppAlertsByTypeComponent {
+export class AppBiometricAvgComponent {
   @ViewChild('chart') chart: ChartComponent = Object.create(null);
-  public alertsByTypeChart!: Partial<alertsByTypeChart> | any;
+  public biometricAvgChart!: Partial<biometricAvgChart> | any;
 
   constructor() {
-    this.alertsByTypeChart = {
+    this.biometricAvgChart = {
       series: [
         {
-          name: 'Gases tóxicos',
-          data: [8, 12, 6, 10],
+          name: 'Ritmo cardíaco (bpm)',
+          data: [80, 72, 65, 100],
         },
         {
-          name: 'Ritmo cardíaco anormal',
-          data: [6, 8, 14, 7],
-        },
-        {
-          name: 'Temperatura corporal alta',
-          data: [4, 9, 7, 11],
-        },
-        {
-          name: 'Caídas/Impactos',
-          data: [9, 5, 8, 6],
+          name: 'Temperatura corporal (°C)',
+          data: [36.5, 37.2, 36.8, 37.1],
         },
       ],
 
@@ -63,7 +58,7 @@ export class AppAlertsByTypeComponent {
         foreColor: '#adb0bb',
         height: 350,
         width: 800,
-        stacked: true,
+        stacked: false,
         offsetX: 0,
         offsetY: 0,
         toolbar: {
@@ -71,19 +66,20 @@ export class AppAlertsByTypeComponent {
         },
       },
       colors: [
-        'rgba(220, 53, 69, 1)',    // Rojo más serio para gases tóxicos
-        'rgba(255, 159, 64, 1)',   // Naranja profesional para ritmo cardíaco
-        'rgba(54, 162, 235, 1)',   // Azul para temperatura corporal
-        'rgba(153, 102, 255, 1)'   // Púrpura para caídas/impactos
+        'rgba(220, 53, 69, 1)', // Rojo más serio para gases tóxicos
+        'rgba(255, 159, 64, 1)', // Naranja profesional para ritmo cardíaco
+        'rgba(54, 162, 235, 1)', // Azul para temperatura corporal
+        'rgba(153, 102, 255, 1)', // Púrpura para caídas/impactos
       ],
       plotOptions: {
         bar: {
           horizontal: false,
           barHeight: '60%',
-          columnWidth: '35%',
+          columnWidth: '50%',
           borderRadius: [6],
           borderRadiusApplication: 'end',
           borderRadiusWhenStacked: 'all',
+          distributed: false,
         },
       },
       dataLabels: {
@@ -130,32 +126,64 @@ export class AppAlertsByTypeComponent {
         },
       },
 
-      yaxis: {
-        min: 0,
-        max: 35,
-        tickAmount: 7,
-        title: {
-          text: 'Número de alertas',
-          style: {
+      yaxis: [
+        {
+          seriesName: 'Ritmo cardíaco (bpm)',
+          min: 0,
+          max: 120,
+          tickAmount: 6,
+          title: {
+            text: 'Ritmo Cardíaco (BPM)',
+            style: {
             color: '#adb0bb',
-            fontSize: '12px',
-            fontWeight: 400,
+              fontSize: '12px',
+              fontWeight: 500,
+            },
+          },
+          labels: {
+            style: {
+            color: '#adb0bb',
+              fontSize: '11px',
+            },
+            formatter: function (value: number) {
+              return Math.round(value) + ' bpm';
+            },
           },
         },
-      },
+        {
+          seriesName: 'Temperatura corporal (°C)',
+          opposite: true,
+          min: 0,
+          max: 45,
+          tickAmount: 6,
+          title: {
+            text: 'Temperatura Corporal (°C)',
+            style: {
+            color: '#adb0bb',
+              fontSize: '12px',
+              fontWeight: 500,
+            },
+          },
+          labels: {
+            style: {
+            color: '#adb0bb',
+              fontSize: '11px',
+            },
+            formatter: function (value: number) {
+              return value.toFixed(1) + '°C';
+            },
+          },
+        },
+      ],
       xaxis: {
+        type: 'category',
         axisBorder: {
           show: false,
         },
         axisTicks: {
           show: false,
         },
-        categories: [
-          'Semana 1',
-          'Semana 2',
-          'Semana 3',
-          'Semana 4',
-        ],
+        categories: ['Tunel 1', 'Tunel 2', 'Tunel 3', 'Tunel 4'],
         labels: {
           style: { fontSize: '13px', colors: '#adb0bb', fontWeight: '400' },
         },

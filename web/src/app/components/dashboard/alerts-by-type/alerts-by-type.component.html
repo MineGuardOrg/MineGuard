@@ -2,12 +2,12 @@
   <mat-card-content>
     <div class="hstack align-items-center flex-column flex-lg-row">
       <div class="w-100">
-        <mat-card-title>Alertas por tipo - Ultimo mes</mat-card-title>
+        <mat-card-title>Alertas por tipo - Últimas 4 semanas</mat-card-title>
       </div>
     </div>
 
     <!-- chart -->
-    <div class="m-t-16 rounded-bars" style="height: 300px">
+    <div class="m-t-16 rounded-bars" style="width: 100%; overflow: hidden;">
       <apx-chart
         [series]="alertsByTypeChart.series"
         [chart]="alertsByTypeChart.chart"
