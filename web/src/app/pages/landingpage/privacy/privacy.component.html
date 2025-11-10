@@ -8,9 +8,9 @@
         <!-- --------------------------------------------------------------- -->
         <div class="branding p-x-0">
           <img
-            src="../../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
+            src="../../../../assets/images/logos/mineria-segura-logo.svg"
             class="align-middle m-2"
-            alt="logo"
+            alt="Monitoreo Integral de Minería Segura"
             width="170px"
           />
         </div>
@@ -32,9 +32,9 @@
           <button
             mat-button
             class="m-x-8 f-s-16 f-w-500"
-            [routerLink]="['/teaching']"
+            [routerLink]="['/aboutus']"
           >
-            Enseña en TeachU
+            Nosotros
           </button>
 
           <button
@@ -42,9 +42,9 @@
             class="m-x-8"
             color="primary"
             style="font-weight: bold"
-            [routerLink]="['/auth/boxed-login']"
+            [routerLink]="['/sistema']"
           >
-            Iniciar sesión
+            Sistema
           </button>
 
           <button
@@ -52,9 +52,9 @@
             class="m-x-8"
             color="primary"
             style="font-weight: bold"
-            [routerLink]="['/auth/boxed-register']"
+            [routerLink]="['/demo']"
           >
-            Registrate
+            Solicitar Demo
           </button>
         </div>
 
@@ -83,11 +83,11 @@
           >
             <div class="text-center" style="padding: 80px 20px">
               <h1 class="banner-title m-0">
-                <span class="text-primary">Enseña con nosotros</span>
+                <span class="text-primary">Seguridad y Privacidad</span>
               </h1>
               <p class="f-s-18 m-t-12 m-0 banner-subtitle">
-                Conviértete en instructor y comparte tu conocimiento con los
-                demás
+                Garantizamos la protección de datos biométricos y la 
+                confidencialidad de la información de su operación minera
               </p>
             </div>
           </div>
@@ -98,8 +98,8 @@
               class="flex-column gap-9 text-center"
             >
               <img
-                src="/assets/images/teaching/teaching.svg"
-                alt="teaching-img"
+                src="/assets/images/mineria/seguridad-privacidad.svg"
+                alt="seguridad-privacidad-minera"
                 class="img-fluid"
                 style="height: 400px"
               />
@@ -113,39 +113,42 @@
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-    Reasons
+    Políticas de Seguridad
     ------------------------------------------------------------------ -->
     <div class="spacer-sm">
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-lg-6 col-sm-8">
+          <div class="col-lg-8 col-sm-10">
             <h1 class="section-title text-center m-t-16">
-              Tu eliges de que manera empezar
+              Nuestros Compromisos de Seguridad
             </h1>
           </div>
         </div>
-        <!-- reasons -->
+        <!-- políticas -->
         <mat-card class="cardWithShadow">
           <mat-card-content>
             <div class="row justify-content-center m-t-16">
-              @for(reason of reasons; track reason.subtitle) {
-              <div class="col-lg-4 col-sm-6 m-b-16">
-                <mat-card class="shadow-none text-center m-b-0">
+              @for(policy of securityPolicies; track policy.title) {
+              <div class="col-lg-4 col-sm-6 m-b-24">
+                <mat-card class="shadow-none text-center m-b-0 h-100">
                   <mat-card-content class="p-32">
                     <span
-                      class="icon-48 m-auto m-b-16 d-flex align-items-center justify-content-center rounded bg-{{ reason.color }}"
+                      class="icon-48 m-auto m-b-16 d-flex align-items-center justify-content-center rounded bg-{{ policy.color }}"
                     >
                       <span
                         class="iconify text-white icon-27"
-                        [attr.data-icon]="reason.icon"
+                        [attr.data-icon]="policy.icon"
                       ></span>
                     </span>
                     <h6 class="m-t-4 mat-subtitle-1 f-s-22 f-w-600 m-b-16">
-                      {{ reason.title }}
+                      {{ policy.title }}
                     </h6>
                     <span class="f-s-14 d-block text-center f-w-500 m-t-8">
-                      {{ reason.subtitle }}
+                      {{ policy.subtitle }}
                     </span>
+                    <div class="m-t-16">
+                      <p class="f-s-12 text-muted">{{ policy.description }}</p>
+                    </div>
                   </mat-card-content>
                 </mat-card>
               </div>
@@ -156,68 +159,62 @@
       </div>
     </div>
     <!-- ------------------------------------------------------------------
-    End Reasons
+    End Políticas de Seguridad
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-    About the program
+    Certificaciones de Seguridad
     ------------------------------------------------------------------ -->
     <div class="overflow-hidden banner-section bg-light py-5">
       <div class="container">
         <div class="row text-center justify-content-center g-4">
-          <div class="col-6 col-md-2">
+          <div class="col-6 col-md-3">
             <h2 class="banner-title m-0">
-              <span class="text-primary">200</span>
+              <span class="text-primary">AES-256</span>
             </h2>
-            <p class="f-s-16 m-t-5 m-0">Usuarios</p>
+            <p class="f-s-16 m-t-5 m-0">Cifrado de Datos</p>
           </div>
-          <div class="col-6 col-md-2">
+          <div class="col-6 col-md-3">
             <h2 class="banner-title m-0">
-              <span class="text-primary">150</span>
+              <span class="text-primary">LFPDPPP</span>
             </h2>
-            <p class="f-s-16 m-t-5 m-0">Registros</p>
+            <p class="f-s-16 m-t-5 m-0">Cumplimiento</p>
           </div>
-          <div class="col-6 col-md-2">
+          <div class="col-6 col-md-3">
             <h2 class="banner-title m-0">
-              <span class="text-primary">Más de 60</span>
+              <span class="text-primary">ISO 27001</span>
             </h2>
-            <p class="f-s-16 m-t-5 m-0">Cursos</p>
+            <p class="f-s-16 m-t-5 m-0">Estándar Seguridad</p>
           </div>
-          <div class="col-6 col-md-2">
+          <div class="col-6 col-md-3">
             <h2 class="banner-title m-0">
-              <span class="text-primary">Más de 50</span>
+              <span class="text-primary">0</span>
             </h2>
-            <p class="f-s-16 m-t-5 m-0">Instructores</p>
-          </div>
-          <div class="col-6 col-md-2">
-            <h2 class="banner-title m-0">
-              <span class="text-primary">Más de 20</span>
-            </h2>
-            <p class="f-s-16 m-t-5 m-0">Categorias</p>
+            <p class="f-s-16 m-t-5 m-0">Incidentes Reportados</p>
           </div>
         </div>
       </div>
     </div>
 
     <!-- ------------------------------------------------------------------
-    End about the program
+    End Certificaciones de Seguridad
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-    How to start
+    Detalles de Seguridad
     ------------------------------------------------------------------ -->
     <div class="overflow-hidden banner-section">
       <div class="container">
         <div class="col-lg-10 justify-content-center m-auto">
           <div class="text-center">
             <h1 class="banner-title p-y-16 m-0">
-              <span class="text-dark">Cómo empezar</span>
+              <span class="text-dark">Medidas de Protección Implementadas</span>
             </h1>
           </div>
           <mat-card class="shadow-none w-100">
             <mat-card-content class="b-t-1">
               <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
-                <mat-tab label="Crea tu programa">
+                <mat-tab label="Protección de Datos Biométricos">
                   <div
                     class="d-flex align-items-center justify-content-between flex-wrap responsive-section"
                   >
@@ -225,23 +222,25 @@
                       class="bg-light-primary text-dark f-s-16 mat-body-1 p-16 rounded m-t-12"
                       style="flex: 1 1 60%"
                     >
-                      El proceso de creación inicia a partir del interés genuino
-                      y el dominio del conocimiento por parte del instructor.
-                      Posteriormente, es posible identificar una temática con
-                      alto potencial utilizando la herramienta Marketplace
-                      Insights. El diseño pedagógico y el enfoque didáctico
-                      quedan a cargo del docente,quien definirá la manera de
-                      impartir el contenido e imprimir su sello distintivo.
+                      <strong>Cifrado de extremo a extremo</strong> para todos 
+                      los datos biométricos recolectados. Los datos de ritmo 
+                      cardíaco, temperatura corporal y otros parámetros vitales 
+                      se cifran inmediatamente en el casco y permanecen cifrados 
+                      durante toda la transmisión y almacenamiento.<br><br>
+                      • Cifrado AES-256 en reposo y tránsito<br>
+                      • Anonimización de datos para análisis<br>
+                      • Consentimiento informado obligatorio<br>
+                      • Políticas de retención definidas
                     </div>
                     <img
-                      src="/assets/images/teaching/create-program.svg"
-                      alt="img"
+                      src="/assets/images/mineria/proteccion-datos.svg"
+                      alt="Protección de Datos Biométricos"
                       style="flex: 1 1 30%; max-width: 300px"
                     />
                   </div>
                 </mat-tab>
 
-                <mat-tab label="Graba tu video">
+                <mat-tab label="Seguridad de la Infraestructura">
                   <div
                     class="d-flex align-items-center justify-content-between flex-wrap"
                   >
@@ -249,23 +248,25 @@
                       class="bg-light-primary text-dark f-s-16 mat-body-1 p-16 rounded m-t-12"
                       style="flex: 1 1 60%"
                     >
-                      A partir del compromiso personal con el conocimiento y la
-                      vocación por compartirlo, el instructor puede seleccionar
-                      una temática con alto potencial utilizando la herramienta
-                      Marketplace Insights. La definición del enfoque pedagógico
-                      y del estilo de enseñanza queda en manos del creador,
-                      quien podrá imprimir su sello personal en el desarrollo
-                      del contenido.
+                      <strong>Arquitectura segura multi-nivel</strong> que 
+                      protege tanto la infraestructura física como digital. 
+                      Implementamos firewalls de última generación, sistemas 
+                      de detección de intrusos y monitoreo continuo de 
+                      seguridad.<br><br>
+                      • Servidores en centros de datos certificados<br>
+                      • Copias de seguridad encriptadas<br>
+                      • Acceso biométrico a instalaciones<br>
+                      • Auditorías de seguridad trimestrales
                     </div>
                     <img
-                      src="/assets/images/teaching/record-video.svg"
-                      alt="img"
+                      src="/assets/images/mineria/seguridad-infraestructura.svg"
+                      alt="Seguridad de la Infraestructura"
                       style="flex: 1 1 30%; max-width: 300px"
                     />
                   </div>
                 </mat-tab>
 
-                <mat-tab label="Publica tu curso">
+                <mat-tab label="Cumplimiento Legal">
                   <div
                     class="d-flex align-items-center justify-content-between flex-wrap"
                   >
@@ -273,16 +274,18 @@
                       class="bg-light-primary text-dark mat-body-1 p-16 rounded m-t-12"
                       style="flex: 1 1 60%"
                     >
-                      Promocionar el curso a través de redes sociales y canales
-                      profesionales es una estrategia efectiva para obtener las
-                      primeras valoraciones y reseñas. El curso estará
-                      disponible en nuestra plataforma virtual, lo que permitirá
-                      generar ingresos por cada inscripción realizada bajo
-                      modalidad de pago.
+                      <strong>Cumplimiento integral</strong> con las 
+                      regulaciones nacionales e internacionales de 
+                      protección de datos y seguridad de la información.<br><br>
+                      • Ley Federal de Protección de Datos Personales (LFPDPPP)<br>
+                      • Reglamento de la Ley Minera<br>
+                      • Normas Oficiales Mexicanas de seguridad<br>
+                      • Estándares internacionales ISO 27001<br>
+                      • Protocolos de notificación de incidentes
                     </div>
                     <img
-                      src="/assets/images/teaching/post-your-course.svg"
-                      alt="img"
+                      src="/assets/images/mineria/cumplimiento-legal.svg"
+                      alt="Cumplimiento Legal"
                       style="flex: 1 1 30%; max-width: 300px"
                     />
                   </div>
@@ -294,38 +297,36 @@
       </div>
     </div>
     <!-- ------------------------------------------------------------------
-    End How to start
+    End Detalles de Seguridad
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-    Become an instructor
+    Llamado a la Acción
     ------------------------------------------------------------------ -->
-    <div class="overflow-hidden banner-section bg-light">
+    <div class="overflow-hidden banner-section bg-primary">
       <div class="container">
         <div class="row">
           <div
             class="col-lg-12 d-flex align-items-center justify-content-center"
           >
             <div class="text-center" style="padding: 80px 20px">
-              <h1 class="banner-title m-0">
-                <span class="text-primary"
-                  >Conviértete en instructor ahora
+              <h1 class="banner-title m-0 text-white">
+                <span class="text-accent"
+                  >¿Tiene preguntas sobre seguridad?
                 </span>
               </h1>
-              <p class="f-s-18 m-t-12 m-0 banner-subtitle">
-                <!-- Únete a una de las tiendas virtuales de aprendizaje en línea más
-                grandes del mundo. -->
-                Únete al grupo de instructores y ayudalos dandoles una mano en algo 
-                que te apaciona.
+              <p class="f-s-18 m-t-12 m-0 banner-subtitle text-light">
+                Nuestro equipo de seguridad de la información está disponible 
+                para resolver sus dudas y proporcionar auditorías de seguridad.
               </p>
               <button
                 mat-flat-button
                 class="m-t-16"
-                color="primary"
+                color="accent"
                 style="font-weight: bold; width: 250px"
-                [routerLink]="['/authentication/boxed-register']"
+                [routerLink]="['/contacto']"
               >
-                Empezar
+                Consultar Seguridad
               </button>
             </div>
           </div>
@@ -333,7 +334,7 @@
       </div>
     </div>
     <!-- ------------------------------------------------------------------
-    End Become an instructor
+    End Llamado a la Acción
     ------------------------------------------------------------------ -->
 
     <app-footer></app-footer>
@@ -351,64 +352,52 @@
     <div>
       <div class="branding">
         <img
-          src="../../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
+          src="../../../../assets/images/logos/mineria-segura-logo.svg"
           class="align-middle m-2"
-          alt="logo"
+          alt="Monitoreo Integral de Minería Segura"
           width="170px"
         />
       </div>
       <div class="p-x-16">
         <a
-          [routerLink]="['/authentication/boxed-login']"
+          [routerLink]="['/landingpage']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Inicio</span>
+        </a>
+        <a
+          [routerLink]="['/aboutus']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Nosotros</span>
+        </a>
+        <a
+          [routerLink]="['/sistema']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
           <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
-            >Iniciar sesión</span
+            >Sistema</span
           >
         </a>
         <a
-          [routerLink]="['/authentication/boxed-register']"
+          [routerLink]="['/demo']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
           <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
-            >Registrar</span
+            >Solicitar Demo</span
           >
         </a>
         <a
-          [routerLink]="['/views/aboutus']"
+          [routerLink]="['/capacitacion']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
-          <span class="f-s-15 f-w-500 m-l-8">¿Quiénes somos?</span>
+          <span class="f-s-15 f-w-500 m-l-8">Capacitación</span>
         </a>
         <a
-          [routerLink]="['/views/employment']"
+          [routerLink]="['/seguridad']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
-          <span class="f-s-15 f-w-500 m-l-8">Empleo</span>
-        </a>
-        <a
-          [routerLink]="['/views/teaching']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Enseña en TeachU</span>
-        </a>
-        <a
-          [routerLink]="['/views/']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Invitar a amigos</span>
-        </a>
-        <a
-          [routerLink]="['/views/help']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Ayuda y asistencia</span>
-        </a>
-        <a
-          [routerLink]="['/views/privacy']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Política de privacidad</span>
+          <span class="f-s-15 f-w-500 m-l-8">Seguridad y Privacidad</span>
         </a>
       </div>
     </div>

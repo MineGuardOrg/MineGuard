@@ -8,9 +8,9 @@
         <!-- --------------------------------------------------------------- -->
         <div class="branding p-x-0">
           <img
-            src="../../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
+            src="../../../../assets/images/logos/mineria-segura-logo.svg"
             class="align-middle m-2"
-            alt="logo"
+            alt="Monitoreo Integral de Minería Segura"
             width="170px"
           />
         </div>
@@ -32,9 +32,9 @@
           <button
             mat-button
             class="m-x-8 f-s-16 f-w-500"
-            [routerLink]="['/teaching']"
+            [routerLink]="['/sistema']"
           >
-            Enseña en TeachU
+            Sistema
           </button>
 
           <button
@@ -42,9 +42,9 @@
             class="m-x-8"
             color="primary"
             style="font-weight: bold"
-            [routerLink]="['/auth/boxed-login']"
+            [routerLink]="['/contacto']"
           >
-            Iniciar sesión
+            Contacto
           </button>
 
           <button
@@ -52,9 +52,9 @@
             class="m-x-8"
             color="primary"
             style="font-weight: bold"
-            [routerLink]="['/auth/boxed-register']"
+            [routerLink]="['/demo']"
           >
-            Registrate
+            Solicitar Demo
           </button>
         </div>
 
@@ -86,9 +86,10 @@
                 <span class="text-primary">¿Quiénes Somos?</span>
               </h1>
               <p class="f-s-18 m-t-12 m-0 banner-subtitle">
-                  TeachU es una plataforma comprometida con brindar oportunidades de aprendizaje a todas las personas,
-                  sin importar su origen o situación. Nuestro propósito es facilitar el acceso al conocimiento a través
-                  de instructores apasionados que comparten su experiencia con quienes desean superarse y crecer profesionalmente.
+                Somos un equipo multidisciplinario dedicado al desarrollo de soluciones tecnológicas 
+                para la seguridad minera. Nuestro sistema de Monitoreo Integral de Minería Segura 
+                combina hardware especializado con software avanzado para proteger la vida de los 
+                trabajadores en entornos mineros de alto riesgo.
               </p>
             </div>
           </div>
@@ -100,59 +101,44 @@
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-  Imagenes para seleccionar en slide
------------------------------------------------------------------- -->
-<!-- <div class="container py-4">
-  <div
-            class="col-lg-12 d-flex align-items-center justify-content-center"
-          >
-            <div
-              class="flex-column gap-9 text-center"
-            >
-              <img
-                src="/assets/images/backgrounds/maintenance.svg"
-                alt="teaching-img"
-                class="img-fluid"
-                style="height: 400px"
-              />
-            </div>
-          </div>
-</div> -->
-
-    <!-- ------------------------------------------------------------------
-    Reasons
+    Nuestro Equipo
     ------------------------------------------------------------------ -->
     <div class="spacer-sm">
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-lg-6 col-sm-8">
+          <div class="col-lg-8 col-sm-10">
             <h1 class="section-title text-center m-t-16">
-              Nuestros valores y metas son
+              Nuestro Equipo de Desarrollo
             </h1>
           </div>
         </div>
-        <!-- reasons -->
+        <!-- Team Members -->
         <mat-card class="cardWithShadow">
           <mat-card-content>
             <div class="row justify-content-center m-t-16">
-              @for(reason of reasons; track reason.subtitle) {
-              <div class="col-lg-4 col-sm-6 m-b-16">
-                <mat-card class="shadow-none text-center m-b-0">
+              @for(member of teamMembers; track member.name) {
+              <div class="col-lg-4 col-sm-6 m-b-24">
+                <mat-card class="shadow-none text-center m-b-0 h-100">
                   <mat-card-content class="p-32">
-                    <span
-                      class="icon-48 m-auto m-b-16 d-flex align-items-center justify-content-center rounded bg-{{ reason.color }}"
-                    >
-                      <span
-                        class="iconify text-white icon-27"
-                        [attr.data-icon]="reason.icon"
-                      ></span>
-                    </span>
-                    <h6 class="m-t-4 mat-subtitle-1 f-s-22 f-w-600 m-b-16">
-                      {{ reason.title }}
+                    <div class="avatar-overlay rounded-circle m-auto m-b-16">
+                      <img 
+                        [src]="member.avatar" 
+                        [alt]="member.name" 
+                        class="rounded-circle"
+                        width="80"
+                        height="80"
+                        onerror="this.src='src/assets/images/teamMembers/Member.webp';"
+                      />
+                    </div>
+                    <h6 class="m-t-4 mat-subtitle-1 f-s-20 f-w-600 m-b-8 text-primary">
+                      {{ member.name }}
                     </h6>
-                    <span class="f-s-14 d-block text-center f-w-500 m-t-8">
-                      {{ reason.subtitle }}
+                    <span class="f-s-14 d-block text-center f-w-500 m-b-12 text-accent">
+                      {{ member.role }}
                     </span>
+                    <p class="f-s-14 text-muted m-0">
+                      {{ member.description }}
+                    </p>
                   </mat-card-content>
                 </mat-card>
               </div>
@@ -163,55 +149,49 @@
       </div>
     </div>
     <!-- ------------------------------------------------------------------
-    End Reasons
+    End Nuestro Equipo
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-    About the program
+    Métricas del Proyecto
     ------------------------------------------------------------------ -->
     <div class="overflow-hidden banner-section bg-light py-5">
       <div class="container">
         <div class="row text-center justify-content-center g-4">
-          <div class="col-6 col-md-2">
+          <div class="col-6 col-md-3">
             <h2 class="banner-title m-0">
-              <span class="text-primary">200</span>
+              <span class="text-primary">99%</span>
             </h2>
-            <p class="f-s-16 m-t-5 m-0">Usuarios</p>
+            <p class="f-s-16 m-t-5 m-0">Disponibilidad</p>
           </div>
-          <div class="col-6 col-md-2">
+          <div class="col-6 col-md-3">
             <h2 class="banner-title m-0">
-              <span class="text-primary">150</span>
+              <span class="text-primary">&lt; 3s</span>
             </h2>
-            <p class="f-s-16 m-t-5 m-0">Registros</p>
+            <p class="f-s-16 m-t-5 m-0">Tiempo Respuesta</p>
           </div>
-          <div class="col-6 col-md-2">
+          <div class="col-6 col-md-3">
             <h2 class="banner-title m-0">
-              <span class="text-primary">Más de 60</span>
+              <span class="text-primary">50+</span>
             </h2>
-            <p class="f-s-16 m-t-5 m-0">Cursos</p>
+            <p class="f-s-16 m-t-5 m-0">Miners Simultáneos</p>
           </div>
-          <div class="col-6 col-md-2">
+          <div class="col-6 col-md-3">
             <h2 class="banner-title m-0">
-              <span class="text-primary">Más de 50</span>
+              <span class="text-primary">12h</span>
             </h2>
-            <p class="f-s-16 m-t-5 m-0">Instructores</p>
-          </div>
-          <div class="col-6 col-md-2">
-            <h2 class="banner-title m-0">
-              <span class="text-primary">Más de 20</span>
-            </h2>
-            <p class="f-s-16 m-t-5 m-0">Categorias</p>
+            <p class="f-s-16 m-t-5 m-0">Autonomía</p>
           </div>
         </div>
       </div>
     </div>
 
     <!-- ------------------------------------------------------------------
-    End about the program
+    End Métricas del Proyecto
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-    How to start
+    Información del Proyecto
     ------------------------------------------------------------------ -->
     <div class="overflow-hidden banner-section">
       <div class="container">
@@ -219,7 +199,7 @@
           <mat-card class="shadow-none w-100">
             <mat-card-content class="b-t-1">
               <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
-                <mat-tab label="¿Por que TeachU?">
+                <mat-tab label="Nuestra Misión">
                   <div
                     class="d-flex align-items-center justify-content-between flex-wrap responsive-section"
                   >
@@ -227,21 +207,20 @@
                       class="bg-light-primary text-dark f-s-16 mat-body-1 p-16 rounded m-t-12"
                       style="flex: 1 1 60%"
                     >
-                      El nombre "TeachU" surge de una idea simple pero poderosa: representar la acción de
-                        <strong>“Teach You”</strong>, que en inglés significa “enseñarte”. Fue elegido tras evaluar varias opciones como
-                        <em>Alumnet</em> y <em>Educode</em>, pero TeachU destacó por su claridad y propósito.
-                        Refleja nuestra misión de facilitar el aprendizaje a todas las personas y construir
-                        una comunidad donde enseñar y aprender estén al alcance de todos.
+                      Desarrollar un sistema integral de monitoreo en tiempo real que permita la recolección, 
+                      transmisión, visualización y análisis de parámetros vitales y ambientales de los mineros, 
+                      a fin de <strong>prevenir riesgos laborales, reducir accidentes y mejorar la capacidad 
+                      de respuesta ante emergencias</strong> en entornos mineros de alto riesgo.
                     </div>
                     <img
-                      src="/assets/images/teaching/create-program.svg"
-                      alt="img"
+                      src="/assets/images/mineria/seguridad-minera.svg"
+                      alt="Seguridad Minera"
                       style="flex: 1 1 30%; max-width: 300px"
                     />
                   </div>
                 </mat-tab>
 
-                <mat-tab label="Nuestra Meta">
+                <mat-tab label="Tecnología">
                   <div
                     class="d-flex align-items-center justify-content-between flex-wrap"
                   >
@@ -249,20 +228,21 @@
                       class="bg-light-primary text-dark f-s-16 mat-body-1 p-16 rounded m-t-12"
                       style="flex: 1 1 60%"
                     >
-                      Nuestra meta es construir una plataforma en la que el aprendizaje y la enseñanza 
-                      se den de forma colaborativa, auténtica y sin barreras. Queremos ofrecer un espacio
-                      donde las personas compartan su conocimiento, encuentren inspiración y se desarrollen
-                      a su propio ritmo, conectando con una comunidad activa y comprometida con la educación.
+                      Nuestro sistema integra <strong>sensores biométricos de última generación, 
+                      conectividad Bluetooth 5.0, y algoritmos de Machine Learning</strong> para 
+                      el análisis predictivo de riesgos. La plataforma web centralizada permite 
+                      el monitoreo simultáneo de múltiples trabajadores, mientras que la aplicación 
+                      móvil actúa como puente de comunicación en zonas sin conectividad.
                     </div>
                     <img
-                      src="/assets/images/teaching/record-video.svg"
-                      alt="img"
+                      src="/assets/images/mineria/tecnologia-minera.svg"
+                      alt="Tecnología Minera"
                       style="flex: 1 1 30%; max-width: 300px"
                     />
                   </div>
                 </mat-tab>
 
-                <mat-tab label="Planes a Futuro">
+                <mat-tab label="Compromiso">
                   <div
                     class="d-flex align-items-center justify-content-between flex-wrap"
                   >
@@ -270,15 +250,15 @@
                       class="bg-light-primary text-dark mat-body-1 p-16 rounded m-t-12"
                       style="flex: 1 1 60%"
                     >
-                      En TeachU buscamos integrar nuevas tecnologías para personalizar el aprendizaje,
-                      implementar inteligencia artificial para recomendaciones educativas, y expandir
-                      nuestra red de instructores en todo el mundo. Además, trabajamos en alianzas con
-                      instituciones y empresas que comparten nuestra visión: que aprender sea tan fácil
-                      como tener ganas de hacerlo.
+                      Estamos comprometidos con el <strong>cumplimiento de las normativas de seguridad 
+                      minera NOM-023-STPS-2012</strong> y la protección de datos personales. Nuestro 
+                      sistema garantiza la privacidad y seguridad de la información mediante 
+                      cifrado AES-256, tanto en reposo como en tránsito, asegurando que los datos 
+                      sensibles de los trabajadores estén siempre protegidos.
                     </div>
                     <img
-                      src="/assets/images/teaching/post-your-course.svg"
-                      alt="img"
+                      src="/assets/images/mineria/compromiso-calidad.svg"
+                      alt="Compromiso Calidad"
                       style="flex: 1 1 30%; max-width: 300px"
                     />
                   </div>
@@ -290,65 +270,60 @@
       </div>
     </div>
     <!-- ------------------------------------------------------------------
-    End How to start
+    End Información del Proyecto
     ------------------------------------------------------------------ -->
-        <!-- ------------------------------------------------------------------
-   Testimonios
-    ------------------------------------------------------------------ -->
-<div class="testimonials-section container py-5">
-  <div class="row text-center">
-    <div class="col-md-4 mb-4">
-      <p class="quote">❝ TeachU se adapta completamente a nuestras necesidades. Su equipo selecciona cursos nuevos y actualizados de la tienda virtual y los pone a disposición de los clientes. ❞</p>
-      <p><strong>Antonio Cid</strong><br /><span class="text-muted">Senior Manager of Development</span></p>
-    </div>
-    <div class="col-md-4 mb-4">
-      <p class="quote">❝ En general, fue un gran éxito. Solía recibir correos electrónicos acerca de lo fantástico que era el recurso. ❞</p>
-      <p><strong>Alexander Parra</strong><br /><span class="text-muted">Gerente de formación ejecutiva</span></p>
-    </div>
-    <div class="col-md-4 mb-4">
-      <p class="quote">❝ TeachU responde a las necesidades de la empresa de un modo ágil y global. Es realmente la mejor solución para nuestros empleados y sus carreras profesionales. ❞</p>
-      <p><strong>Adrián Reyes</strong><br /><span class="text-muted">Director de desarrollo y participación</span></p>
-      
-    </div>
-  </div>
-</div>
-
 
     <!-- ------------------------------------------------------------------
-   End Testimonios
+    Testimonios
     ------------------------------------------------------------------ -->
-
-
+    <div class="testimonials-section container py-5">
+      <div class="row text-center">
+        <div class="col-md-4 mb-4">
+          <p class="quote">❝ El sistema ha revolucionado nuestra forma de monitorear la seguridad. La detección temprana de gases tóxicos nos ha permitido prevenir incidentes graves. ❞</p>
+          <p><strong>Ing. Roberto Mendoza</strong><br /><span class="text-muted">Supervisor de Seguridad Minera</span></p>
+        </div>
+        <div class="col-md-4 mb-4">
+          <p class="quote">❝ La plataforma web es intuitiva y los reportes en tiempo real nos permiten tomar decisiones informadas inmediatamente. Una herramienta indispensable. ❞</p>
+          <p><strong>Dra. Laura Sánchez</strong><br /><span class="text-muted">Gerente de Operaciones</span></p>
+        </div>
+        <div class="col-md-4 mb-4">
+          <p class="quote">❝ La autonomía del casco y la confiabilidad del sistema en condiciones extremas superaron nuestras expectativas. Excelente solución tecnológica. ❞</p>
+          <p><strong>Ing. Carlos Ruiz</strong><br /><span class="text-muted">Jefe de Cuadrilla</span></p>
+        </div>
+      </div>
+    </div>
 
     <!-- ------------------------------------------------------------------
-    Become an instructor
+    End Testimonios
     ------------------------------------------------------------------ -->
-    <div class="overflow-hidden banner-section bg-light">
+
+    <!-- ------------------------------------------------------------------
+    Llamado a la Acción
+    ------------------------------------------------------------------ -->
+    <div class="overflow-hidden banner-section bg-primary">
       <div class="container">
         <div class="row">
           <div
             class="col-lg-12 d-flex align-items-center justify-content-center"
           >
             <div class="text-center" style="padding: 80px 20px">
-              <h1 class="banner-title m-0">
-                <span class="text-primary"
-                  >Crea una cuenta y unete a nuestra comunidad
+              <h1 class="banner-title m-0 text-white">
+                <span class="text-accent"
+                  >Proteja a su equipo con tecnología de vanguardia
                 </span>
               </h1>
-              <p class="f-s-18 m-t-12 m-0 banner-subtitle">
-                <!-- Únete a una de las tiendas virtuales de aprendizaje en línea más
-                grandes del mundo. -->
-                Únete al grupo de alumnos e instructores siendo parte de la formacion
-                de personas como nosotros.
+              <p class="f-s-18 m-t-12 m-0 banner-subtitle text-light">
+                Implemente nuestro sistema de monitoreo integral y reduzca los accidentes 
+                laborales hasta en un 60%. Cumplimiento normativo garantizado.
               </p>
               <button
                 mat-flat-button
                 class="m-t-16"
-                color="primary"
+                color="accent"
                 style="font-weight: bold; width: 250px"
-                [routerLink]="['/auth/boxed-register']"
+                [routerLink]="['/demo']"
               >
-                Empezar
+                Solicitar Demo
               </button>
             </div>
           </div>
@@ -356,7 +331,7 @@
       </div>
     </div>
     <!-- ------------------------------------------------------------------
-    End Become an instructor
+    End Llamado a la Acción
     ------------------------------------------------------------------ -->
 
     <app-footer></app-footer>
@@ -374,64 +349,58 @@
     <div>
       <div class="branding">
         <img
-          src="../../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
+          src="../../../../assets/images/logos/mineria-segura-logo.svg"
           class="align-middle m-2"
-          alt="logo"
+          alt="Monitoreo Integral de Minería Segura"
           width="170px"
         />
       </div>
       <div class="p-x-16">
         <a
-          [routerLink]="['/authentication/boxed-login']"
+          [routerLink]="['/landingpage']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Inicio</span>
+        </a>
+        <a
+          [routerLink]="['/sistema']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Sistema</span>
+        </a>
+        <a
+          [routerLink]="['/contacto']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
           <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
-            >Iniciar sesión</span
+            >Contacto</span
           >
         </a>
         <a
-          [routerLink]="['/authentication/boxed-register']"
+          [routerLink]="['/demo']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
           <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
-            >Registrar</span
+            >Solicitar Demo</span
           >
         </a>
         <a
-          [routerLink]="['/views/aboutus']"
+          [routerLink]="['/srs']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
-          <span class="f-s-15 f-w-500 m-l-8">¿Quiénes somos?</span>
+          <span class="f-s-15 f-w-500 m-l-8">Documentación Técnica</span>
         </a>
         <a
-          [routerLink]="['/views/employment']"
+          [routerLink]="['/normativas']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
-          <span class="f-s-15 f-w-500 m-l-8">Empleo</span>
+          <span class="f-s-15 f-w-500 m-l-8">Cumplimiento Normativo</span>
         </a>
         <a
-          [routerLink]="['/views/teaching']"
+          [routerLink]="['/privacidad']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
-          <span class="f-s-15 f-w-500 m-l-8">Enseña en TeachU</span>
-        </a>
-        <a
-          [routerLink]="['/views/']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Invitar a amigos</span>
-        </a>
-        <a
-          [routerLink]="['/views/help']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Ayuda y asistencia</span>
-        </a>
-        <a
-          [routerLink]="['/views/privacy']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Política de privacidad</span>
+          <span class="f-s-15 f-w-500 m-l-8">Política de Privacidad</span>
         </a>
       </div>
     </div>

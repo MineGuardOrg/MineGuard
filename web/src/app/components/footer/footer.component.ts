@@ -15,10 +15,25 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     FormsModule,
     TablerIconsModule,
     CommonModule,
-    TranslateModule // 👈 
+    TranslateModule
   ],
   templateUrl: './footer.component.html',
 })
 export class AppFooterComponent {
+  
+  // Información del equipo basada en el SRS
+  teamMembers = [
+    'Balderas Martinez Vanessa',
+    'Avalos Garcia Juan Antonio', 
+    'Chávez Castillón Angel Alejandro',
+    'De Guerreroosio Arenas Isaac',
+    'Parra Espinosa Alexander'
+  ];
+
   constructor(public translate: TranslateService) {}
+
+  // Método para obtener el año actual
+  getCurrentYear(): number {
+    return new Date().getFullYear();
+  }
 }

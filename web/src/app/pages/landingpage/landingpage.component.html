@@ -1,75 +1,72 @@
 <mat-sidenav-container>
-  <mat-sidenav-content class="">
-    <!-- ------------------------------------------------------------------
-    Header
-    ------------------------------------------------------------------ -->
+  <mat-sidenav-content>
+    <!-- HEADER -->
     <mat-toolbar class="topbar topbar-xl m-auto">
       <div class="container full-width p-xs-6">
-        <!-- --------------------------------------------------------------- -->
+        <!-- LOGO -->
         <div class="branding p-x-0">
-          <img
-            src="../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
-            class="align-middle m-2"
-            alt="logo"
-            width="170px"
-          />
+          <a class="d-flex align-items-center text-decoration-none" [routerLink]="['/landingpage']" style="gap: 12px;">
+            <!-- SVG -->
+          <svg viewBox="0 0 500 500" style="width: 3rem; height: 3rem;" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="helmetGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#FFB84D;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
+                </linearGradient>
+              </defs>
+              <style type="text/css">
+                .st6{fill:none;stroke:url(#helmetGradient);stroke-width:35;stroke-linecap:round;stroke-linejoin:round;}
+                .st7{fill:none;stroke:#FFA500;stroke-width:25;opacity:0.9;stroke-linecap:round;}
+                .st8{fill:none;stroke:#FFA500;stroke-width:25;opacity:0.7;stroke-linecap:round;}
+              </style>
+              <g id="helmet">
+                <path class="st6" d="M65.76,338.47v-74.52c0,0,5.4-69.9,58.27-105.24l5.78-19.27c0,0,8.81-8.35,26.18-14.46l10.03,4.82l11.85-4.82 l6.42-13.81c0,0,17.03-7.71,38.87-7.71l5.46,7.71c0,0,20.88-2.25,40.8-0.64l6.75-7.07c0,0,17.67,0,36.94,7.71 c0,0,3.21,8.35,4.5,11.24l17.35,8.03l8.03-4.82c0,0,15.74,5.78,25.7,16.38l8.35,16.7c0,0,47.54,29.55,53.97,106.65l3.21,73.24l0,0 c9.7,0,17.56,7.86,17.56,17.56v33.95c0,3.85-3.36,6.84-7.18,6.39C407.7,392.11,234.2,374,55.45,396.45 c-3.84,0.48-7.23-2.51-7.23-6.38v-34.13C48.19,346.27,56.07,338.43,65.76,338.47L65.76,338.47z"></path>
+                <g>
+                  <path class="st7" d="M317.6,122.41l7.34,3.4c0,0,10.71,84.94-3.67,210.86C321.27,336.67,329.16,242.23,317.6,122.41z"></path>
+                  <path class="st8" d="M177.87,124.98l-7.12,2.89c0,0,1.03,104.29,15.97,208.8C186.71,336.67,174.76,216.53,177.87,124.98z"></path>
+                  <path class="st7" d="M377.03,158.71l5.59,4.17c0,0,6.51,87.11-11.05,173.79C371.57,336.67,383.77,247.59,377.03,158.71z"></path>
+                  <path class="st8" d="M123.97,158.71l-5.59,4.17c0,0-6.51,87.11,11.05,173.79C129.43,336.67,117.22,247.59,123.97,158.71z"></path>
+                </g>
+              </g>
+            </svg>
+            <span style="font-weight: 700; font-size: 1.3rem; letter-spacing: 0.5px; color: #000;">MineGuard</span>
+          </a>
         </div>
-        <!-- --------------------------------------------------------------- -->
 
-        <!-- --------------------------------------------------------------- -->
-        <!--  Links -->
-        <!-- --------------------------------------------------------------- -->
+        <!-- NAV LINKS -->
         <span class="flex-1-auto"></span>
-
         <div class="d-none d-lg-flex">
-          <button
-            mat-button
-            class="m-x-8 f-s-16 f-w-500"
-            [routerLink]="['/landingpage']"
-          >
-            {{ "teaching.nav.home" | translate }}
+          <button mat-button class="m-x-8 f-s-16 f-w-500" [routerLink]="['/landingpage']">
+            {{ 'HEADER.HOME' | translate }}
           </button>
-          <button
-            mat-button
-            class="m-x-8 f-s-16 f-w-500"
-            [routerLink]="['/teaching']"
-          >
-            {{ "teaching.nav.teach" | translate }}
+          <button mat-button class="m-x-8 f-s-16 f-w-500" [routerLink]="['/dashboard']">
+            {{ 'HEADER.DASHBOARD' | translate }}
           </button>
+          <button mat-button class="m-x-8 f-s-16 f-w-500" [routerLink]="['/dispositivos']">
+            {{ 'HEADER.DEVICES' | translate }}
+          </button>
+          <button mat-button class="m-x-8 f-s-16 f-w-500" [routerLink]="['/demo']">
+            {{ 'HEADER.DEMO' | translate }}
+          </button>
+            <button mat-stroked-button class="m-x-8" color="primary" style="font-weight:bold; background-color: #FFA500; color: rgb(0, 0, 0); border: 2px solid #000; border-radius: 4px;"
+            [routerLink]="['/auth/boxed-login']">
+            {{ 'HEADER.LOGIN' | translate }}
+            </button>
 
-          <button
-            mat-stroked-button
-            class="m-x-8"
-            color="primary"
-            style="font-weight: bold"
-            [routerLink]="['/auth/boxed-login']"
-          >
-            {{ "teaching.nav.login" | translate }}
-          </button>
+            <button mat-flat-button class="m-x-8" color="primary" style="font-weight:bold; background-color: #FFA500; color: black; border: 2px solid #000; border-radius: 4px;"
+            [routerLink]="['/auth/boxed-register']">
+            {{ 'HEADER.REGISTER' | translate }}
+            </button>
 
-          <button
-            mat-flat-button
-            class="m-x-8"
-            color="primary"
-            style="font-weight: bold"
-            [routerLink]="['/auth/boxed-register']"
-          >
-            {{ "teaching.nav.register" | translate }}
-          </button>
           <button [matMenuTriggerFor]="flags" mat-mini-fab color="inherit">
-            <img
-              [src]="selectedLanguage.icon"
-              class="rounded-circle object-cover icon-20 m-t-2"
-            />
+            <img [src]="selectedLanguage.icon" class="rounded-circle object-cover icon-20 m-t-2" />
           </button>
+
           <mat-menu #flags="matMenu" class="cardWithShadow">
             @for(lang of languages; track lang.icon) {
             <button mat-menu-item (click)="changeLanguage(lang)">
               <div class="d-flex align-items-center">
-                <img
-                  [src]="lang.icon"
-                  class="rounded-circle object-cover m-r-8 icon-20"
-                />
+                <img [src]="lang.icon" class="rounded-circle object-cover m-r-8 icon-20" />
                 <span class="mat-subtitle-1 f-s-14">{{ lang.language }}</span>
               </div>
             </button>
@@ -77,99 +74,47 @@
           </mat-menu>
         </div>
 
-        <!-- Mobile Menu -->
-        <button
-          mat-icon-button
-          (click)="filterNavRight.toggle()"
-          class="d-flex d-lg-none"
-        >
+        <!-- MOBILE MENU -->
+        <button mat-icon-button (click)="filterNavRight.toggle()" class="d-flex d-lg-none">
           <i-tabler name="menu-2" class="icon-20 d-flex"></i-tabler>
         </button>
       </div>
     </mat-toolbar>
-    <!-- ------------------------------------------------------------------
-    End Header
-    ------------------------------------------------------------------ -->
 
     <app-content></app-content>
     <app-footer></app-footer>
   </mat-sidenav-content>
 
-  <!-- ------------------------------------------------------------------
-    Mobile Sidebar
-    ------------------------------------------------------------------ -->
-  <mat-sidenav
-    #filterNavRight
-    mode="over"
-    position="end"
-    class="filter-sidebar"
-  >
-    <div>
-      <div class="branding">
-        <img
-          src="../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
-          class="align-middle m-2"
-          alt="logo"
-          width="170px"
-        />
-      </div>
-      <div class="p-x-16">
-        <a
-          [routerLink]="['/auth/boxed-login']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
-            >Iniciar sesión</span
-          >
-        </a>
-        <a
-          [routerLink]="['/auth/boxed-register']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
-            >Registrar</span
-          >
-        </a>
-        <a
-          [routerLink]="['/aboutus']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">¿Quiénes somos?</span>
-        </a>
-        <a
-          [routerLink]="['/employment']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Empleo</span>
-        </a>
-        <a
-          [routerLink]="['/teaching']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Enseña en TeachU</span>
-        </a>
-        <a
-          [routerLink]="['/views/']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Invitar a amigos</span>
-        </a>
-        <a
-          [routerLink]="['/help']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Ayuda y asistencia</span>
-        </a>
-        <a
-          [routerLink]="['/privacy']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Política de privacidad</span>
-        </a>
-      </div>
+  <!-- MOBILE SIDENAV -->
+  <mat-sidenav #filterNavRight mode="over" position="end" class="filter-sidebar">
+    <div class="p-x-16">
+      <a [routerLink]="['/auth/boxed-login']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="text-primary f-s-15 m-l-8" style="font-weight:bold">{{ 'HEADER.LOGIN' | translate }}</span>
+      </a>
+      <a [routerLink]="['/auth/boxed-register']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="text-primary f-s-15 m-l-8" style="font-weight:bold">{{ 'HEADER.REGISTER' | translate }}</span>
+      </a>
+      <a [routerLink]="['/dashboard']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.DASHBOARD' | translate }}</span>
+      </a>
+      <a [routerLink]="['/trabajadores']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.WORKERS' | translate }}</span>
+      </a>
+      <a [routerLink]="['/dispositivos']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.DEVICES' | translate }}</span>
+      </a>
+      <a [routerLink]="['/alertas']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.ALERTS' | translate }}</span>
+      </a>
+      <a [routerLink]="['/demo']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.DEMO' | translate }}</span>
+      </a>
+      <a [routerLink]="['/normativas']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.COMPLIANCE' | translate }}</span>
+      </a>
+      <a [routerLink]="['/privacidad']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.PRIVACY' | translate }}</span>
+      </a>
     </div>
   </mat-sidenav>
-  <!-- ------------------------------------------------------------------
-    End mobile Sidebar
-    ------------------------------------------------------------------ -->
 </mat-sidenav-container>

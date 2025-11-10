@@ -8,35 +8,19 @@ import { MatDialog } from '@angular/material/dialog';
 import { AppDialogOverviewComponent } from '../../template/ui-components/dialog/dialog.component';
 import { AppFooterComponent } from 'src/app/components/footer/footer.component';
 
-interface courses {
-  id: number;
-  name: string;
-  url: string;
-  imgSrc: string;
-}
-
-interface reasons {
+interface supportChannels {
   id: number;
   icon: string;
   color: string;
   title: string;
   subtitle: string;
+  contact: string;
+  hours: string;
 }
 
-interface facts {
-  id: number;
-  icon: string;
-  color: string;
-  title: string;
-  subtext: string;
-}
-
-interface facts2 {
-  id: number;
-  icon: string;
-  color: string;
-  title: string;
-  subtext: string;
+interface faqs {
+  question: string;
+  answer: string;
 }
 
 @Component({
@@ -87,127 +71,62 @@ export class AppHelpComponent {
     });
   }
 
-  courses: courses[] = [
-    {
-      id: 1,
-      imgSrc: '/assets/images/landingpage/demos/PT-1.png',
-      name: 'Sistema de información estudiantil',
-      url: '#',
-    },
-    {
-      id: 2,
-      imgSrc: '/assets/images/landingpage/demos/PT-2.png',
-      name: 'Gestión multiescolar para distritos',
-      url: '#',
-    },
-    {
-      id: 3,
-      imgSrc: '/assets/images/landingpage/demos/PT-3.png',
-      name: 'Solución de facturación en línea',
-      url: '#',
-    },
-    {
-      id: 4,
-      imgSrc: '/assets/images/landingpage/demos/PT-4.png',
-      name: 'Sitios web compatibles con dispositivos móviles',
-      url: '#',
-    },
-    {
-      id: 5,
-      imgSrc: '/assets/images/landingpage/demos/PT-5.png',
-      name: 'Libro de calificaciones del docente',
-      url: '#',
-    },
-    {
-      id: 6,
-      imgSrc: '/assets/images/landingpage/demos/PT-6.png',
-      name: 'Generación de informes para toda la red escolar',
-      url: '#',
-    },
-  ];
-
-  reasons: reasons[] = [
+  // Canales de soporte técnico
+  supportChannels: supportChannels[] = [
     {
       id: 1,
       color: 'primary',
-      icon: 'solar:book-linear',
-      title: 'Enseña a tu manera',
-      subtitle:
-        'Crea e imparte los cursos que desees, con total libertad sobre el contenido, el formato y el horario.',
+      icon: 'mdi:email-outline',
+      title: 'Soporte por Email',
+      subtitle: 'Respuesta en 24 horas',
+      contact: 'MineGuard@gmail.com',
+      hours: 'Lunes a Viernes 8:00 - 18:00 hrs'
     },
     {
       id: 2,
-      color: 'primary',
-      icon: 'solar:share-linear',
-      title: 'Inspira a tu comunidad',
-      subtitle:
-        'Comparte tus conocimientos, guía a tus seguidores a descubrir nuevas pasiones, adquirir habilidades y avanzar profesionalmente.',
+      color: 'accent',
+      icon: 'mdi:phone-outline',
+      title: 'Soporte Telefónico',
+      subtitle: 'Atención inmediata',
+      contact: '+52 55 1234 5678',
+      hours: 'Lunes a Viernes 9:00 - 17:00 hrs'
     },
     {
       id: 3,
-      color: 'primary',
-      icon: 'solar:magic-stick-3-linear',
-      title: 'Conecta y crece',
-      subtitle:
-        'Expande tu red profesional o académica mientras desarrollas y fortaleces tus conocimientos.',
-    },
-    {
-      id: 4,
-      color: 'primary',
-      icon: 'solar:book-linear',
-      title: 'Enseña a tu manera',
-      subtitle:
-        'Crea e imparte los cursos que desees, con total libertad sobre el contenido, el formato y el horario.',
-    },
-    {
-      id: 5,
-      color: 'primary',
-      icon: 'solar:share-linear',
-      title: 'Inspira a tu comunidad',
-      subtitle:
-        'Comparte tus conocimientos, guía a tus seguidores a descubrir nuevas pasiones, adquirir habilidades y avanzar profesionalmente.',
-    },
-    {
-      id: 56,
-      color: 'primary',
-      icon: 'solar:magic-stick-3-linear',
-      title: 'Conecta y crece',
-      subtitle:
-        'Expande tu red profesional o académica mientras desarrollas y fortaleces tus conocimientos.',
-    },
+      color: 'warn',
+      icon: 'mdi:chat-outline',
+      title: 'Soporte Técnico Remoto',
+      subtitle: 'Asistencia en tiempo real',
+      contact: 'Solicitar cita previa',
+      hours: 'Disponible según agenda'
+    }
   ];
 
-  facts: facts[] = [
+  // Preguntas frecuentes específicas del sistema minero
+  faqs: faqs[] = [
     {
-      id: 1,
-      color: 'primary',
-      icon: 'solar:user-hand-up-linear',
-      title: '1,245,341',
-      subtext: 'Alumnos registrados',
+      question: '¿Qué requisitos técnicos necesita mi mina para implementar el sistema?',
+      answer: 'El sistema requiere conectividad Bluetooth para la comunicación entre cascos y dispositivos móviles, y acceso a internet para la sincronización con la plataforma web. No se necesita infraestructura compleja.'
     },
     {
-      id: 2,
-      color: 'primary',
-      icon: 'mdi:account-tie-outline',
-      title: '828,867',
-      subtext: 'Docentes y administrativos',
-    },
-  ];
-
-  facts2: facts2[] = [
-    {
-      id: 3,
-      color: 'primary',
-      icon: 'mdi:account-group-outline',
-      title: '46,328',
-      subtext: 'Comunidades',
+      question: '¿Cuál es la autonomía de batería del casco inteligente?',
+      answer: 'El casco tiene una autonomía de 12 horas continuas de operación. Incluye sistema de carga rápida y alertas de batería baja.'
     },
     {
-      id: 4,
-      color: 'primary',
-      icon: 'solar:card-transfer-linear',
-      title: '1,926,436',
-      subtext: 'Transacciones realizadas',
+      question: '¿Cómo maneja el sistema las zonas sin conectividad?',
+      answer: 'La aplicación móvil almacena localmente los datos y los sincroniza automáticamente cuando recupera la conexión, garantizando que no se pierda información.'
     },
+    {
+      question: '¿El sistema cumple con las normativas de seguridad minera?',
+      answer: 'Sí, nuestro sistema está diseñado para cumplir con la NOM-023-STPS-2012 y otras regulaciones de seguridad minera aplicables.'
+    },
+    {
+      question: '¿Qué tipo de mantenimiento requiere el equipo?',
+      answer: 'El casco requiere calibración mensual de sensores y mantenimiento preventivo trimestral. La plataforma software incluye actualizaciones automáticas.'
+    },
+    {
+      question: '¿Puedo integrar el sistema con otros softwares de la empresa?',
+      answer: 'Sí, ofrecemos APIs para integración con sistemas ERP, de gestión de seguridad y plataformas de reportes existentes.'
+    }
   ];
 }

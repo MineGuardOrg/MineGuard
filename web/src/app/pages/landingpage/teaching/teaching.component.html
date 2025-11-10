@@ -8,9 +8,9 @@
         <!-- --------------------------------------------------------------- -->
         <div class="branding p-x-0">
           <img
-            src="../../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
+            src="../../../../assets/images/logos/mineria-segura-logo.svg"
             class="align-middle m-2"
-            alt="logo"
+            alt="Monitoreo Integral de Minería Segura"
             width="170px"
           />
         </div>
@@ -32,9 +32,9 @@
           <button
             mat-button
             class="m-x-8 f-s-16 f-w-500"
-            [routerLink]="['/teaching']"
+            [routerLink]="['/aboutus']"
           >
-            {{ "teaching.nav.teach" | translate }}
+            {{ "teaching.nav.about" | translate }}
           </button>
 
           <button
@@ -42,9 +42,9 @@
             class="m-x-8"
             color="primary"
             style="font-weight: bold"
-            [routerLink]="['/auth/boxed-login']"
+            [routerLink]="['/sistema']"
           >
-            {{ "teaching.nav.login" | translate }}
+            {{ "teaching.nav.system" | translate }}
           </button>
 
           <button
@@ -52,9 +52,9 @@
             class="m-x-8"
             color="primary"
             style="font-weight: bold"
-            [routerLink]="['/auth/boxed-register']"
+            [routerLink]="['/demo']"
           >
-            {{ "teaching.nav.register" | translate }}
+            {{ "teaching.nav.demo" | translate }}
           </button>
           <button [matMenuTriggerFor]="flags" mat-mini-fab color="inherit">
             <img
@@ -116,8 +116,8 @@
               class="flex-column gap-9 text-center"
             >
               <img
-                src="/assets/images/teaching/teaching.svg"
-                alt="teaching-img"
+                src="/assets/images/mineria/capacitacion-minera.svg"
+                alt="capacitacion-minera"
                 class="img-fluid"
                 style="height: 400px"
               />
@@ -131,7 +131,7 @@
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-    Reasons
+    Programas de Capacitación
     ------------------------------------------------------------------ -->
     <div class="spacer-sm">
       <div class="container">
@@ -142,28 +142,34 @@
             </h1>
           </div>
         </div>
-        <!-- reasons -->
+        <!-- programas -->
         <mat-card class="cardWithShadow">
           <mat-card-content>
             <div class="row justify-content-center m-t-16">
-              @for(reason of reasons; track reason.subtitle) {
+              @for(program of trainingPrograms; track program.title) {
               <div class="col-lg-4 col-sm-6 m-b-16">
                 <mat-card class="shadow-none text-center m-b-0">
                   <mat-card-content class="p-32">
                     <span
-                      class="icon-48 m-auto m-b-16 d-flex align-items-center justify-content-center rounded bg-{{ reason.color }}"
+                      class="icon-48 m-auto m-b-16 d-flex align-items-center justify-content-center rounded bg-{{ program.color }}"
                     >
                       <span
                         class="iconify text-white icon-27"
-                        [attr.data-icon]="reason.icon"
+                        [attr.data-icon]="program.icon"
                       ></span>
                     </span>
                     <h6 class="m-t-4 mat-subtitle-1 f-s-22 f-w-600 m-b-16">
-                      {{ reason.title | translate }}
+                      {{ program.title | translate }}
                     </h6>
                     <span class="f-s-14 d-block text-center f-w-500 m-t-8">
-                      {{ reason.subtitle | translate }}
+                      {{ program.subtitle | translate }}
                     </span>
+                    <div class="m-t-16">
+                      <p class="f-s-12 text-muted">{{ program.duration | translate }}</p>
+                      <mat-chip class="f-s-12" color="primary" selected>
+                        {{ program.level | translate }}
+                      </mat-chip>
+                    </div>
                   </mat-card-content>
                 </mat-card>
               </div>
@@ -175,11 +181,41 @@
     </div>
 
     <!-- ------------------------------------------------------------------
-    End about the program
+    Estadísticas del Sistema
     ------------------------------------------------------------------ -->
+    <div class="overflow-hidden banner-section bg-light py-5">
+      <div class="container">
+        <div class="row text-center justify-content-center g-4">
+          <div class="col-6 col-md-3">
+            <h2 class="banner-title m-0">
+              <span class="text-primary">500+</span>
+            </h2>
+            <p class="f-s-16 m-t-5 m-0">{{ "teaching.stats.trained" | translate }}</p>
+          </div>
+          <div class="col-6 col-md-3">
+            <h2 class="banner-title m-0">
+              <span class="text-primary">25+</span>
+            </h2>
+            <p class="f-s-16 m-t-5 m-0">{{ "teaching.stats.companies" | translate }}</p>
+          </div>
+          <div class="col-6 col-md-3">
+            <h2 class="banner-title m-0">
+              <span class="text-primary">98%</span>
+            </h2>
+            <p class="f-s-16 m-t-5 m-0">{{ "teaching.stats.satisfaction" | translate }}</p>
+          </div>
+          <div class="col-6 col-md-3">
+            <h2 class="banner-title m-0">
+              <span class="text-primary">15+</span>
+            </h2>
+            <p class="f-s-16 m-t-5 m-0">{{ "teaching.stats.programs" | translate }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- ------------------------------------------------------------------
-    How to start
+    Proceso de Capacitación
     ------------------------------------------------------------------ -->
     <div class="overflow-hidden banner-section">
       <div class="container">
@@ -194,7 +230,7 @@
               <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
                 <mat-tab>
                   <ng-template mat-tab-label>
-                    {{ 'learn.title' | translate }}
+                    {{ 'learn.option1.title' | translate }}
                   </ng-template>
                   <div
                     class="d-flex align-items-center justify-content-between flex-wrap responsive-section"
@@ -206,7 +242,7 @@
                       {{ 'learn.option1.description' | translate }}
                     </div>
                     <img
-                      src="/assets/images/teaching/create-program.svg"
+                      src="/assets/images/mineria/evaluacion-inicial.svg"
                       alt="img"
                       style="flex: 1 1 30%; max-width: 300px"
                     />
@@ -227,7 +263,7 @@
                       {{ 'learn.option2.description' | translate }}
                     </div>
                     <img
-                      src="/assets/images/teaching/record-video.svg"
+                      src="/assets/images/mineria/entrenamiento-practico.svg"
                       alt="img"
                       style="flex: 1 1 30%; max-width: 300px"
                     />
@@ -248,7 +284,7 @@
                       {{ 'learn.option3.description' | translate }}
                     </div>
                     <img
-                      src="/assets/images/teaching/post-your-course.svg"
+                      src="/assets/images/mineria/certificacion.svg"
                       alt="img"
                       style="flex: 1 1 30%; max-width: 300px"
                     />
@@ -261,35 +297,33 @@
       </div>
     </div>
     <!-- ------------------------------------------------------------------
-    End How to start
+    End Proceso de Capacitación
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-    Become an instructor
+    Llamado a la Acción
     ------------------------------------------------------------------ -->
-    <div class="overflow-hidden banner-section bg-light">
+    <div class="overflow-hidden banner-section bg-primary">
       <div class="container">
         <div class="row">
           <div
             class="col-lg-12 d-flex align-items-center justify-content-center"
           >
             <div class="text-center" style="padding: 80px 20px">
-              <h1 class="banner-title m-0">
-                <span class="text-primary"
+              <h1 class="banner-title m-0 text-white">
+                <span class="text-accent"
                   >{{ 'learn.section3.title' | translate }}
                 </span>
               </h1>
-              <p class="f-s-18 m-t-12 m-0 banner-subtitle">
-                <!-- Únete a una de las tiendas virtuales de aprendizaje en línea más
-                grandes del mundo. -->
-                  {{ 'learn.section3.description' | translate }}
+              <p class="f-s-18 m-t-12 m-0 banner-subtitle text-light">
+                {{ 'learn.section3.description' | translate }}
               </p>
               <button
                 mat-flat-button
                 class="m-t-16"
-                color="primary"
+                color="accent"
                 style="font-weight: bold; width: 250px"
-                [routerLink]="['/auth/boxed-register']"
+                [routerLink]="['/contacto']"
               >
                 {{ 'learn.section3.button' | translate }}
               </button>
@@ -299,7 +333,7 @@
       </div>
     </div>
     <!-- ------------------------------------------------------------------
-    End Become an instructor
+    End Llamado a la Acción
     ------------------------------------------------------------------ -->
 
     <app-footer></app-footer>
@@ -317,64 +351,54 @@
     <div>
       <div class="branding">
         <img
-          src="../../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
+          src="../../../../assets/images/logos/mineria-segura-logo.svg"
           class="align-middle m-2"
-          alt="logo"
+          alt="Monitoreo Integral de Minería Segura"
           width="170px"
         />
       </div>
       <div class="p-x-16">
         <a
-          [routerLink]="['/authentication/boxed-login']"
+          [routerLink]="['/landingpage']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
           <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
-            >Iniciar sesión</span
+            >{{ "teaching.nav.home" | translate }}</span
           >
         </a>
         <a
-          [routerLink]="['/authentication/boxed-register']"
+          [routerLink]="['/aboutus']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">{{ "teaching.nav.about" | translate }}</span>
+        </a>
+        <a
+          [routerLink]="['/sistema']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
           <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
-            >Registrar</span
+            >{{ "teaching.nav.system" | translate }}</span
           >
         </a>
         <a
-          [routerLink]="['/views/aboutus']"
+          [routerLink]="['/demo']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
-          <span class="f-s-15 f-w-500 m-l-8">¿Quiénes somos?</span>
+          <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
+            >{{ "teaching.nav.demo" | translate }}</span
+          >
         </a>
         <a
-          [routerLink]="['/views/employment']"
+          [routerLink]="['/capacitacion']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
-          <span class="f-s-15 f-w-500 m-l-8">Empleo</span>
+          <span class="f-s-15 f-w-500 m-l-8">{{ "teaching.nav.training" | translate }}</span>
         </a>
         <a
-          [routerLink]="['/views/teaching']"
+          [routerLink]="['/seguridad']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
-          <span class="f-s-15 f-w-500 m-l-8">Enseña en TeachU</span>
-        </a>
-        <a
-          [routerLink]="['/views/']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Invitar a amigos</span>
-        </a>
-        <a
-          [routerLink]="['/views/help']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Ayuda y asistencia</span>
-        </a>
-        <a
-          [routerLink]="['/views/privacy']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Política de privacidad</span>
+          <span class="f-s-15 f-w-500 m-l-8">{{ "teaching.nav.security" | translate }}</span>
         </a>
       </div>
     </div>

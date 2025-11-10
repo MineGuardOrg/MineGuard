@@ -8,35 +8,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { AppDialogOverviewComponent } from '../../template/ui-components/dialog/dialog.component';
 import { AppFooterComponent } from 'src/app/components/footer/footer.component';
 
-interface courses {
-  id: number;
-  name: string;
-  url: string;
-  imgSrc: string;
-}
-
-interface reasons {
+interface securityPolicies {
   id: number;
   icon: string;
   color: string;
   title: string;
   subtitle: string;
-}
-
-interface facts {
-  id: number;
-  icon: string;
-  color: string;
-  title: string;
-  subtext: string;
-}
-
-interface facts2 {
-  id: number;
-  icon: string;
-  color: string;
-  title: string;
-  subtext: string;
+  description: string;
 }
 
 @Component({
@@ -87,103 +65,31 @@ export class AppPrivacyComponent {
     });
   }
 
-  courses: courses[] = [
-    {
-      id: 1,
-      imgSrc: '/assets/images/landingpage/demos/PT-1.png',
-      name: 'Sistema de información estudiantil',
-      url: '#',
-    },
-    {
-      id: 2,
-      imgSrc: '/assets/images/landingpage/demos/PT-2.png',
-      name: 'Gestión multiescolar para distritos',
-      url: '#',
-    },
-    {
-      id: 3,
-      imgSrc: '/assets/images/landingpage/demos/PT-3.png',
-      name: 'Solución de facturación en línea',
-      url: '#',
-    },
-    {
-      id: 4,
-      imgSrc: '/assets/images/landingpage/demos/PT-4.png',
-      name: 'Sitios web compatibles con dispositivos móviles',
-      url: '#',
-    },
-    {
-      id: 5,
-      imgSrc: '/assets/images/landingpage/demos/PT-5.png',
-      name: 'Libro de calificaciones del docente',
-      url: '#',
-    },
-    {
-      id: 6,
-      imgSrc: '/assets/images/landingpage/demos/PT-6.png',
-      name: 'Generación de informes para toda la red escolar',
-      url: '#',
-    },
-  ];
-
-  reasons: reasons[] = [
+  // Políticas de seguridad para el sistema minero
+  securityPolicies: securityPolicies[] = [
     {
       id: 1,
       color: 'primary',
-      icon: 'solar:book-linear',
-      title: 'Enseña a tu manera',
-      subtitle:
-        'Crea e imparte los cursos que desees, con total libertad sobre el contenido, el formato y el horario.',
+      icon: 'mdi:lock-outline',
+      title: 'Cifrado de Datos',
+      subtitle: 'Protección AES-256',
+      description: 'Todos los datos se cifran en reposo y durante la transmisión'
     },
     {
       id: 2,
-      color: 'primary',
-      icon: 'solar:share-linear',
-      title: 'Inspira a tu comunidad',
-      subtitle:
-        'Comparte tus conocimientos, guía a tus seguidores a descubrir nuevas pasiones, adquirir habilidades y avanzar profesionalmente.',
+      color: 'accent',
+      icon: 'mdi:shield-check',
+      title: 'Acceso Controlado',
+      subtitle: 'Autenticación multi-factor',
+      description: 'Sistemas de autenticación robustos para proteger el acceso'
     },
     {
       id: 3,
-      color: 'primary',
-      icon: 'solar:magic-stick-3-linear',
-      title: 'Conecta y crece',
-      subtitle:
-        'Expande tu red profesional o académica mientras desarrollas y fortaleces tus conocimientos.',
-    },
-  ];
-
-  facts: facts[] = [
-    {
-      id: 1,
-      color: 'primary',
-      icon: 'solar:user-hand-up-linear',
-      title: '1,245,341',
-      subtext: 'Alumnos registrados',
-    },
-    {
-      id: 2,
-      color: 'primary',
-      icon: 'mdi:account-tie-outline',
-      title: '828,867',
-      subtext: 'Docentes y administrativos',
-    },
-  ];
-
-  facts2: facts2[] = [
-    {
-      id: 3,
-      color: 'primary',
-      icon: 'mdi:account-group-outline',
-      title: '46,328',
-      subtext: 'Comunidades',
-    },
-    {
-      id: 4,
-      color: 'primary',
-      icon: 'solar:card-transfer-linear',
-      title: '1,926,436',
-      subtext: 'Transacciones realizadas',
-    },
+      color: 'warn',
+      icon: 'mdi:eye-off',
+      title: 'Privacidad Garantizada',
+      subtitle: 'Cumplimiento LFPDPPP',
+      description: 'Respetamos y protegemos los datos personales de los usuarios'
+    }
   ];
 }

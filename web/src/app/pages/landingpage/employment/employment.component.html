@@ -8,9 +8,9 @@
         <!-- --------------------------------------------------------------- -->
         <div class="branding p-x-0">
           <img
-            src="../../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
+            src="../../../../assets/images/logos/mineria-segura-logo.svg"
             class="align-middle m-2"
-            alt="logo"
+            alt="Monitoreo Integral de Minería Segura"
             width="170px"
           />
         </div>
@@ -32,9 +32,9 @@
           <button
             mat-button
             class="m-x-8 f-s-16 f-w-500"
-            [routerLink]="['/teaching']"
+            [routerLink]="['/aboutus']"
           >
-            Enseña en TeachU
+            Nosotros
           </button>
 
           <button
@@ -42,9 +42,9 @@
             class="m-x-8"
             color="primary"
             style="font-weight: bold"
-            [routerLink]="['/auth/boxed-login']"
+            [routerLink]="['/contacto']"
           >
-            Iniciar sesión
+            Contacto
           </button>
 
           <button
@@ -52,9 +52,9 @@
             class="m-x-8"
             color="primary"
             style="font-weight: bold"
-            [routerLink]="['/auth/boxed-register']"
+            [routerLink]="['/demo']"
           >
-            Registrate
+            Solicitar Demo
           </button>
         </div>
 
@@ -83,11 +83,11 @@
           >
             <div class="text-center" style="padding: 80px 20px">
               <h1 class="banner-title m-0">
-                <span class="text-primary">Enseña con nosotros</span>
+                <span class="text-primary">Sistema Integral</span>
               </h1>
               <p class="f-s-18 m-t-12 m-0 banner-subtitle">
-                Conviértete en instructor y comparte tu conocimiento con los
-                demás
+                Conozca los componentes tecnológicos que conforman nuestro 
+                sistema de monitoreo minero en tiempo real
               </p>
             </div>
           </div>
@@ -98,8 +98,8 @@
               class="flex-column gap-9 text-center"
             >
               <img
-                src="/assets/images/teaching/teaching.svg"
-                alt="teaching-img"
+                src="/assets/images/mineria/sistema-integral.svg"
+                alt="sistema-monitoreo-minero"
                 class="img-fluid"
                 style="height: 400px"
               />
@@ -113,39 +113,44 @@
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-    Reasons
+    Componentes del Sistema
     ------------------------------------------------------------------ -->
     <div class="spacer-sm">
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-lg-6 col-sm-8">
+          <div class="col-lg-8 col-sm-10">
             <h1 class="section-title text-center m-t-16">
-              Tu eliges de que manera empezar
+              Componentes Tecnológicos
             </h1>
           </div>
         </div>
-        <!-- reasons -->
+        <!-- componentes -->
         <mat-card class="cardWithShadow">
           <mat-card-content>
             <div class="row justify-content-center m-t-16">
-              @for(reason of reasons; track reason.subtitle) {
-              <div class="col-lg-4 col-sm-6 m-b-16">
-                <mat-card class="shadow-none text-center m-b-0">
+              @for(component of systemComponents; track component.title) {
+              <div class="col-lg-4 col-sm-6 m-b-24">
+                <mat-card class="shadow-none text-center m-b-0 h-100">
                   <mat-card-content class="p-32">
                     <span
-                      class="icon-48 m-auto m-b-16 d-flex align-items-center justify-content-center rounded bg-{{ reason.color }}"
+                      class="icon-48 m-auto m-b-16 d-flex align-items-center justify-content-center rounded bg-{{ component.color }}"
                     >
                       <span
                         class="iconify text-white icon-27"
-                        [attr.data-icon]="reason.icon"
+                        [attr.data-icon]="component.icon"
                       ></span>
                     </span>
                     <h6 class="m-t-4 mat-subtitle-1 f-s-22 f-w-600 m-b-16">
-                      {{ reason.title }}
+                      {{ component.title }}
                     </h6>
                     <span class="f-s-14 d-block text-center f-w-500 m-t-8">
-                      {{ reason.subtitle }}
+                      {{ component.subtitle }}
                     </span>
+                    <ul class="text-start f-s-14 m-t-16">
+                      @for(feature of component.features; track feature) {
+                      <li class="m-b-8">{{ feature }}</li>
+                      }
+                    </ul>
                   </mat-card-content>
                 </mat-card>
               </div>
@@ -156,68 +161,62 @@
       </div>
     </div>
     <!-- ------------------------------------------------------------------
-    End Reasons
+    End Componentes del Sistema
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-    About the program
+    Especificaciones Técnicas
     ------------------------------------------------------------------ -->
     <div class="overflow-hidden banner-section bg-light py-5">
       <div class="container">
         <div class="row text-center justify-content-center g-4">
-          <div class="col-6 col-md-2">
+          <div class="col-6 col-md-3">
             <h2 class="banner-title m-0">
-              <span class="text-primary">200</span>
+              <span class="text-primary">99%</span>
             </h2>
-            <p class="f-s-16 m-t-5 m-0">Usuarios</p>
+            <p class="f-s-16 m-t-5 m-0">Disponibilidad</p>
           </div>
-          <div class="col-6 col-md-2">
+          <div class="col-6 col-md-3">
             <h2 class="banner-title m-0">
-              <span class="text-primary">150</span>
+              <span class="text-primary">&lt; 3s</span>
             </h2>
-            <p class="f-s-16 m-t-5 m-0">Registros</p>
+            <p class="f-s-16 m-t-5 m-0">Tiempo Respuesta</p>
           </div>
-          <div class="col-6 col-md-2">
+          <div class="col-6 col-md-3">
             <h2 class="banner-title m-0">
-              <span class="text-primary">Más de 60</span>
+              <span class="text-primary">50+</span>
             </h2>
-            <p class="f-s-16 m-t-5 m-0">Cursos</p>
+            <p class="f-s-16 m-t-5 m-0">Miners Simultáneos</p>
           </div>
-          <div class="col-6 col-md-2">
+          <div class="col-6 col-md-3">
             <h2 class="banner-title m-0">
-              <span class="text-primary">Más de 50</span>
+              <span class="text-primary">AES-256</span>
             </h2>
-            <p class="f-s-16 m-t-5 m-0">Instructores</p>
-          </div>
-          <div class="col-6 col-md-2">
-            <h2 class="banner-title m-0">
-              <span class="text-primary">Más de 20</span>
-            </h2>
-            <p class="f-s-16 m-t-5 m-0">Categorias</p>
+            <p class="f-s-16 m-t-5 m-0">Cifrado</p>
           </div>
         </div>
       </div>
     </div>
 
     <!-- ------------------------------------------------------------------
-    End about the program
+    End Especificaciones Técnicas
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-    How to start
+    Funcionamiento del Sistema
     ------------------------------------------------------------------ -->
     <div class="overflow-hidden banner-section">
       <div class="container">
         <div class="col-lg-10 justify-content-center m-auto">
           <div class="text-center">
             <h1 class="banner-title p-y-16 m-0">
-              <span class="text-dark">Cómo empezar</span>
+              <span class="text-dark">Cómo Funciona el Sistema</span>
             </h1>
           </div>
           <mat-card class="shadow-none w-100">
             <mat-card-content class="b-t-1">
               <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
-                <mat-tab label="Crea tu programa">
+                <mat-tab label="Monitoreo en Tiempo Real">
                   <div
                     class="d-flex align-items-center justify-content-between flex-wrap responsive-section"
                   >
@@ -225,23 +224,21 @@
                       class="bg-light-primary text-dark f-s-16 mat-body-1 p-16 rounded m-t-12"
                       style="flex: 1 1 60%"
                     >
-                      El proceso de creación inicia a partir del interés genuino
-                      y el dominio del conocimiento por parte del instructor.
-                      Posteriormente, es posible identificar una temática con
-                      alto potencial utilizando la herramienta Marketplace
-                      Insights. El diseño pedagógico y el enfoque didáctico
-                      quedan a cargo del docente,quien definirá la manera de
-                      impartir el contenido e imprimir su sello distintivo.
+                      El <strong>casco inteligente</strong> recolecta datos biométricos y ambientales 
+                      continuamente mediante sensores especializados. Los parámetros monitoreados 
+                      incluyen ritmo cardíaco, temperatura corporal, detección de caídas y presencia 
+                      de gases tóxicos. La transmisión de datos se realiza mediante <strong>Bluetooth 5.0</strong> 
+                      hacia la aplicación móvil del capataz.
                     </div>
                     <img
-                      src="/assets/images/teaching/create-program.svg"
-                      alt="img"
+                      src="/assets/images/mineria/monitoreo-tiempo-real.svg"
+                      alt="Monitoreo en Tiempo Real"
                       style="flex: 1 1 30%; max-width: 300px"
                     />
                   </div>
                 </mat-tab>
 
-                <mat-tab label="Graba tu video">
+                <mat-tab label="Procesamiento de Datos">
                   <div
                     class="d-flex align-items-center justify-content-between flex-wrap"
                   >
@@ -249,23 +246,21 @@
                       class="bg-light-primary text-dark f-s-16 mat-body-1 p-16 rounded m-t-12"
                       style="flex: 1 1 60%"
                     >
-                      A partir del compromiso personal con el conocimiento y la
-                      vocación por compartirlo, el instructor puede seleccionar
-                      una temática con alto potencial utilizando la herramienta
-                      Marketplace Insights. La definición del enfoque pedagógico
-                      y del estilo de enseñanza queda en manos del creador,
-                      quien podrá imprimir su sello personal en el desarrollo
-                      del contenido.
+                      La <strong>aplicación móvil</strong> actúa como puente de comunicación en zonas 
+                      sin conectividad. Almacena localmente los datos y los sincroniza con la 
+                      plataforma web cuando la conexión esté disponible. Implementa algoritmos 
+                      de <strong>detección temprana</strong> que generan alertas inmediatas ante 
+                      condiciones críticas como anomalías en signos vitales o presencia de gases peligrosos.
                     </div>
                     <img
-                      src="/assets/images/teaching/record-video.svg"
-                      alt="img"
+                      src="/assets/images/mineria/procesamiento-datos.svg"
+                      alt="Procesamiento de Datos"
                       style="flex: 1 1 30%; max-width: 300px"
                     />
                   </div>
                 </mat-tab>
 
-                <mat-tab label="Publica tu curso">
+                <mat-tab label="Análisis y Reportes">
                   <div
                     class="d-flex align-items-center justify-content-between flex-wrap"
                   >
@@ -273,16 +268,15 @@
                       class="bg-light-primary text-dark mat-body-1 p-16 rounded m-t-12"
                       style="flex: 1 1 60%"
                     >
-                      Promocionar el curso a través de redes sociales y canales
-                      profesionales es una estrategia efectiva para obtener las
-                      primeras valoraciones y reseñas. El curso estará
-                      disponible en nuestra plataforma virtual, lo que permitirá
-                      generar ingresos por cada inscripción realizada bajo
-                      modalidad de pago.
+                      La <strong>plataforma web centralizada</strong> utiliza <strong>Machine Learning</strong> 
+                      para identificar patrones de riesgo y realizar análisis predictivo. Genera 
+                      reportes detallados por trabajador, turno y tipo de evento. Los supervisores 
+                      pueden visualizar dashboards en tiempo real y acceder a historiales completos 
+                      para la toma de decisiones estratégicas.
                     </div>
                     <img
-                      src="/assets/images/teaching/post-your-course.svg"
-                      alt="img"
+                      src="/assets/images/mineria/analisis-reportes.svg"
+                      alt="Análisis y Reportes"
                       style="flex: 1 1 30%; max-width: 300px"
                     />
                   </div>
@@ -294,38 +288,36 @@
       </div>
     </div>
     <!-- ------------------------------------------------------------------
-    End How to start
+    End Funcionamiento del Sistema
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-    Become an instructor
+    Llamado a la Acción
     ------------------------------------------------------------------ -->
-    <div class="overflow-hidden banner-section bg-light">
+    <div class="overflow-hidden banner-section bg-primary">
       <div class="container">
         <div class="row">
           <div
             class="col-lg-12 d-flex align-items-center justify-content-center"
           >
             <div class="text-center" style="padding: 80px 20px">
-              <h1 class="banner-title m-0">
-                <span class="text-primary"
-                  >Conviértete en instructor ahora
+              <h1 class="banner-title m-0 text-white">
+                <span class="text-accent"
+                  >Implemente nuestro sistema en su operación minera
                 </span>
               </h1>
-              <p class="f-s-18 m-t-12 m-0 banner-subtitle">
-                <!-- Únete a una de las tiendas virtuales de aprendizaje en línea más
-                grandes del mundo. -->
-                Únete al grupo de instructores y ayudalos dandoles una mano en algo 
-                que te apaciona.
+              <p class="f-s-18 m-t-12 m-0 banner-subtitle text-light">
+                Reduzca accidentes laborales, cumpla con normativas de seguridad 
+                y proteja a su equipo de trabajo con tecnología de vanguardia.
               </p>
               <button
                 mat-flat-button
                 class="m-t-16"
-                color="primary"
+                color="accent"
                 style="font-weight: bold; width: 250px"
-                [routerLink]="['/authentication/boxed-register']"
+                [routerLink]="['/demo']"
               >
-                Empezar
+                Solicitar Demo
               </button>
             </div>
           </div>
@@ -333,7 +325,7 @@
       </div>
     </div>
     <!-- ------------------------------------------------------------------
-    End Become an instructor
+    End Llamado a la Acción
     ------------------------------------------------------------------ -->
 
     <app-footer></app-footer>
@@ -351,64 +343,52 @@
     <div>
       <div class="branding">
         <img
-          src="../../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
+          src="../../../../assets/images/logos/mineria-segura-logo.svg"
           class="align-middle m-2"
-          alt="logo"
+          alt="Monitoreo Integral de Minería Segura"
           width="170px"
         />
       </div>
       <div class="p-x-16">
         <a
-          [routerLink]="['/authentication/boxed-login']"
+          [routerLink]="['/landingpage']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Inicio</span>
+        </a>
+        <a
+          [routerLink]="['/aboutus']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Nosotros</span>
+        </a>
+        <a
+          [routerLink]="['/contacto']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
           <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
-            >Iniciar sesión</span
+            >Contacto</span
           >
         </a>
         <a
-          [routerLink]="['/authentication/boxed-register']"
+          [routerLink]="['/demo']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
           <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
-            >Registrar</span
+            >Solicitar Demo</span
           >
         </a>
         <a
-          [routerLink]="['/views/aboutus']"
+          [routerLink]="['/srs']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
-          <span class="f-s-15 f-w-500 m-l-8">¿Quiénes somos?</span>
+          <span class="f-s-15 f-w-500 m-l-8">Documentación Técnica</span>
         </a>
         <a
-          [routerLink]="['/views/employment']"
+          [routerLink]="['/normativas']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
-          <span class="f-s-15 f-w-500 m-l-8">Empleo</span>
-        </a>
-        <a
-          [routerLink]="['/views/teaching']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Enseña en TeachU</span>
-        </a>
-        <a
-          [routerLink]="['/views/']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Invitar a amigos</span>
-        </a>
-        <a
-          [routerLink]="['/views/help']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Ayuda y asistencia</span>
-        </a>
-        <a
-          [routerLink]="['/views/privacy']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Política de privacidad</span>
+          <span class="f-s-15 f-w-500 m-l-8">Cumplimiento Normativo</span>
         </a>
       </div>
     </div>

@@ -1,26 +1,15 @@
-.mdc-data-table__cell,
-.mdc-data-table__header-cell {
-  padding: 16px;
+.rounded-sm {
+  border-radius: 6px !important;
 }
 
-.mdc-data-table__cell,
-.mdc-data-table__header-cell,
-.mat-mdc-cell {
-  border-bottom-color: $bordertableColor !important;
+.rounded {
+  border-radius: $border-radius !important;
 }
 
-.table-responsive {
-  overflow-x: auto;
-
-  td,
-  mat-cell {
-    white-space: nowrap;
-    padding: 14px;
-  }
+.rounded-circle {
+  border-radius: 50% !important;
 }
 
-@media (max-width: 1023px) {
-  .table-xs-responsive {
-    overflow-x: auto;
-  }
+.rounded-pill {
+  border-radius: 25px !important;
 }

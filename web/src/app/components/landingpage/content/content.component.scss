@@ -1,0 +1,1131 @@
+// ============================================
+// VARIABLES - PALETA MINERÍA MODERNA
+// ============================================
+$primary: #1a1a1a;           // Negro profundo
+$accent: #FDB71A;            // Amarillo dorado minero
+$accent-dark: #E69F00;       // Amarillo oscuro
+$accent-light: #FFD54F;      // Amarillo claro
+$orange: #FF6B35;            // Naranja señalización
+$text-primary: #1a1a1a;      // Texto principal
+$text-secondary: #666666;    // Texto secundario
+$text-muted: #999999;        // Texto suave
+$bg-light: #FAFAFA;          // Fondo claro
+$bg-yellow: #FFF9E6;         // Fondo amarillo suave
+$border: #E5E5E5;            // Bordes suaves
+$white: #FFFFFF;
+$success: #10B981;           // Verde seguridad
+
+
+// ============================================
+// TIPOGRAFÍA BASE
+// ============================================
+* {
+  font-feature-settings: 'ss01', 'ss02', 'cv01', 'cv02';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+// ============================================
+// HERO SECTION
+// ============================================
+.hero-section {
+  background: linear-gradient(135deg, $white 0%, $bg-yellow 100%);
+  padding: 100px 0 80px 0;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 2px solid $accent;
+}
+
+.hero-container {
+  position: relative;
+  z-index: 2;
+}
+
+// Gradiente con toques amarillos
+.hero-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(253, 183, 26, 0.06) 0%, transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(255, 107, 53, 0.04) 0%, transparent 50%);
+  z-index: 1;
+}
+
+// Badge con amarillo
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  background: $accent;
+  color: $primary;
+  border: 1px solid $accent-dark;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  animation: fadeInUp 0.6s ease-out;
+  box-shadow: 0 2px 8px rgba(253, 183, 26, 0.25);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  .iconify {
+    font-size: 13px;
+    color: $primary;
+  }
+}
+
+// Título hero más contenido
+.hero-title {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  color: $text-primary;
+  letter-spacing: -1px;
+  animation: fadeInUp 0.6s ease-out 0.1s both;
+}
+
+.hero-description {
+  font-size: 17px;
+  line-height: 1.6;
+  color: $text-secondary;
+  max-width: 540px;
+  margin-bottom: 32px;
+  font-weight: 400;
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+// Botones más compactos
+.hero-btn-primary {
+  padding: 14px 28px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  background: $accent !important;
+  border: 1px solid $accent-dark !important;
+  color: $primary !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 2px 12px rgba(253, 183, 26, 0.3) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+
+  .iconify {
+    font-size: 16px;
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(253, 183, 26, 0.4) !important;
+    background: $accent-dark !important;
+  }
+}
+
+.hero-btn-secondary {
+  padding: 14px 28px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  border: 1px solid $primary !important;
+  color: $primary !important;
+  background: $white !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+
+  .iconify {
+    font-size: 16px;
+  }
+
+  &:hover {
+    border-color: $accent !important;
+    background: $bg-yellow !important;
+    color: $primary !important;
+  }
+}
+
+.trust-badges {
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+  
+  .iconify {
+    font-size: 16px;
+    color: $accent;
+  }
+}
+
+
+// ============================================
+// ANIMACIONES
+// ============================================
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+// ============================================
+// DASHBOARD PREVIEW
+// ============================================
+.hero-card-container {
+  animation: scaleIn 0.8s ease-out 0.4s both;
+  
+  .hero-dashboard {
+    max-width: 480px;
+    margin: auto;
+    border-radius: 14px;
+    border: 2px solid $accent;
+    box-shadow: 0 12px 40px rgba(253, 183, 26, 0.15),
+                0 0 0 1px rgba(253, 183, 26, 0.1);
+    overflow: hidden;
+    background: $white;
+  }
+}
+
+.dashboard-header {
+  background: linear-gradient(135deg, $primary 0%, #2a2a2a 100%);
+  padding: 24px 20px;
+  color: $white;
+  border-bottom: 2px solid $accent;
+}
+
+.status-badge {
+  background: $accent;
+  color: $primary;
+  border: none;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 11px;
+
+  .iconify {
+    font-size: 7px;
+  }
+}
+
+.pulse-dot {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.dashboard-stat {
+  background: rgba(253, 183, 26, 0.12);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(253, 183, 26, 0.25);
+}
+
+.dashboard-body {
+  padding: 20px;
+  background: $white;
+}
+
+.dashboard-label {
+  color: $text-secondary;
+  font-weight: 600;
+}
+
+.custom-progress {
+  height: 6px;
+  border-radius: 6px;
+  background: $bg-yellow;
+}
+
+// Tarjetas de estado más compactas
+.status-card {
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid $border;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: $white;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    border-color: $accent;
+  }
+
+  .iconify {
+    font-size: 22px;
+  }
+}
+
+.success-card {
+  background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+  border-color: $success;
+}
+
+.warning-card {
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFEDCC 100%);
+  border-color: $accent;
+}
+
+.update-indicator {
+  background: $bg-yellow;
+  border-radius: 8px;
+  border: 1px solid $accent;
+}
+
+.update-time {
+  color: $text-primary;
+  font-weight: 600;
+}
+
+
+// ============================================
+// METRICS BAR
+// ============================================
+.metrics-bar {
+  margin-top: -60px;
+  position: relative;
+  z-index: 100;
+  padding: 0 0 60px 0;
+}
+
+.metrics-card {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid $accent;
+  background: $white;
+  box-shadow: 0 6px 24px rgba(253, 183, 26, 0.15);
+}
+
+.metrics-content {
+  padding: 40px 32px;
+  background: linear-gradient(135deg, $white 0%, $bg-yellow 100%);
+}
+
+.metric-item {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
+.metric-icon-wrapper {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: $accent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 12px rgba(253, 183, 26, 0.25);
+  border: 1px solid $accent-dark;
+
+  .iconify {
+    font-size: 26px;
+    color: $primary;
+  }
+}
+
+.metric-number {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+  color: $text-primary;
+  letter-spacing: -1px;
+}
+
+
+// ============================================
+// COMMON STYLES
+// ============================================
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  background: $accent;
+  color: $primary;
+  border: 1px solid $accent-dark;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(253, 183, 26, 0.25);
+
+  .iconify {
+    font-size: 13px;
+  }
+
+  &.accent {
+    background: $accent;
+    border-color: $accent-dark;
+  }
+
+  &.success {
+    background: $success;
+    border-color: darken($success, 10%);
+    color: $white;
+  }
+
+  &.primary {
+    background: $primary;
+    border-color: $accent;
+    color: $accent;
+  }
+}
+
+.section-title-main {
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: $text-primary;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.section-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: $text-secondary;
+  max-width: 680px;
+  margin: 0 auto;
+  font-weight: 400;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, $accent 0%, $accent-dark 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+
+// ============================================
+// COMPONENTS SECTION
+// ============================================
+.components-section {
+  padding: 80px 0;
+  background: $white;
+  position: relative;
+}
+
+.component-card {
+  border-radius: 14px;
+  border: 1px solid $border;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  background: $white;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(253, 183, 26, 0.12);
+    border-color: $accent;
+  }
+}
+
+.component-icon-wrapper {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: $bg-yellow;
+  border-radius: 10px;
+  border: 1px solid $accent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.component-card:hover .icon-background {
+  background: $accent;
+  transform: rotate(6deg);
+}
+
+.component-icon {
+  font-size: 24px;
+  position: relative;
+  z-index: 2;
+  color: $primary;
+  transition: all 0.3s;
+}
+
+.component-card:hover .component-icon {
+  transform: scale(1.08);
+}
+
+.component-number {
+  display: inline-block;
+  padding: 4px 12px;
+  background: $accent;
+  color: $primary;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: 0.3px;
+  border: 1px solid $accent-dark;
+}
+
+.component-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: $text-primary;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.component-description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: $text-secondary;
+  margin-bottom: 24px;
+}
+
+// Lista de características
+.features-list {
+  border-top: 1px solid $bg-yellow;
+  padding-top: 20px;
+}
+
+.features-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: $accent-dark;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+
+  .iconify {
+    font-size: 14px;
+    color: $accent;
+  }
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 10px;
+}
+
+.feature-check {
+  width: 18px;
+  height: 18px;
+  background: $accent;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  border: 1px solid $accent-dark;
+
+  .iconify {
+    font-size: 10px;
+    color: $primary;
+  }
+}
+
+.feature-item span {
+  font-size: 13px;
+  color: $text-primary;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+
+// ============================================
+// FEATURES SECTION
+// ============================================
+.features-section {
+  padding: 80px 0;
+  background: linear-gradient(135deg, $bg-yellow 0%, $white 100%);
+  border-top: 2px solid $accent;
+  border-bottom: 2px solid $accent;
+}
+
+.feature-card {
+  border-radius: 14px;
+  border: 1px solid $border;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: $white;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(253, 183, 26, 0.15);
+    border-color: $accent;
+  }
+}
+
+.feature-icon-container {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 20px;
+  background: $accent;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid $accent-dark;
+  box-shadow: 0 3px 12px rgba(253, 183, 26, 0.25);
+}
+
+.feature-icon-large {
+  font-size: 28px;
+  color: $primary;
+  transition: transform 0.3s;
+}
+
+.feature-card:hover .feature-icon-large {
+  transform: scale(1.1) rotate(4deg);
+}
+
+.feature-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: $text-primary;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.feature-card-description {
+  font-size: 13px;
+  line-height: 1.6;
+  color: $text-secondary;
+  margin: 0;
+}
+
+
+// ============================================
+// BENEFITS SECTION
+// ============================================
+.benefits-section {
+  padding: 80px 0;
+  background: $white;
+  position: relative;
+}
+
+.benefits-decoration {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(135deg, $bg-yellow 0%, transparent 100%);
+  opacity: 0.3;
+}
+
+.benefits-title {
+  margin-bottom: 16px;
+}
+
+.benefits-desc {
+  margin-bottom: 40px;
+}
+
+.text-highlight {
+  color: $accent-dark;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: $accent;
+}
+
+// Lista de beneficios
+.benefits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.benefit-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateX(8px);
+  }
+}
+
+.benefit-check-icon {
+  width: 44px;
+  height: 44px;
+  background: $accent;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s;
+  border: 2px solid $accent-dark;
+  box-shadow: 0 3px 12px rgba(253, 183, 26, 0.25);
+
+  .iconify {
+    font-size: 22px;
+    color: $primary;
+  }
+}
+
+.benefit-list-item:hover .benefit-check-icon {
+  transform: scale(1.08) rotate(4deg);
+}
+
+.benefit-list-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: $text-primary;
+  margin: 0 0 6px 0;
+}
+
+.benefit-list-text {
+  font-size: 14px;
+  color: $text-secondary;
+  line-height: 1.6;
+}
+
+// Tarjetas de beneficios
+.benefit-card {
+  border-radius: 14px;
+  border: 1px solid $border;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  background: $white;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(253, 183, 26, 0.12);
+    border-color: $accent;
+  }
+}
+
+.benefit-icon-wrapper {
+  width: 52px;
+  height: 52px;
+  background: $bg-yellow;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  transition: all 0.3s;
+  border: 1px solid $accent;
+
+  .iconify {
+    font-size: 26px;
+    color: $accent-dark;
+  }
+}
+
+.benefit-card:hover .benefit-icon-wrapper {
+  transform: scale(1.08);
+  background: $accent;
+  
+  .iconify {
+    color: $primary;
+  }
+}
+
+.benefit-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: $text-primary;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.benefit-card-description {
+  font-size: 13px;
+  line-height: 1.6;
+  color: $text-secondary;
+  margin: 0;
+}
+
+.benefit-card-arrow {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 30px;
+  height: 30px;
+  background: $accent;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s;
+  border: 1px solid $accent-dark;
+
+  .iconify {
+    font-size: 16px;
+    color: $primary;
+  }
+}
+
+.benefit-card:hover .benefit-card-arrow {
+  opacity: 1;
+  transform: translateX(3px);
+}
+
+.cta-button-large {
+  padding: 14px 28px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  background: $accent !important;
+  color: $primary !important;
+  border: 1px solid $accent-dark !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 3px 12px rgba(253, 183, 26, 0.3) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+
+  .iconify {
+    font-size: 16px;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(253, 183, 26, 0.4) !important;
+    background: $accent-dark !important;
+  }
+}
+
+
+// ============================================
+// TEAM SECTION
+// ============================================
+.team-section {
+  padding: 80px 0;
+  background: linear-gradient(135deg, $white 0%, $bg-yellow 100%);
+  border-top: 2px solid $accent;
+}
+
+.team-card {
+  border-radius: 14px;
+  border: 1px solid $border;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: $white;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(253, 183, 26, 0.15);
+    border-color: $accent;
+  }
+}
+
+.team-avatar-wrapper {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 14px;
+}
+
+.team-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid $accent;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 3px 12px rgba(253, 183, 26, 0.25);
+}
+
+.avatar-status {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: $success;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: 2px solid $white;
+  z-index: 3;
+}
+
+.team-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: $text-primary;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.team-role {
+  font-size: 12px;
+  color: $text-secondary;
+  font-weight: 500;
+}
+
+
+// ============================================
+// TECH SECTION
+// ============================================
+.tech-section {
+  padding: 80px 0;
+  background: $white;
+  position: relative;
+}
+
+.tech-chip {
+  border: 1px solid $accent !important;
+  background: $bg-yellow !important;
+  font-weight: 600 !important;
+  padding: 10px 18px !important;
+  border-radius: 100px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  cursor: default !important;
+  color: $primary !important;
+  font-size: 13px !important;
+
+  .iconify {
+    font-size: 14px;
+    color: $accent-dark;
+  }
+
+  &:hover {
+    border-color: $accent-dark !important;
+    background: $accent !important;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(253, 183, 26, 0.25) !important;
+  }
+}
+
+
+// ============================================
+// CTA FINAL
+// ============================================
+.cta-final {
+  padding: 80px 0;
+  background: linear-gradient(135deg, $primary 0%, #2a2a2a 100%);
+  position: relative;
+  overflow: hidden;
+  border-top: 3px solid $accent;
+}
+
+.cta-container {
+  position: relative;
+  z-index: 2;
+}
+
+.cta-title {
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.cta-subtitle {
+  opacity: 0.9;
+  line-height: 1.6;
+  max-width: 600px;
+  font-size: 16px;
+}
+
+.cta-final-button {
+  padding: 16px 32px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  background: $accent !important;
+  color: $primary !important;
+  border: 1px solid $accent-dark !important;
+  min-width: 200px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 3px 16px rgba(253, 183, 26, 0.4) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+
+  .iconify {
+    font-size: 16px;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(253, 183, 26, 0.5) !important;
+    background: $accent-dark !important;
+  }
+}
+
+.cta-footer {
+  opacity: 0.85;
+
+  .iconify {
+    font-size: 15px;
+    color: $accent;
+  }
+}
+
+
+// ============================================
+// RESPONSIVE
+// ============================================
+@media (max-width: 991px) {
+  .hero-title {
+    font-size: 40px;
+  }
+
+  .section-title-main {
+    font-size: 32px;
+  }
+
+  .hero-section {
+    padding: 80px 0 60px 0;
+  }
+
+  .components-section,
+  .features-section,
+  .benefits-section,
+  .team-section,
+  .tech-section,
+  .cta-final {
+    padding: 50px 0;
+  }
+}-final {
+    padding: 60px 0;
+  }
+
+  .metrics-content {
+    padding: 32px 20px;
+  }
+
+
+@media (max-width: 767px) {
+  .hero-title {
+    font-size: 32px;
+    letter-spacing: -0.5px;
+  }
+
+  .section-title-main {
+    font-size: 28px;
+  }
+
+  .hero-description {
+    font-size: 15px;
+  }
+
+  .section-description {
+    font-size: 15px;
+  }
+
+  .metric-number {
+    font-size: 32px;
+  }
+
+  .cta-title {
+    font-size: 28px;
+  }
+  
+  .hero-section {
+    padding: 60px 0 40px 0;
+  }
+  
+  .components-section,
+  .features-section,
+  .benefits-section,
+  .team-section,
+  .tech-section,
+  .cta-final {
+    padding: 40px 0;
+  }   }
+
+  
+  .helmet-animation-container {
+  position: relative;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.helmet-canvas {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  background: linear-gradient(135deg, $white 0%, $bg-yellow 100%);
+  border: 2px solid $accent;
+  box-shadow: 0 8px 32px rgba(253, 183, 26, 0.2);
+}
+
+.helmet-info-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid $accent;
+}
+
+.info-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: $accent;
+  color: $primary;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.helmet-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: $text-primary;
+  margin-bottom: 12px;
+}
+
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: $text-primary;
+}

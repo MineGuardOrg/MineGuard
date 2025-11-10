@@ -8,35 +8,20 @@ import { MatDialog } from '@angular/material/dialog';
 import { AppDialogOverviewComponent } from '../../template/ui-components/dialog/dialog.component';
 import { AppFooterComponent } from 'src/app/components/footer/footer.component';
 
-interface courses {
+interface teamMembers {
   id: number;
   name: string;
-  url: string;
-  imgSrc: string;
+  role: string;
+  avatar: string;
+  description: string;
+  icon: string;
 }
 
-interface reasons {
+interface projectMetrics {
   id: number;
+  value: string;
+  label: string;
   icon: string;
-  color: string;
-  title: string;
-  subtitle: string;
-}
-
-interface facts {
-  id: number;
-  icon: string;
-  color: string;
-  title: string;
-  subtext: string;
-}
-
-interface facts2 {
-  id: number;
-  icon: string;
-  color: string;
-  title: string;
-  subtext: string;
 }
 
 @Component({
@@ -87,103 +72,99 @@ export class AppAboutusComponent {
     });
   }
 
-  courses: courses[] = [
+  // Miembros del equipo basados en el SRS
+  teamMembers: teamMembers[] = [
     {
       id: 1,
-      imgSrc: '/assets/images/landingpage/demos/PT-1.png',
-      name: 'Sistema de información estudiantil',
-      url: '#',
+      name: 'Vanessa Balderas Martínez',
+      role: 'Líder de Proyecto',
+      avatar: '',
+      icon: 'user-check',
+      description: 'Responsable de la coordinación general del proyecto y gestión de requerimientos.'
     },
     {
       id: 2,
-      imgSrc: '/assets/images/landingpage/demos/PT-2.png',
-      name: 'Gestión multiescolar para distritos',
-      url: '#',
+      name: 'Juan Antonio Avalos García',
+      role: 'Desarrollador Hardware',
+      avatar: '',
+      icon: 'cpu',
+      description: 'Especialista en integración de sensores y diseño electrónico del casco inteligente.'
     },
     {
       id: 3,
-      imgSrc: '/assets/images/landingpage/demos/PT-3.png',
-      name: 'Solución de facturación en línea',
-      url: '#',
+      name: 'Angel Alejandro Chávez Castillón',
+      role: 'Desarrollador Software',
+      avatar: '',
+      icon: 'code',
+      description: 'Encargado del desarrollo de la aplicación móvil y plataforma web.'
     },
     {
       id: 4,
-      imgSrc: '/assets/images/landingpage/demos/PT-4.png',
-      name: 'Sitios web compatibles con dispositivos móviles',
-      url: '#',
+      name: 'Isaac De Guerreroosio Arenas',
+      role: 'Especialista en Sensores',
+      avatar: '',
+      icon: 'settings',
+      description: 'Experto en calibración y validación de sensores biométricos y ambientales.'
     },
     {
       id: 5,
-      imgSrc: '/assets/images/landingpage/demos/PT-5.png',
-      name: 'Libro de calificaciones del docente',
-      url: '#',
-    },
-    {
-      id: 6,
-      imgSrc: '/assets/images/landingpage/demos/PT-6.png',
-      name: 'Generación de informes para toda la red escolar',
-      url: '#',
-    },
+      name: 'Alexander Parra Espinosa',
+      role: 'Arquitecto de Sistema',
+      avatar: '',
+      icon: 'layout',
+      description: 'Diseñador de la arquitectura integral del sistema y coordinación técnica.'
+    }
   ];
 
-  reasons: reasons[] = [
+  // Métricas del proyecto basadas en los RNF del SRS
+  projectMetrics: projectMetrics[] = [
     {
       id: 1,
-      color: 'primary',
-      icon: 'solar:book-linear',
-      title: 'Enseña a tu manera',
-      subtitle:
-        'Crea e imparte los cursos que desees, con total libertad sobre el contenido, el formato y el horario.',
+      value: '99%',
+      label: 'Disponibilidad del Sistema',
+      icon: 'shield-check'
     },
     {
       id: 2,
-      color: 'primary',
-      icon: 'solar:share-linear',
-      title: 'Inspira a tu comunidad',
-      subtitle:
-        'Comparte tus conocimientos, guía a tus seguidores a descubrir nuevas pasiones, adquirir habilidades y avanzar profesionalmente.',
+      value: '< 3s',
+      label: 'Tiempo de Respuesta',
+      icon: 'clock'
     },
     {
       id: 3,
-      color: 'primary',
-      icon: 'solar:magic-stick-3-linear',
-      title: 'Conecta y crece',
-      subtitle:
-        'Expande tu red profesional o académica mientras desarrollas y fortaleces tus conocimientos.',
-    },
-  ];
-
-  facts: facts[] = [
-    {
-      id: 1,
-      color: 'primary',
-      icon: 'solar:user-hand-up-linear',
-      title: '1,245,341',
-      subtext: 'Alumnos registrados',
-    },
-    {
-      id: 2,
-      color: 'primary',
-      icon: 'mdi:account-tie-outline',
-      title: '828,867',
-      subtext: 'Docentes y administrativos',
-    },
-  ];
-
-  facts2: facts2[] = [
-    {
-      id: 3,
-      color: 'primary',
-      icon: 'mdi:account-group-outline',
-      title: '46,328',
-      subtext: 'Comunidades',
+      value: '50+',
+      label: 'Miners Monitored Simultaneously',
+      icon: 'users'
     },
     {
       id: 4,
-      color: 'primary',
-      icon: 'solar:card-transfer-linear',
-      title: '1,926,436',
-      subtext: 'Transacciones realizadas',
-    },
+      value: '12h',
+      label: 'Autonomía del Casco',
+      icon: 'battery'
+    }
   ];
+
+  // Función para obtener color basado en el rol
+  getRoleColor(role: string): string {
+    const colorMap: { [key: string]: string } = {
+      'Líder de Proyecto': 'primary',
+      'Desarrollador Hardware': 'accent',
+      'Desarrollador Software': 'warn',
+      'Especialista en Sensores': 'success',
+      'Arquitecto de Sistema': 'info'
+    };
+    return colorMap[role] || 'primary';
+  }
+
+  // Función para obtener icono de fondo basado en el ID
+  getMemberBackground(id: number): string {
+    const backgrounds = [
+      'bg-light-primary',
+      'bg-light-accent',
+      'bg-light-warn',
+      'bg-light-success',
+      'bg-light-info'
+    ];
+    return backgrounds[(id - 1) % backgrounds.length];
+  }
 }

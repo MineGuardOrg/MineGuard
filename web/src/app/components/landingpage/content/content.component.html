@@ -1,224 +1,457 @@
-<!-- ------------------------------------------------------------------
-    Banner
-    ------------------------------------------------------------------ -->
-<div class="overflow-hidden banner-section bg-light">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12 d-flex align-items-center justify-content-center">
-        <div class="text-center" style="padding: 80px 20px">
-          <h1 class="banner-title m-0">
-            <span class="text-primary">
-              {{ "landing.header.title" | translate }}
-            </span>
+<!-- ============================================
+    HERO SECTION - Compact and Structured
+    ============================================ -->
+<div class="hero-section">
+  <div class="hero-background"></div>
+  
+  <div class="container position-relative hero-container">
+    <div class="row align-items-center">
+      <!-- Text Column -->
+      <div class="col-lg-6 col-md-12 m-b-24">
+        <div class="fade-in-up">
+          <span class="hero-badge">
+            <i class="iconify m-r-6" data-icon="mdi:shield-check"></i>
+            {{ 'HERO.CERTIFIED' | translate }}
+          </span>
+          <h1 class="hero-title">
+            {{ 'HERO.TITLE' | translate }} <br>
+            <span class="gradient-text">{{ 'HERO.TITLE_HIGHLIGHT' | translate }}</span>
           </h1>
-          <p class="f-s-18 p-y-24 m-t-12 m-0 banner-subtitle">
-            {{ "landing.description" | translate }}
+          <p class="hero-description">
+            {{ 'HERO.DESCRIPTION' | translate }}
           </p>
+          
+          <div class="d-flex gap-3 flex-wrap m-b-24">
+            <button mat-flat-button color="primary" (click)="openDialog('0ms', '0ms')" class="hero-btn-primary">
+              <i class="iconify m-r-8" data-icon="mdi:rocket-launch"></i>
+              {{ 'BUTTONS.REQUEST_DEMO' | translate }}
+            </button>
+            <button mat-stroked-button class="hero-btn-secondary">
+              <i class="iconify m-r-8" data-icon="mdi:play-circle"></i>
+              {{ 'BUTTONS.WATCH_VIDEO' | translate }}
+            </button>
+          </div>
+          
+          <!-- Trust Badges -->
+          <div class="d-flex align-items-center gap-3 flex-wrap trust-badges">
+            <div class="d-flex align-items-center">
+              <i class="iconify m-r-6" data-icon="mdi:check-decagram"></i>
+              <span class="f-s-13 text-muted f-w-600">{{ 'BADGES.ISO' | translate }}</span>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="iconify m-r-6" data-icon="mdi:shield-star"></i>
+              <span class="f-s-13 text-muted f-w-600">{{ 'BADGES.WARRANTY' | translate }}</span>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="iconify m-r-6" data-icon="mdi:clock-fast"></i>
+              <span class="f-s-13 text-muted f-w-600">{{ 'BADGES.INSTALLATION' | translate }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Column -->
+      <div class="col-lg-6 col-md-12">
+        <div class="position-relative hero-card-container">
+          <mat-card class="hero-dashboard">
+            <mat-card-content class="p-0">
+              <!-- Dashboard Header -->
+              <div class="dashboard-header">
+                <div class="d-flex align-items-center justify-content-between m-b-16">
+                  <div>
+                    <h5 class="f-w-700 m-0 f-s-16">{{ 'DASHBOARD.TITLE' | translate }}</h5>
+                    <span class="f-s-12" style="opacity: 0.9;">{{ 'DASHBOARD.SUBTITLE' | translate }}</span>
+                  </div>
+                  <div class="pulse-dot">
+                    <span class="badge p-x-12 p-y-6 status-badge">
+                      <i class="iconify m-r-4" data-icon="mdi:circle"></i> {{ 'STATUS.ACTIVE' | translate }}
+                    </span>
+                  </div>
+                </div>
+                
+                <div class="d-flex gap-2">
+                  <div class="flex-fill text-center dashboard-stat">
+                    <div class="f-s-22 f-w-700">47</div>
+                    <div class="f-s-10 f-w-600" style="opacity: 0.9;">{{ 'DASHBOARD.WORKERS' | translate }}</div>
+                  </div>
+                  <div class="flex-fill text-center dashboard-stat">
+                    <div class="f-s-22 f-w-700">99.9%</div>
+                    <div class="f-s-10 f-w-600" style="opacity: 0.9;">{{ 'DASHBOARD.UPTIME' | translate }}</div>
+                  </div>
+                  <div class="flex-fill text-center dashboard-stat">
+                    <div class="f-s-22 f-w-700">0</div>
+                    <div class="f-s-10 f-w-600" style="opacity: 0.9;">{{ 'DASHBOARD.INCIDENTS' | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dashboard Body -->
+              <div class="dashboard-body">
+                <div class="m-b-20">
+                  <div class="d-flex justify-content-between align-items-center m-b-10">
+                    <span class="f-s-13 f-w-700 dashboard-label">{{ 'DASHBOARD.CAPACITY' | translate }}</span>
+                    <span class="f-w-700 f-s-16" style="color: #FDB71A;">94%</span>
+                  </div>
+                  <mat-progress-bar mode="determinate" value="94" color="primary" class="custom-progress"></mat-progress-bar>
+                </div>
+
+                <div class="row g-2">
+                  <div class="col-6">
+                    <div class="status-card success-card">
+                      <div class="d-flex align-items-center justify-content-between m-b-8">
+                        <i class="iconify text-success" data-icon="mdi:heart-pulse"></i>
+                        <span class="badge bg-success f-s-9 p-x-8 p-y-3 f-w-700">+5.2%</span>
+                      </div>
+                      <div class="f-s-11 text-muted m-b-6 f-w-700 text-uppercase">{{ 'STATUS.NORMAL' | translate }}</div>
+                      <div class="f-s-28 f-w-800 text-success">45</div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="status-card warning-card">
+                      <div class="d-flex align-items-center justify-content-between m-b-8">
+                        <i class="iconify" style="color: #FDB71A;" data-icon="mdi:alert-circle"></i>
+                        <span class="badge f-s-9 p-x-8 p-y-3 f-w-700" style="background: #FDB71A; color: #1a1a1a;">{{ 'STATUS.ATTENTION' | translate }}</span>
+                      </div>
+                      <div class="f-s-11 text-muted m-b-6 f-w-700 text-uppercase">{{ 'STATUS.ALERTS' | translate }}</div>
+                      <div class="f-s-28 f-w-800" style="color: #FDB71A;">2</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Update Indicator -->
+                <div class="m-t-16 p-14 update-indicator">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                      <div class="f-s-11 text-muted m-b-4 f-w-600">{{ 'DASHBOARD.LAST_UPDATE' | translate }}</div>
+                      <div class="f-s-12 f-w-700 update-time">
+                        <i class="iconify text-success m-r-4 f-s-11" data-icon="mdi:check-circle"></i>
+                        {{ 'DASHBOARD.UPDATE_TIME' | translate }}
+                      </div>
+                    </div>
+                    <div class="mini-wave">
+                      <svg width="50" height="24" viewBox="0 0 50 24">
+                        <path d="M0,12 Q12,4 24,12 T48,12" stroke="#FDB71A" stroke-width="2" fill="none"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ------------------------------------------------------------------
-    End Banner
-    ------------------------------------------------------------------ -->
-
-<!-- ------------------------------------------------------------------
-    Features
-    ------------------------------------------------------------------ -->
-<div class="spacer-sm">
+<!-- ============================================
+    METRICS BAR
+    ============================================ -->
+<div class="metrics-bar">
   <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-6 col-sm-8">
-        <h1 class="section-title text-center m-t-16">
-          {{ "landing.features.subtitle" | translate }}
-        </h1>
-      </div>
-    </div>
-    <span class="f-s-16 d-block lh-base text-center">
-      {{ "landing.features.description" | translate }}
-    </span>
-    <!-- features -->
-    <mat-card class="cardWithShadow">
-      <mat-card-content>
-        <div class="row justify-content-center m-t-16">
-          @for(topcard of topcards; track topcard.subtitle) {
-          <div class="col-lg-4 col-sm-6 m-b-16">
-            <mat-card
-              class="shadow-none text-center {{
-                topcard.color
-              }}-gt shadow-none m-b-0"
-            >
-              <mat-card-content class="p-32">
-                <span
-                  class="icon-48 m-auto m-b-16 d-flex align-items-center justify-content-center rounded bg-{{
-                    topcard.color
-                  }}"
-                >
-                  <span
-                    class="iconify text-white icon-27"
-                    [attr.data-icon]="topcard.icon"
-                  ></span>
-                </span>
-                <h6 class="m-t-4 mat-subtitle-1 f-s-22 f-w-600 m-b-16">
-                  {{ topcard.subtitle | translate }}
-                </h6>
-              </mat-card-content>
-            </mat-card>
-          </div>
+    <mat-card class="shadow-lg metrics-card">
+      <mat-card-content class="metrics-content">
+        <div class="row text-center">
+          @for(metric of metrics; track metric.value) {
+            <div class="col-lg-3 col-md-3 col-sm-6 col-6 m-b-md-0 m-b-24">
+              <div class="metric-item">
+                <div class="metric-icon-wrapper m-auto m-b-14">
+                  <i class="iconify" [attr.data-icon]="metric.icon"></i>
+                </div>
+                <h2 class="m-0 metric-number" style="color: #1a1a1a;">{{ metric.value }}</h2>
+                <p class="f-s-14 text-muted m-t-10 m-0 f-w-600">{{ metric.label | translate }}</p>
+              </div>
+            </div>
           }
         </div>
       </mat-card-content>
     </mat-card>
   </div>
 </div>
-<!-- ------------------------------------------------------------------
-    End Features
-    ------------------------------------------------------------------ -->
-<!-- ------------------------------------------------------------------
-    Courses
-    ------------------------------------------------------------------ -->
-<div class="bg-light spacer-sm" id="demos">
+
+<!-- ============================================
+    SYSTEM COMPONENTS
+    ============================================ -->
+<div class="components-section">
   <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center m-b-48">
       <div class="col-lg-8 text-center">
-        <h1 class="section-title">
-          {{ "landing.courses.title" | translate }}
-        </h1>
-        <span class="f-s-16 m-b-24 d-block lh-base">
-          {{ "landing.courses.description" | translate }}
+        <span class="section-badge accent">
+          <i class="iconify m-r-6" data-icon="mdi:cube-scan"></i>
+          {{ 'SECTIONS.COMPONENTS' | translate }}
         </span>
+        <h2 class="section-title-main">
+          {{ 'COMPONENTS.TITLE' | translate }} <span class="gradient-text">{{ 'COMPONENTS.TITLE_HIGHLIGHT' | translate }}</span>
+        </h2>
+        <p class="section-description">
+          {{ 'COMPONENTS.DESCRIPTION' | translate }}
+        </p>
       </div>
     </div>
-    <!-- courses -->
-    <div class="row m-t-24 justify-content-center">
-      @for(course of courses; track course.name) {
-      <div class="col-lg-4 col-sm-6 m-b-16">
-        <div>
-          <div class="img-overlay rounded">
-            <img [src]="course.imgSrc" alt="courses" class="rounded w-80" />
-          </div>
-          <span class="f-s-14 d-block text-center f-w-500 m-t-8">{{
-            course.name | translate
-          }}</span>
+    
+    <div class="row g-3">
+      @for(component of systemComponents; track component.name) {
+        <div class="col-lg-4 col-md-6">
+          <mat-card class="component-card h-100">
+            <mat-card-content class="p-24">
+              <div class="d-flex align-items-start m-b-20">
+                <div class="component-icon-wrapper">
+                  <div class="icon-background"></div>
+                  <i class="iconify component-icon" [attr.data-icon]="component.icon"></i>
+                </div>
+                <div class="m-l-16 flex-grow-1">
+                  <span class="component-number">0{{ component.id }}</span>
+                  <h4 class="component-title m-t-6">{{ component.name | translate }}</h4>
+                </div>
+              </div>
+
+              <p class="component-description">{{ component.description | translate }}</p>
+
+              <div class="features-list">
+                <h6 class="features-title">
+                  <i class="iconify m-r-8" data-icon="mdi:check-all"></i>
+                  {{ 'COMPONENTS.KEY_FEATURES' | translate }}
+                </h6>
+                <ul class="list-unstyled m-0">
+                  @for(feature of component.features; track feature) {
+                    <li class="feature-item">
+                      <div class="feature-check">
+                        <i class="iconify" data-icon="mdi:check-bold"></i>
+                      </div>
+                      <span>{{ feature | translate }}</span>
+                    </li>
+                  }
+                </ul>
+              </div>
+            </mat-card-content>
+          </mat-card>
         </div>
-      </div>
       }
     </div>
   </div>
 </div>
-<!-- ------------------------------------------------------------------
-    End Courses
-    ------------------------------------------------------------------ -->
 
-<!-- ------------------------------------------------------------------
-    facts section
-    ------------------------------------------------------------------ -->
-<div class="bg-white spacer-sm">
+<!-- ============================================
+    MAIN FEATURES
+    ============================================ -->
+<div class="features-section" id="features">
   <div class="container">
-    <div class="row justify-content-between">
-      <div class="col-lg-6 d-flex align-items-center m-b-24">
-        <div>
-          <h3 class="m-t-0 section-title m-b-24">
-            {{ "landing.facts.title" | translate }}
-          </h3>
-          <span class="f-s-16 m-b-24 d-block lh-base">
-            {{ "landing.facts.description" | translate }}
-          </span>
-        </div>
+    <div class="row justify-content-center m-b-48">
+      <div class="col-lg-8 text-center">
+        <span class="section-badge accent">
+          <i class="iconify m-r-6" data-icon="mdi:star-four-points"></i>
+          {{ 'SECTIONS.FEATURES' | translate }}
+        </span>
+        <h2 class="section-title-main">
+          {{ 'FEATURES.TITLE' | translate }} <span class="gradient-text">{{ 'FEATURES.TITLE_HIGHLIGHT' | translate }}</span>
+        </h2>
+        <p class="section-description">
+          {{ 'FEATURES.DESCRIPTION' | translate }}
+        </p>
       </div>
-      <div class="col-lg-6 d-flex justify-content-between flex-wrap">
-        <div class="col-sm-6">
-          @for(fact of facts; track fact.title) {
-          <div class="hstack align-items-center m-t-20">
-            <div
-              class="rounded icon-48 bg-light-{{
-                fact.color
-              }} d-flex align-items-center flex-shrink-0 justify-content-center"
-            >
-              <span
-                class="iconify f-s-24 text-{{ fact.color }}"
-                [attr.data-icon]="fact.icon"
-              ></span>
-            </div>
-            <div>
-              <h6 class="mat-subtitle-1 f-s-15 f-w-600 text-nowrap">
-                {{ fact.title | translate }}
-              </h6>
-              <span class="mat-body-1">{{ fact.subtext | translate}}</span>
-            </div>
-          </div>
-          }
+    </div>
+    
+    <div class="row g-3">
+      @for(feature of keyFeatures; track feature.title) {
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <mat-card class="feature-card h-100">
+            <mat-card-content class="p-24 text-center">
+              <div class="feature-icon-container">
+                <i class="iconify feature-icon-large" [attr.data-icon]="feature.icon"></i>
+              </div>
+              <h5 class="feature-card-title">{{ feature.title | translate }}</h5>
+              <p class="feature-card-description">{{ feature.description | translate }}</p>
+            </mat-card-content>
+          </mat-card>
         </div>
-        <div class="col-sm-6">
-          @for(fact2 of facts2; track fact2.title) {
-          <div class="hstack align-items-center m-t-20">
-            <div
-              class="rounded icon-48 bg-light-{{
-                fact2.color
-              }} d-flex align-items-center flex-shrink-0 justify-content-center"
-            >
-              <span
-                class="iconify f-s-24 text-{{ fact2.color }}"
-                [attr.data-icon]="fact2.icon"
-              ></span>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+    BENEFITS
+    ============================================ -->
+<div class="benefits-section">
+  <div class="benefits-decoration"></div>
+  
+  <div class="container position-relative benefits-container">
+    <div class="row align-items-center">
+      <div class="col-lg-5 m-b-lg-0 m-b-48">
+        <span class="section-badge success">
+          <i class="iconify m-r-6" data-icon="mdi:trophy-variant"></i>
+          {{ 'SECTIONS.BENEFITS' | translate }}
+        </span>
+        <h2 class="section-title-main benefits-title">
+          {{ 'BENEFITS.TITLE' | translate }} <span class="gradient-text">{{ 'BENEFITS.TITLE_HIGHLIGHT' | translate }}</span>
+        </h2>
+        <p class="section-description benefits-desc">
+          {{ 'BENEFITS.DESCRIPTION' | translate }}
+        </p>
+
+        <div class="benefits-list">
+          <div class="benefit-list-item">
+            <div class="benefit-check-icon">
+              <i class="iconify" data-icon="mdi:shield-check"></i>
             </div>
             <div>
-              <h6 class="mat-subtitle-1 f-s-15 f-w-600 text-nowrap">
-                {{ fact2.title | translate}}
-              </h6>
-              <span class="mat-body-1">{{ fact2.subtext | translate}}</span>
+              <h6 class="benefit-list-title">{{ 'BENEFITS.PROACTIVE' | translate }}</h6>
+              <span class="benefit-list-text">{{ 'BENEFITS.PROACTIVE_DESC' | translate }}</span>
             </div>
           </div>
+          
+          <div class="benefit-list-item">
+            <div class="benefit-check-icon">
+              <i class="iconify" data-icon="mdi:lightning-bolt"></i>
+            </div>
+            <div>
+              <h6 class="benefit-list-title">{{ 'BENEFITS.RESPONSE' | translate }}</h6>
+              <span class="benefit-list-text">{{ 'BENEFITS.RESPONSE_DESC' | translate }}</span>
+            </div>
+          </div>
+          
+          <div class="benefit-list-item">
+            <div class="benefit-check-icon">
+              <i class="iconify" data-icon="mdi:certificate"></i>
+            </div>
+            <div>
+              <h6 class="benefit-list-title">{{ 'BENEFITS.COMPLIANCE' | translate }}</h6>
+              <span class="benefit-list-text">{{ 'BENEFITS.COMPLIANCE_DESC' | translate }}</span>
+            </div>
+          </div>
+        </div>
+
+        <button mat-flat-button color="primary" (click)="openDialog('0ms', '0ms')" class="cta-button-large">
+          <i class="iconify m-r-10" data-icon="mdi:rocket-launch"></i>
+          {{ 'BUTTONS.GET_STARTED' | translate }}
+        </button>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="row g-3">
+          @for(benefit of benefits; track benefit.title) {
+            <div class="col-md-6">
+              <mat-card class="benefit-card h-100">
+                <mat-card-content class="p-24">
+                  <div class="benefit-icon-wrapper">
+                    <i class="iconify" [attr.data-icon]="benefit.icon"></i>
+                  </div>
+                  <h5 class="benefit-card-title">{{ benefit.title | translate }}</h5>
+                  <p class="benefit-card-description">{{ benefit.description | translate }}</p>
+                  <div class="benefit-card-arrow">
+                    <i class="iconify" data-icon="mdi:arrow-right"></i>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
           }
         </div>
       </div>
     </div>
   </div>
 </div>
-<!-- ------------------------------------------------------------------
-    end facts section
-    ------------------------------------------------------------------ -->
 
-<!-- ------------------------------------------------------------------
-    Banner
-    ------------------------------------------------------------------ -->
-<div class="bg-light overflow-hidden banner-section spacer-sm">
+<!-- ============================================
+    EXPERT TEAM
+    ============================================ -->
+<div class="team-section" id="team">
   <div class="container">
-    <div class="row">
-      <div class="col-lg-8 d-flex align-items-center">
-        <div>
-          <h1 class="banner-title m-0">
-            TeachU:
-            <span class="text-primary">
-              {{ "landing.banner.title" | translate }}
-            </span>
-          </h1>
-          <p class="f-s-16 p-y-24 m-t-12 m-0 banner-subtitle">
-            {{ "landing.banner.description" | translate }}
-          </p>
-        </div>
+    <div class="row justify-content-center m-b-48">
+      <div class="col-lg-8 text-center">
+        <span class="section-badge primary">
+          <i class="iconify m-r-6" data-icon="mdi:account-group"></i>
+          {{ 'SECTIONS.TEAM' | translate }}
+        </span>
+        <h2 class="section-title-main">
+          {{ 'TEAM.TITLE' | translate }} <span class="gradient-text">{{ 'TEAM.TITLE_HIGHLIGHT' | translate }}</span>
+        </h2>
+        <p class="section-description">
+          {{ 'TEAM.DESCRIPTION' | translate }}
+        </p>
       </div>
-      <div
-        class="col-lg-4 d-none d-lg-flex justify-content-center align-items-center"
-      >
-        <div class="text-center">
-          <div class="m-t-24 hstack">
-            <button
-              mat-flat-button
-              color="primary"
-              (click)="openDialog('0ms', '0ms')"
-              class="btn-custom"
-            >
-            {{ "buttons.view_more" | translate }}
-            </button>
-          </div>
+    </div>
+    
+    <div class="row justify-content-center g-3">
+      @for(member of teamMembers; track member.name) {
+        <div class="col-lg-2 col-md-4 col-sm-6 col-6">
+          <mat-card class="team-card h-100">
+            <mat-card-content class="p-20 text-center">
+              <div class="team-avatar-wrapper">
+                <img 
+                  [src]="member.avatar" 
+                  [alt]="member.name" 
+                  class="team-avatar"
+                  onerror="this.src='./assets/images/teamMembers/Member.webp';"
+                />
+                <div class="avatar-status"></div>
+              </div>
+              <h6 class="team-name">{{ member.name | translate }}</h6>
+              <span class="team-role">{{ member.role | translate }}</span>
+            </mat-card-content>
+          </mat-card>
         </div>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+    TECH STACK
+    ============================================ -->
+<div class="tech-section">
+  <div class="container">
+    <div class="row justify-content-center m-b-48">
+      <div class="col-lg-8 text-center">
+        <span class="section-badge accent">
+          <i class="iconify m-r-6" data-icon="mdi:code-tags"></i>
+          {{ 'SECTIONS.TECH' | translate }}
+        </span>
+        <h2 class="section-title-main">
+          {{ 'TECH.TITLE' | translate }} <span class="gradient-text">{{ 'TECH.TITLE_HIGHLIGHT' | translate }}</span>
+        </h2>
+        <p class="section-description">
+          {{ 'TECH.DESCRIPTION' | translate }}
+        </p>
+      </div>
+    </div>
+    
+    <div class="row justify-content-center g-2">
+      @for(tech of technologies; track tech) {
+        <div class="col-auto">
+          <mat-chip class="tech-chip">
+            <i class="iconify m-r-8" data-icon="mdi:check-circle"></i>
+            {{ tech | translate }}
+          </mat-chip>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+    FINAL CTA
+    ============================================ -->
+<div class="cta-final">
+  <div class="container position-relative cta-container">
+    <div class="row align-items-center">
+      <div class="col-lg-8 m-b-lg-0 m-b-32 text-center text-lg-start">
+        <h2 class="text-white m-0 cta-title">
+          {{ 'CTA.TITLE' | translate }}
+        </h2>
+        <p class="f-s-16 text-white m-0 m-t-12 cta-subtitle">
+          {{ 'CTA.SUBTITLE' | translate }}
+        </p>
+      </div>
+      <div class="col-lg-4 text-center text-lg-end">
+        <button mat-flat-button (click)="openDialog('0ms', '0ms')" class="cta-final-button">
+          <i class="iconify m-r-10" data-icon="mdi:calendar-check"></i>
+          {{ 'BUTTONS.REQUEST_DEMO' | translate }}
+        </button>
+        <p class="f-s-13 text-white m-t-16 m-0 cta-footer">
+          <i class="iconify m-r-6" data-icon="mdi:shield-check"></i>
+          {{ 'CTA.FOOTER' | translate }}
+        </p>
       </div>
     </div>
   </div>
 </div>
-<!-- ------------------------------------------------------------------
-    End Banner
-    ------------------------------------------------------------------ -->

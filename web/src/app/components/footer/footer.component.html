@@ -1,82 +1,176 @@
 <!-- ------------------------------------------------------------------
     footer
     ------------------------------------------------------------------ -->
-    <footer class="p-b-30 bg-dark">
-      <div class="container">
-        <div class="row text-center text-md-start">
-          <!-- Columna: logo -->
-          <div
-            class="col-12 col-md-6 d-flex flex-column align-items-center justify-content-center m-t-24"
-          >
-            <div class="branding">
-              <img
-                src="../../../../assets/images/logos/TeachU_SVG/5-cropped.svg"
-                class="align-middle m-2"
-                alt="logo"
-                width="200px"
-              />
-            </div>
-            <div class="f-s-14 m-t-8 text-light">© 2025 TeachU, Inc.</div>
+<footer class="p-b-30 bg-dark">
+  <div class="container">
+    <div class="row text-center text-md-start">
+      <!-- Columna: logo e información de contacto -->
+      <div class="col-12 col-md-4 d-flex flex-column align-items-center justify-content-center m-t-24">
+        <div class="branding d-flex align-items-center justify-content-center gap-3">
+          <!-- SVG del Casco -->
+          <svg viewBox="0 0 500 500" style="width: 3.5rem; height: 3.5rem; margin-right: 12px;" xmlns="http://www.w3.org/2000/svg">
+            <style type="text/css">
+              .st6{fill:none;stroke:#FFA500;stroke-width:35;stroke-linecap:round;stroke-linejoin:round;}
+              .st7{fill:none;stroke:#FFA500;stroke-width:25;opacity:0.8;stroke-linecap:round;}
+              .st8{fill:none;stroke:#FFA500;stroke-width:25;opacity:0.6;stroke-linecap:round;}
+            </style>
+            <g id="helmet">
+              <path class="st6" d="M65.76,338.47v-74.52c0,0,5.4-69.9,58.27-105.24l5.78-19.27c0,0,8.81-8.35,26.18-14.46l10.03,4.82l11.85-4.82 l6.42-13.81c0,0,17.03-7.71,38.87-7.71l5.46,7.71c0,0,20.88-2.25,40.8-0.64l6.75-7.07c0,0,17.67,0,36.94,7.71 c0,0,3.21,8.35,4.5,11.24l17.35,8.03l8.03-4.82c0,0,15.74,5.78,25.7,16.38l8.35,16.7c0,0,47.54,29.55,53.97,106.65l3.21,73.24l0,0 c9.7,0,17.56,7.86,17.56,17.56v33.95c0,3.85-3.36,6.84-7.18,6.39C407.7,392.11,234.2,374,55.45,396.45 c-3.84,0.48-7.23-2.51-7.23-6.38v-34.13C48.19,346.27,56.07,338.43,65.76,338.47L65.76,338.47z"></path>
+              <g>
+                <path class="st7" d="M317.6,122.41l7.34,3.4c0,0,10.71,84.94-3.67,210.86C321.27,336.67,329.16,242.23,317.6,122.41z"></path>
+                <path class="st8" d="M177.87,124.98l-7.12,2.89c0,0,1.03,104.29,15.97,208.8C186.71,336.67,174.76,216.53,177.87,124.98z"></path>
+                <path class="st7" d="M377.03,158.71l5.59,4.17c0,0,6.51,87.11-11.05,173.79C371.57,336.67,383.77,247.59,377.03,158.71z"></path>
+                <path class="st8" d="M123.97,158.71l-5.59,4.17c0,0-6.51,87.11,11.05,173.79C129.43,336.67,117.22,247.59,123.97,158.71z"></path>
+              </g>
+            </g>
+          </svg>
+          
+          <div class="text-light">
+            <div class="f-s-24 f-w-700 m-b-0" style="line-height: 1.1;">MINERÍA</div>
+            <div class="f-s-24 f-w-700" style="line-height: 1.1;">SEGURA</div>
           </div>
+        </div>
+        <div class="f-s-14 m-t-16 text-light text-center">
+          <p class="m-b-8">Sistema de Monitoreo en Tiempo Real</p>
+          <p class="m-b-4">📍 Universidad Tecnológica de Tijuana</p>
+          <p class="m-b-4">📧 MineGuard&#64;gmail.com</p>
+          <p>📞 +52 55 1234 5678</p>
+        </div>
+        <div class="f-s-12 m-t-16 text-light opacity-75">© 2025 Monitoreo Integral de Minería Segura</div>
+      </div>
 
-          <!-- Columna: Acerca de -->
-          <div class="col-12 col-md-6 m-t-24">
-            <h6 class="m-0 f-s-20 f-w-600 m-b-8 m-t-24 text-light">
-              <strong>{{ "footer.title" | translate }}</strong>
-            </h6>
+      <!-- Columna: Enlaces del sistema -->
+      <div class="col-12 col-md-4 m-t-24">
+        <h6 class="m-0 f-s-18 f-w-600 m-b-16 text-light">
+          <strong>Sistema</strong>
+        </h6>
 
-            <div class="f-s-14 m-t-8">
-              <a
-                [routerLink]="['/aboutus']"
-                class="text-light text-decoration-none"
-                >{{ "footer.option1" | translate }}</a
-              >
-            </div>
+        <div class="f-s-14 m-t-12">
+          <a
+            [routerLink]="['/casco-inteligente']"
+            class="text-light text-decoration-none d-block m-b-8"
+            >Casco Inteligente</a
+          >
+        </div>
 
-            <div class="f-s-14 m-t-8">
-              <a
-                [routerLink]="['/employment']"
-                class="text-light text-decoration-none"
-                >{{ "footer.option2" | translate }}</a
-              >
-            </div>
+        <div class="f-s-14 m-t-12">
+          <a
+            [routerLink]="['/aplicacion-movil']"
+            class="text-light text-decoration-none d-block m-b-8"
+            >Aplicación Móvil</a
+          >
+        </div>
 
-            <div class="f-s-14 m-t-8">
-              <a
-                [routerLink]="['/teaching']"
-                class="text-light text-decoration-none"
-                >{{ "footer.option3" | translate }}</a
-              >
-            </div>
+        <div class="f-s-14 m-t-12">
+          <a
+            [routerLink]="['/plataforma-web']"
+            class="text-light text-decoration-none d-block m-b-8"
+            >Plataforma Web</a
+          >
+        </div>
 
-            <div class="f-s-14 m-t-8">
-              <a
-                [routerLink]="['/views']"
-                class="text-light text-decoration-none"
-                >{{ "footer.option4" | translate }}</a
-              >
-            </div>
+        <div class="f-s-14 m-t-12">
+          <a
+            [routerLink]="['/sensores']"
+            class="text-light text-decoration-none d-block m-b-8"
+            >Sensores y Tecnología</a
+          >
+        </div>
 
-            <div class="f-s-14 m-t-8">
-              <a
-                [routerLink]="['/help']"
-                class="text-light text-decoration-none"
-                >{{ "footer.option5" | translate }}</a
-              >
-            </div>
+        <div class="f-s-14 m-t-12">
+          <a
+            [routerLink]="['/demo']"
+            class="text-light text-decoration-none d-block m-b-8"
+            >Solicitar Demo</a
+          >
+        </div>
+      </div>
 
-            <div class="f-s-14 m-t-8">
-              <a
-                [routerLink]="['/privacy']"
-                class="text-light text-decoration-none"
-                >{{ "footer.option6" | translate }}</a
-              >
-            </div>
+      <!-- Columna: Documentación y legal -->
+      <div class="col-12 col-md-4 m-t-24">
+        <h6 class="m-0 f-s-18 f-w-600 m-b-16 text-light">
+          <strong>Documentación</strong>
+        </h6>
+
+        <div class="f-s-14 m-t-12">
+          <a
+            [routerLink]="['/srs']"
+            class="text-light text-decoration-none d-block m-b-8"
+            >Especificación de Requerimientos</a
+          >
+        </div>
+
+        <div class="f-s-14 m-t-12">
+          <a
+            [routerLink]="['/manual-usuario']"
+            class="text-light text-decoration-none d-block m-b-8"
+            >Manual de Usuario</a
+          >
+        </div>
+
+        <div class="f-s-14 m-t-12">
+          <a
+            [routerLink]="['/normativas']"
+            class="text-light text-decoration-none d-block m-b-8"
+            >Cumplimiento Normativo</a
+          >
+        </div>
+
+        <div class="f-s-14 m-t-12">
+          <a
+            [routerLink]="['/privacidad']"
+            class="text-light text-decoration-none d-block m-b-8"
+            >Política de Privacidad</a
+          >
+        </div>
+
+        <div class="f-s-14 m-t-12">
+          <a
+            [routerLink]="['/terminos']"
+            class="text-light text-decoration-none d-block m-b-8"
+            >Términos de Servicio</a
+          >
+        </div>
+
+        <!-- Redes sociales -->
+        <div class="m-t-24">
+          <h6 class="m-0 f-s-16 f-w-600 m-b-12 text-light">Síguenos</h6>
+          <div class="hstack gap-16 justify-content-center justify-content-md-start">
+            <a href="#" class="text-light text-decoration-none">
+              <span class="iconify" data-icon="mdi:linkedin" width="20"></span>
+            </a>
+            <a href="#" class="text-light text-decoration-none">
+              <span class="iconify" data-icon="mdi:twitter" width="20"></span>
+            </a>
+            <a href="#" class="text-light text-decoration-none">
+              <span class="iconify" data-icon="mdi:youtube" width="20"></span>
+            </a>
+            <a href="#" class="text-light text-decoration-none">
+              <span class="iconify" data-icon="mdi:github" width="20"></span>
+            </a>
           </div>
         </div>
       </div>
-    </footer>
+    </div>
 
-    <!-- ------------------------------------------------------------------
-    end footer
-    ------------------------------------------------------------------ -->
+    <!-- Línea divisoria -->
+    <div class="row m-t-30">
+      <div class="col-12">
+        <hr class="border-light opacity-25">
+      </div>
+    </div>
+
+    <!-- Información adicional -->
+    <div class="row text-center m-t-20">
+      <div class="col-12">
+        <p class="f-s-12 text-light opacity-75 m-b-8">
+          Sistema desarrollado por el equipo de Monitoreo Integral de Minería Segura
+        </p>
+        <p class="f-s-10 text-light opacity-50">
+          Certificado NOM-023-STPS-2012 | Cumplimiento de seguridad minera
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- end footer -->

@@ -8,35 +8,19 @@ import { MatDialog } from '@angular/material/dialog';
 import { AppDialogOverviewComponent } from '../../template/ui-components/dialog/dialog.component';
 import { AppFooterComponent } from 'src/app/components/footer/footer.component';
 
-interface courses {
-  id: number;
-  name: string;
-  url: string;
-  imgSrc: string;
-}
-
-interface reasons {
+interface systemComponents {
   id: number;
   icon: string;
   color: string;
   title: string;
   subtitle: string;
+  features: string[];
 }
 
-interface facts {
+interface technicalSpecs {
   id: number;
-  icon: string;
-  color: string;
-  title: string;
-  subtext: string;
-}
-
-interface facts2 {
-  id: number;
-  icon: string;
-  color: string;
-  title: string;
-  subtext: string;
+  value: string;
+  label: string;
 }
 
 @Component({
@@ -87,103 +71,73 @@ export class AppEmploymentComponent {
     });
   }
 
-  courses: courses[] = [
+  // Componentes del sistema basados en el SRS
+  systemComponents: systemComponents[] = [
     {
       id: 1,
-      imgSrc: '/assets/images/landingpage/demos/PT-1.png',
-      name: 'Sistema de información estudiantil',
-      url: '#',
+      color: 'primary',
+      icon: 'mdi:hard-hat',
+      title: 'Casco Inteligente',
+      subtitle: 'Dispositivo wearable con sensores especializados',
+      features: [
+        'Sensores biométricos: ritmo cardíaco y temperatura',
+        'Detección de caídas e impactos bruscos',
+        'Sensor de gases tóxicos en tiempo real',
+        'Transmisión Bluetooth 5.0',
+        'Batería de 12 horas de autonomía'
+      ]
     },
     {
       id: 2,
-      imgSrc: '/assets/images/landingpage/demos/PT-2.png',
-      name: 'Gestión multiescolar para distritos',
-      url: '#',
+      color: 'accent',
+      icon: 'mdi:cellphone',
+      title: 'Aplicación Móvil',
+      subtitle: 'Interfaz para capataces y jefes de cuadrilla',
+      features: [
+        'Recepción de datos en tiempo real',
+        'Almacenamiento local en modo offline',
+        'Alertas inmediatas ante emergencias',
+        'Sincronización automática con plataforma web',
+        'Interfaz intuitiva para personal técnico'
+      ]
     },
     {
       id: 3,
-      imgSrc: '/assets/images/landingpage/demos/PT-3.png',
-      name: 'Solución de facturación en línea',
-      url: '#',
+      color: 'warn',
+      icon: 'mdi:monitor-dashboard',
+      title: 'Plataforma Web',
+      subtitle: 'Sistema centralizado de monitoreo',
+      features: [
+        'Dashboard en tiempo real múltiple',
+        'Algoritmos de Machine Learning',
+        'Reportes históricos y análisis predictivo',
+        'Gestión de usuarios y permisos',
+        'Cumplimiento normativo NOM-023-STPS-2012'
+      ]
+    }
+  ];
+
+  // Especificaciones técnicas basadas en los RNF del SRS
+  technicalSpecs: technicalSpecs[] = [
+    {
+      id: 1,
+      value: '99%',
+      label: 'Disponibilidad del Sistema'
+    },
+    {
+      id: 2,
+      value: '< 3s',
+      label: 'Tiempo de Respuesta'
+    },
+    {
+      id: 3,
+      value: '50+',
+      label: 'Miners Monitored Simultaneously'
     },
     {
       id: 4,
-      imgSrc: '/assets/images/landingpage/demos/PT-4.png',
-      name: 'Sitios web compatibles con dispositivos móviles',
-      url: '#',
-    },
-    {
-      id: 5,
-      imgSrc: '/assets/images/landingpage/demos/PT-5.png',
-      name: 'Libro de calificaciones del docente',
-      url: '#',
-    },
-    {
-      id: 6,
-      imgSrc: '/assets/images/landingpage/demos/PT-6.png',
-      name: 'Generación de informes para toda la red escolar',
-      url: '#',
-    },
-  ];
-
-  reasons: reasons[] = [
-    {
-      id: 1,
-      color: 'primary',
-      icon: 'solar:book-linear',
-      title: 'Enseña a tu manera',
-      subtitle:
-        'Crea e imparte los cursos que desees, con total libertad sobre el contenido, el formato y el horario.',
-    },
-    {
-      id: 2,
-      color: 'primary',
-      icon: 'solar:share-linear',
-      title: 'Inspira a tu comunidad',
-      subtitle:
-        'Comparte tus conocimientos, guía a tus seguidores a descubrir nuevas pasiones, adquirir habilidades y avanzar profesionalmente.',
-    },
-    {
-      id: 3,
-      color: 'primary',
-      icon: 'solar:magic-stick-3-linear',
-      title: 'Conecta y crece',
-      subtitle:
-        'Expande tu red profesional o académica mientras desarrollas y fortaleces tus conocimientos.',
-    },
-  ];
-
-  facts: facts[] = [
-    {
-      id: 1,
-      color: 'primary',
-      icon: 'solar:user-hand-up-linear',
-      title: '1,245,341',
-      subtext: 'Alumnos registrados',
-    },
-    {
-      id: 2,
-      color: 'primary',
-      icon: 'mdi:account-tie-outline',
-      title: '828,867',
-      subtext: 'Docentes y administrativos',
-    },
-  ];
-
-  facts2: facts2[] = [
-    {
-      id: 3,
-      color: 'primary',
-      icon: 'mdi:account-group-outline',
-      title: '46,328',
-      subtext: 'Comunidades',
-    },
-    {
-      id: 4,
-      color: 'primary',
-      icon: 'solar:card-transfer-linear',
-      title: '1,926,436',
-      subtext: 'Transacciones realizadas',
-    },
+      value: 'AES-256',
+      label: 'Cifrado de Datos'
+    }
   ];
 }

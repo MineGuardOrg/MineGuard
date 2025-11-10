@@ -8,9 +8,9 @@
         <!-- --------------------------------------------------------------- -->
         <div class="branding p-x-0">
           <img
-            src="../../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
+            src="../../../../assets/images/logos/mineria-segura-logo.svg"
             class="align-middle m-2"
-            alt="logo"
+            alt="Monitoreo Integral de Minería Segura"
             width="170px"
           />
         </div>
@@ -32,9 +32,9 @@
           <button
             mat-button
             class="m-x-8 f-s-16 f-w-500"
-            [routerLink]="['/teaching']"
+            [routerLink]="['/aboutus']"
           >
-            Enseña en TeachU
+            Nosotros
           </button>
 
           <button
@@ -42,9 +42,9 @@
             class="m-x-8"
             color="primary"
             style="font-weight: bold"
-            [routerLink]="['/auth/boxed-login']"
+            [routerLink]="['/sistema']"
           >
-            Iniciar sesión
+            Sistema
           </button>
 
           <button
@@ -52,9 +52,9 @@
             class="m-x-8"
             color="primary"
             style="font-weight: bold"
-            [routerLink]="['/auth/boxed-register']"
+            [routerLink]="['/demo']"
           >
-            Registrate
+            Solicitar Demo
           </button>
         </div>
 
@@ -83,8 +83,12 @@
           >
             <div class="text-center" style="padding: 80px 20px">
               <h1 class="banner-title m-0">
-                <span class="text-primary">¿Cómo podemos ayudarte?</span>
+                <span class="text-primary">Soporte Técnico</span>
               </h1>
+              <p class="f-s-18 m-t-12 m-0 banner-subtitle">
+                Estamos aquí para ayudarle con la implementación, 
+                configuración y mantenimiento de su sistema de monitoreo minero
+              </p>
             </div>
           </div>
           <div
@@ -92,8 +96,8 @@
           >
             <div class="flex-column gap-9 text-center">
               <img
-                src="/assets/images/teaching/teaching.svg"
-                alt="teaching-img"
+                src="/assets/images/mineria/soporte-tecnico.svg"
+                alt="soporte-tecnico-minero"
                 class="img-fluid"
                 style="height: 400px"
               />
@@ -107,41 +111,43 @@
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-    Reasons
+    Canales de Soporte
     ------------------------------------------------------------------ -->
     <div class="spacer-sm">
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-lg-6 col-sm-8">
+          <div class="col-lg-8 col-sm-10">
             <h1 class="section-title text-center m-t-16">
-              Preguntas Frecuentes
+              Canales de Contacto
             </h1>
           </div>
         </div>
-        <!-- reasons -->
+        <!-- canales de soporte -->
         <mat-card class="cardWithShadow">
           <mat-card-content>
             <div class="row justify-content-center m-t-16">
-              @for(reason of reasons; track reason.subtitle) {
-              <div class="col-lg-4 col-sm-6 m-b-16">
-                <mat-card class="shadow-none text-center m-b-0">
+              @for(channel of supportChannels; track channel.title) {
+              <div class="col-lg-4 col-sm-6 m-b-24">
+                <mat-card class="shadow-none text-center m-b-0 h-100">
                   <mat-card-content class="p-32">
                     <span
-                      class="icon-48 m-auto m-b-16 d-flex align-items-center justify-content-center rounded bg-{{
-                        reason.color
-                      }}"
+                      class="icon-48 m-auto m-b-16 d-flex align-items-center justify-content-center rounded bg-{{ channel.color }}"
                     >
                       <span
                         class="iconify text-white icon-27"
-                        [attr.data-icon]="reason.icon"
+                        [attr.data-icon]="channel.icon"
                       ></span>
                     </span>
                     <h6 class="m-t-4 mat-subtitle-1 f-s-22 f-w-600 m-b-16">
-                      {{ reason.title }}
+                      {{ channel.title }}
                     </h6>
                     <span class="f-s-14 d-block text-center f-w-500 m-t-8">
-                      {{ reason.subtitle }}
+                      {{ channel.subtitle }}
                     </span>
+                    <div class="m-t-16">
+                      <p class="f-s-16 f-w-600 m-b-8">{{ channel.contact }}</p>
+                      <p class="f-s-14 text-muted">{{ channel.hours }}</p>
+                    </div>
                   </mat-card-content>
                 </mat-card>
               </div>
@@ -152,44 +158,163 @@
       </div>
     </div>
     <!-- ------------------------------------------------------------------
-    End Reasons
+    End Canales de Soporte
     ------------------------------------------------------------------ -->
 
     <!-- ------------------------------------------------------------------
-    Become an instructor
+    Preguntas Frecuentes
     ------------------------------------------------------------------ -->
-    <div class="overflow-hidden banner-section bg-light">
+    <div class="bg-light spacer-sm">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center">
+            <h1 class="section-title">
+              Preguntas Frecuentes
+            </h1>
+            <span class="f-s-16 m-b-24 d-block lh-base">
+              Respuestas a las consultas más comunes sobre nuestro sistema de monitoreo minero
+            </span>
+          </div>
+        </div>
+        
+        <!-- FAQs -->
+        <div class="row m-t-24 justify-content-center">
+          @for(faq of faqs; track faq.question) {
+          <div class="col-lg-6 m-b-24">
+            <mat-card class="shadow-none">
+              <mat-card-content class="p-24">
+                <h5 class="f-s-18 f-w-600 m-b-12 text-primary">
+                  {{ faq.question }}
+                </h5>
+                <p class="f-s-14 text-muted m-0">{{ faq.answer }}</p>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+    <!-- ------------------------------------------------------------------
+    End Preguntas Frecuentes
+    ------------------------------------------------------------------ -->
+
+    <!-- ------------------------------------------------------------------
+    Formulario de Contacto
+    ------------------------------------------------------------------ -->
+    <div class="spacer-sm">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <h1 class="section-title text-center">
+              Contáctenos Directamente
+            </h1>
+            <mat-card class="shadow-none">
+              <mat-card-content class="p-32">
+                <form>
+                  <div class="row">
+                    <div class="col-md-6 m-b-24">
+                      <mat-form-field class="w-100">
+                        <mat-label>Nombre completo</mat-label>
+                        <input matInput placeholder="Ingrese su nombre">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-6 m-b-24">
+                      <mat-form-field class="w-100">
+                        <mat-label>Empresa</mat-label>
+                        <input matInput placeholder="Nombre de su empresa">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 m-b-24">
+                      <mat-form-field class="w-100">
+                        <mat-label>Email</mat-label>
+                        <input matInput type="email" placeholder="su@email.com">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-6 m-b-24">
+                      <mat-form-field class="w-100">
+                        <mat-label>Teléfono</mat-label>
+                        <input matInput placeholder="+52 55 1234 5678">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="m-b-24">
+                    <mat-form-field class="w-100">
+                      <mat-label>Tipo de consulta</mat-label>
+                      <mat-select>
+                        <mat-option value="tecnica">Soporte técnico</mat-option>
+                        <mat-option value="comercial">Información comercial</mat-option>
+                        <mat-option value="implementacion">Implementación</mat-option>
+                        <mat-option value="capacitacion">Capacitación</mat-option>
+                        <mat-option value="otro">Otro</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="m-b-24">
+                    <mat-form-field class="w-100">
+                      <mat-label>Mensaje</mat-label>
+                      <textarea matInput rows="4" placeholder="Describa su consulta o requerimiento..."></textarea>
+                    </mat-form-field>
+                  </div>
+                  <div class="text-center">
+                    <button
+                      mat-flat-button
+                      color="primary"
+                      style="font-weight: bold; width: 200px"
+                    >
+                      Enviar Mensaje
+                    </button>
+                  </div>
+                </form>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ------------------------------------------------------------------
+    End Formulario de Contacto
+    ------------------------------------------------------------------ -->
+
+    <!-- ------------------------------------------------------------------
+    Información de Contacto
+    ------------------------------------------------------------------ -->
+    <div class="overflow-hidden banner-section bg-primary">
       <div class="container">
         <div class="row">
           <div
             class="col-lg-12 d-flex align-items-center justify-content-center"
           >
             <div class="text-center" style="padding: 80px 20px">
-              <h1 class="banner-title m-0">
-                <span class="text-primary"
-                  >¿Aún necesitas ayuda?
+              <h1 class="banner-title m-0 text-white">
+                <span class="text-accent"
+                  >¿Necesita asistencia inmediata?
                 </span>
               </h1>
-              <p class="f-s-18 m-t-12 m-0 banner-subtitle">
-                <!-- Únete a una de las tiendas virtuales de aprendizaje en línea más
-                grandes del mundo. -->
-                ¿Tienes más dudas? Nuestro equipo de soporte está listo para brindarte la ayuda que necesitas de forma rápida y personalizada.
+              <p class="f-s-18 m-t-12 m-0 banner-subtitle text-light">
+                Nuestro equipo de soporte técnico especializado está disponible 
+                para resolver sus dudas sobre implementación, configuración y 
+                operación del sistema.
               </p>
-              <button
-                mat-flat-button
-                class="m-t-16"
-                color="primary"
-                style="font-weight: bold; width: 250px"
-              >
-                Obtener ayuda
-              </button>
+              <div class="m-t-24">
+                <p class="f-s-16 text-light m-b-8">
+                  📧 MineGuard&#64;gmail.com
+                </p>
+                <p class="f-s-16 text-light m-b-8">
+                  📞 +52 55 1234 5678
+                </p>
+                <p class="f-s-14 text-light opacity-75">
+                  Horario de atención: Lunes a Viernes 8:00 - 18:00 hrs
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
     <!-- ------------------------------------------------------------------
-    End Become an instructor
+    End Información de Contacto
     ------------------------------------------------------------------ -->
 
     <app-footer></app-footer>
@@ -207,64 +332,52 @@
     <div>
       <div class="branding">
         <img
-          src="../../../../assets/images/logos/TeachU_SVG/3-cropped.svg"
+          src="../../../../assets/images/logos/mineria-segura-logo.svg"
           class="align-middle m-2"
-          alt="logo"
+          alt="Monitoreo Integral de Minería Segura"
           width="170px"
         />
       </div>
       <div class="p-x-16">
         <a
-          [routerLink]="['/authentication/boxed-login']"
+          [routerLink]="['/landingpage']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Inicio</span>
+        </a>
+        <a
+          [routerLink]="['/aboutus']"
+          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
+        >
+          <span class="f-s-15 f-w-500 m-l-8">Nosotros</span>
+        </a>
+        <a
+          [routerLink]="['/sistema']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
           <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
-            >Iniciar sesión</span
+            >Sistema</span
           >
         </a>
         <a
-          [routerLink]="['/authentication/boxed-register']"
+          [routerLink]="['/demo']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
           <span class="text-primary f-s-15 m-l-8" style="font-weight: bold"
-            >Registrar</span
+            >Solicitar Demo</span
           >
         </a>
         <a
-          [routerLink]="['/views/aboutus']"
+          [routerLink]="['/srs']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
-          <span class="f-s-15 f-w-500 m-l-8">¿Quiénes somos?</span>
+          <span class="f-s-15 f-w-500 m-l-8">Documentación Técnica</span>
         </a>
         <a
-          [routerLink]="['/views/employment']"
+          [routerLink]="['/normativas']"
           class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
         >
-          <span class="f-s-15 f-w-500 m-l-8">Empleo</span>
-        </a>
-        <a
-          [routerLink]="['/views/teaching']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Enseña en TeachU</span>
-        </a>
-        <a
-          [routerLink]="['/views/']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Invitar a amigos</span>
-        </a>
-        <a
-          [routerLink]="['/views/help']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Ayuda y asistencia</span>
-        </a>
-        <a
-          [routerLink]="['/views/privacy']"
-          class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16"
-        >
-          <span class="f-s-15 f-w-500 m-l-8">Política de privacidad</span>
+          <span class="f-s-15 f-w-500 m-l-8">Cumplimiento Normativo</span>
         </a>
       </div>
     </div>

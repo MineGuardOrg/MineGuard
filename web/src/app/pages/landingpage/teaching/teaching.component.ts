@@ -9,22 +9,17 @@ import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { AppDialogOverviewComponent } from '../../template/ui-components/dialog/dialog.component';
 import { AppFooterComponent } from 'src/app/components/footer/footer.component';
 
-interface courses {
-  id: number;
-  name: string;
-  url: string;
-  imgSrc: string;
-}
-
-interface reasons {
+interface trainingPrograms {
   id: number;
   icon: string;
   color: string;
   title: string;
   subtitle: string;
+  duration: string;
+  level: string;
 }
 
-interface facts {
+interface systemStats {
   id: number;
   icon: string;
   color: string;
@@ -32,7 +27,7 @@ interface facts {
   subtext: string;
 }
 
-interface facts2 {
+interface systemStats2 {
   id: number;
   icon: string;
   color: string;
@@ -127,103 +122,69 @@ export class AppTeachingComponent {
     });
   }
 
-  courses: courses[] = [
+  // Programas de capacitación para el sistema minero
+  trainingPrograms: trainingPrograms[] = [
     {
       id: 1,
-      imgSrc: '/assets/images/landingpage/demos/PT-1.png',
-      name: 'Sistema de información estudiantil',
-      url: '#',
+      color: 'primary',
+      icon: 'mdi:hard-hat',
+      title: 'teaching.programs.basic.title',
+      subtitle: 'teaching.programs.basic.description',
+      duration: 'teaching.programs.basic.duration',
+      level: 'teaching.programs.basic.level'
     },
     {
       id: 2,
-      imgSrc: '/assets/images/landingpage/demos/PT-2.png',
-      name: 'Gestión multiescolar para distritos',
-      url: '#',
+      color: 'accent',
+      icon: 'mdi:cellphone',
+      title: 'teaching.programs.advanced.title',
+      subtitle: 'teaching.programs.advanced.description',
+      duration: 'teaching.programs.advanced.duration',
+      level: 'teaching.programs.advanced.level'
     },
     {
       id: 3,
-      imgSrc: '/assets/images/landingpage/demos/PT-3.png',
-      name: 'Solución de facturación en línea',
-      url: '#',
-    },
-    {
-      id: 4,
-      imgSrc: '/assets/images/landingpage/demos/PT-4.png',
-      name: 'Sitios web compatibles con dispositivos móviles',
-      url: '#',
-    },
-    {
-      id: 5,
-      imgSrc: '/assets/images/landingpage/demos/PT-5.png',
-      name: 'Libro de calificaciones del docente',
-      url: '#',
-    },
-    {
-      id: 6,
-      imgSrc: '/assets/images/landingpage/demos/PT-6.png',
-      name: 'Generación de informes para toda la red escolar',
-      url: '#',
-    },
+      color: 'warn',
+      icon: 'mdi:chart-box',
+      title: 'teaching.programs.analysis.title',
+      subtitle: 'teaching.programs.analysis.description',
+      duration: 'teaching.programs.analysis.duration',
+      level: 'teaching.programs.analysis.level'
+    }
   ];
 
-  reasons: reasons[] = [
-     {
+  // Estadísticas del sistema minero
+  systemStats: systemStats[] = [
+    {
       id: 1,
       color: 'primary',
-      icon: 'solar:book-linear',
-      title: 'teaching.reasons.share.title',
-      subtitle:
-        'teaching.reasons.share.description',
+      icon: 'mdi:account-group',
+      title: '500+',
+      subtext: 'teaching.stats.trained',
     },
     {
       id: 2,
       color: 'primary',
-      icon: 'solar:share-linear',
-      title: 'teaching.reasons.inspire.title',
-      subtitle:
-        'teaching.reasons.inspire.description',
-    },
-    {
-      id: 3,
-      color: 'primary',
-      icon: 'solar:magic-stick-3-linear',
-      title: 'teaching.reasons.teach.title',
-      subtitle:
-        'teaching.reasons.teach.description',
+      icon: 'mdi:factory',
+      title: '25+',
+      subtext: 'teaching.stats.companies',
     },
   ];
 
-  facts: facts[] = [
-    {
-      id: 1,
-      color: 'primary',
-      icon: 'solar:user-hand-up-linear',
-      title: '1,245,341',
-      subtext: 'Alumnos registrados',
-    },
-    {
-      id: 2,
-      color: 'primary',
-      icon: 'mdi:account-tie-outline',
-      title: '828,867',
-      subtext: 'Docentes y administrativos',
-    },
-  ];
-
-  facts2: facts2[] = [
+  systemStats2: systemStats2[] = [
     {
       id: 3,
       color: 'primary',
-      icon: 'mdi:account-group-outline',
-      title: '46,328',
-      subtext: 'Comunidades',
+      icon: 'mdi:chart-line',
+      title: '98%',
+      subtext: 'teaching.stats.satisfaction',
     },
     {
       id: 4,
       color: 'primary',
-      icon: 'solar:card-transfer-linear',
-      title: '1,926,436',
-      subtext: 'Transacciones realizadas',
+      icon: 'mdi:book-education',
+      title: '15+',
+      subtext: 'teaching.stats.programs',
     },
   ];
 }
