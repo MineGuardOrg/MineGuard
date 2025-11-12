@@ -113,9 +113,12 @@ $success: #10B981;           // Verde seguridad
   text-transform: uppercase;
   letter-spacing: 0.3px;
 
-  .iconify {
-    font-size: 16px;
-  }
+ .iconify {
+  font-size: 16px;
+  position: relative;
+  top: 3px; /* mueve el ícono ligeramente hacia abajo */
+}
+
 
   &:hover {
     transform: translateY(-1px);
@@ -132,10 +135,13 @@ $success: #10B981;           // Verde seguridad
   border: 1px solid $primary !important;
   color: $primary !important;
   background: $white !important;
+  margin-left: 10px !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 
   .iconify {
     font-size: 16px;
+  position: relative;
+  top: 3px; /* mueve el ícono ligeramente hacia abajo */
   }
 
   &:hover {
@@ -147,10 +153,12 @@ $success: #10B981;           // Verde seguridad
 
 .trust-badges {
   animation: fadeInUp 0.6s ease-out 0.3s both;
+  margin-right: 10%;
   
   .iconify {
     font-size: 16px;
     color: $accent;
+    margin-left: 12px;
   }
 }
 
