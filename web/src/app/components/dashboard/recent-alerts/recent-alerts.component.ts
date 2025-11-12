@@ -19,126 +19,85 @@ import {
 } from '@angular/material/dialog';
 import { CommonModule, DatePipe } from '@angular/common';
 import { AppAddKichenSinkComponent } from './add/add.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCardModule } from '@angular/material/card';
+import { FormsModule } from '@angular/forms';
 import { TablerIconsModule } from 'angular-tabler-icons';
-import { NgxPaginationModule } from 'ngx-pagination';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
 
-export interface Employee {
+export interface Alert {
   id: number;
-  Name: string;
-  Position: string;
-  Email: string;
-  Mobile: number;
-  DateOfJoining: Date;
-  Salary: number;
-  Projects: number;
-  imagePath: string;
+  hora: Date;
+  tipo: string;
+  empleado: string;
+  area: string;
+  severidad: string;
 }
 
-const employees = [
+const alerts = [
   {
     id: 1,
-    Name: 'Johnathan Deo',
-    Position: 'Seo Expert',
-    Email: 'r@gmail.com',
-    Mobile: 9786838,
-    DateOfJoining: new Date('01-2-2020'),
-    Salary: 12000,
-    Projects: 10,
-    imagePath: 'assets/images/profile/user-2.jpg',
+    hora: new Date('2025-11-11T08:30:00'),
+    tipo: 'Gases tóxicos',
+    empleado: 'Juan Pérez',
+    area: 'Túnel Principal',
+    severidad: 'Alta',
   },
   {
     id: 2,
-    Name: 'Mark Zukerburg',
-    Position: 'Web Developer',
-    Email: 'mark@gmail.com',
-    Mobile: 8786838,
-    DateOfJoining: new Date('04-2-2020'),
-    Salary: 12000,
-    Projects: 10,
-    imagePath: 'assets/images/profile/user-3.jpg',
+    hora: new Date('2025-11-11T09:15:00'),
+    tipo: 'Ritmo cardíaco anormal',
+    empleado: 'María González',
+    area: 'Zona de Extracción A',
+    severidad: 'Media',
   },
   {
     id: 3,
-    Name: 'Sam smith',
-    Position: 'Web Designer',
-    Email: 'sam@gmail.com',
-    Mobile: 7788838,
-    DateOfJoining: new Date('02-2-2020'),
-    Salary: 12000,
-    Projects: 10,
-    imagePath: 'assets/images/profile/user-4.jpg',
+    hora: new Date('2025-11-11T10:45:00'),
+    tipo: 'Temperatura corporal alta',
+    empleado: 'Carlos López',
+    area: 'Área de Maquinaria',
+    severidad: 'Media',
   },
   {
     id: 4,
-    Name: 'John Deo',
-    Position: 'Tester',
-    Email: 'john@gmail.com',
-    Mobile: 8786838,
-    DateOfJoining: new Date('03-2-2020'),
-    Salary: 12000,
-    Projects: 11,
-    imagePath: 'assets/images/profile/user-5.jpg',
+    hora: new Date('2025-11-11T11:20:00'),
+    tipo: 'Caídas/Impactos',
+    empleado: 'Ana Martínez',
+    area: 'Escaleras Sector B',
+    severidad: 'Alta',
   },
   {
     id: 5,
-    Name: 'Genilia',
-    Position: 'Actor',
-    Email: 'genilia@gmail.com',
-    Mobile: 8786838,
-    DateOfJoining: new Date('05-2-2020'),
-    Salary: 12000,
-    Projects: 19,
-    imagePath: 'assets/images/profile/user-6.jpg',
+    hora: new Date('2025-11-11T12:05:00'),
+    tipo: 'Gases tóxicos',
+    empleado: 'Roberto Silva',
+    area: 'Ventilación Norte',
+    severidad: 'Crítica',
   },
   {
     id: 6,
-    Name: 'Jack Sparrow',
-    Position: 'Content Writer',
-    Email: 'jac@gmail.com',
-    Mobile: 8786838,
-    DateOfJoining: new Date('05-21-2020'),
-    Salary: 12000,
-    Projects: 5,
-    imagePath: 'assets/images/profile/user-7.jpg',
+    hora: new Date('2025-11-11T13:30:00'),
+    tipo: 'Ritmo cardíaco anormal',
+    empleado: 'Luis Torres',
+    area: 'Zona de Carga',
+    severidad: 'Baja',
   },
   {
     id: 7,
-    Name: 'Tom Cruise',
-    Position: 'Actor',
-    Email: 'tom@gmail.com',
-    Mobile: 8786838,
-    DateOfJoining: new Date('02-15-2019'),
-    Salary: 12000,
-    Projects: 9,
-    imagePath: 'assets/images/profile/user-3.jpg',
+    hora: new Date('2025-11-11T14:15:00'),
+    tipo: 'Temperatura corporal alta',
+    empleado: 'Sofia Ramírez',
+    area: 'Túnel Secundario',
+    severidad: 'Media',
   },
   {
     id: 8,
-    Name: 'Hary Porter',
-    Position: 'Actor',
-    Email: 'hary@gmail.com',
-    Mobile: 8786838,
-    DateOfJoining: new Date('07-3-2019'),
-    Salary: 12000,
-    Projects: 7,
-    imagePath: 'assets/images/profile/user-6.jpg',
-  },
-  {
-    id: 9,
-    Name: 'Kristen Ronaldo',
-    Position: 'Player',
-    Email: 'kristen@gmail.com',
-    Mobile: 8786838,
-    DateOfJoining: new Date('01-15-2019'),
-    Salary: 12000,
-    Projects: 1,
-    imagePath: 'assets/images/profile/user-5.jpg',
+    hora: new Date('2025-11-11T15:00:00'),
+    tipo: 'Caídas/Impactos',
+    empleado: 'Diego Morales',
+    area: 'Plataforma Sur',
+    severidad: 'Alta',
   },
 ];
 
@@ -160,16 +119,14 @@ export class AppRecentAlertsComponent implements AfterViewInit {
     Object.create(null);
   searchText: any;
   displayedColumns: string[] = [
-    '#',
-    'name',
-    'email',
-    'mobile',
-    'date of joining',
-    'salary',
-    'projects',
-    'action',
+    'hora',
+    'tipo',
+    'empleado',
+    'area',
+    'severidad',
+    'acciones',
   ];
-  dataSource = new MatTableDataSource(employees);
+  dataSource = new MatTableDataSource(alerts);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
     Object.create(null);
 
@@ -200,41 +157,35 @@ export class AppRecentAlertsComponent implements AfterViewInit {
   }
 
   // tslint:disable-next-line - Disables all
-  addRowData(row_obj: Employee): void {
+  addRowData(row_obj: Alert): void {
     this.dataSource.data.unshift({
-      id: employees.length + 1,
-      Name: row_obj.Name,
-      Position: row_obj.Position,
-      Email: row_obj.Email,
-      Mobile: row_obj.Mobile,
-      DateOfJoining:  row_obj.DateOfJoining,
-      Salary: row_obj.Salary,
-      Projects: row_obj.Projects,
-      imagePath: row_obj.imagePath,
+      id: alerts.length + 1,
+      hora: row_obj.hora,
+      tipo: row_obj.tipo,
+      empleado: row_obj.empleado,
+      area: row_obj.area,
+      severidad: row_obj.severidad,
     });
     this.dialog.open(AppAddKichenSinkComponent);
     this.table.renderRows();
   }
 
   // tslint:disable-next-line - Disables all
-  updateRowData(row_obj: Employee): boolean | any {
+  updateRowData(row_obj: Alert): boolean | any {
     this.dataSource.data = this.dataSource.data.filter((value: any) => {
       if (value.id === row_obj.id) {
-        value.Name = row_obj.Name;
-        value.Position = row_obj.Position;
-        value.Email = row_obj.Email;
-        value.Mobile = row_obj.Mobile;
-        value.DateOfJoining = row_obj.DateOfJoining;
-        value.Salary = row_obj.Salary;
-        value.Projects = row_obj.Projects;
-        value.imagePath = row_obj.imagePath;
+        value.hora = row_obj.hora;
+        value.tipo = row_obj.tipo;
+        value.empleado = row_obj.empleado;
+        value.area = row_obj.area;
+        value.severidad = row_obj.severidad;
       }
       return true;
     });
   }
 
   // tslint:disable-next-line - Disables all
-  deleteRowData(row_obj: Employee): boolean | any {
+  deleteRowData(row_obj: Alert): boolean | any {
     this.dataSource.data = this.dataSource.data.filter((value: any) => {
       return value.id !== row_obj.id;
     });
@@ -254,25 +205,15 @@ export class AppRecentAlertsDialogContentComponent {
   action: string;
   // tslint:disable-next-line - Disables all
   local_data: any;
-  selectedImage: any = '';
   
   constructor(
     public datePipe: DatePipe,
     public dialogRef: MatDialogRef<AppRecentAlertsDialogContentComponent>,
     // @Optional() is used to prevent error if no data is passed
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Employee
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Alert
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
-    // if (this.local_data.DateOfJoining !== undefined) {
-    //   this.joiningDate = this.datePipe.transform(
-    //     new Date(this.local_data.DateOfJoining),
-    //     'yyyy-MM-dd'
-    //   );
-    // }
-    if (this.local_data.imagePath === undefined) {
-      this.local_data.imagePath = 'assets/images/profile/user-1.jpg';
-    }
   }
 
   doAction(): void {
@@ -282,23 +223,5 @@ export class AppRecentAlertsDialogContentComponent {
     this.dialogRef.close({ event: 'Cancel' });
   }
 
-  selectFile(event: any): void {
-    if (!event.target.files[0] || event.target.files[0].length === 0) {
-      // this.msg = 'You must select an image';
-      return;
-    }
-    const mimeType = event.target.files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
-      // this.msg = "Only images are supported";
-      return;
-    }
-    // tslint:disable-next-line - Disables all
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-    // tslint:disable-next-line - Disables all
-    reader.onload = (_event) => {
-      // tslint:disable-next-line - Disables all
-      this.local_data.imagePath = reader.result;
-    };
-  }
+
 }

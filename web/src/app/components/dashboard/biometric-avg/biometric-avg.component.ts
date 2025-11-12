@@ -76,7 +76,7 @@ export class AppBiometricAvgComponent {
           horizontal: false,
           barHeight: '60%',
           columnWidth: '50%',
-          borderRadius: [6],
+          borderRadius: [0],
           borderRadiusApplication: 'end',
           borderRadiusWhenStacked: 'all',
           distributed: false,

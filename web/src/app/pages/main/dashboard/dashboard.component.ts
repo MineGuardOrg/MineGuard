@@ -5,7 +5,7 @@ import { AppAlertsByTypeComponent } from 'src/app/components/dashboard/alerts-by
 import { AppBiometricAvgComponent } from 'src/app/components/dashboard/biometric-avg/biometric-avg.component';
 import { AppActiveWorkersComponent } from 'src/app/components/dashboard/active-workers/active-workers.component';
 import { AppRecentAlertsComponent } from 'src/app/components/dashboard/recent-alerts/recent-alerts.component';
-import { AppRiskAreasComponent } from 'src/app/components/dashboard/risk-areas/risk-areas.component';
+import { AppWorkoutByShiftComponent } from 'src/app/components/dashboard/workout-by-shift/workout-by-shift.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,7 +17,7 @@ import { AppRiskAreasComponent } from 'src/app/components/dashboard/risk-areas/r
     AppBiometricAvgComponent,
     AppActiveWorkersComponent,
     AppRecentAlertsComponent,
-    AppRiskAreasComponent
+    AppWorkoutByShiftComponent,
   ],
   templateUrl: './dashboard.component.html',
 })

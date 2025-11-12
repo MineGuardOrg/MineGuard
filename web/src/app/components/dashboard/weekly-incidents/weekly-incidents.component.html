@@ -1,0 +1,24 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content>
+    <div class="hstack align-items-center flex-column flex-lg-row">
+      <div class="w-100">
+        <mat-card-title>Evolución de Incidentes</mat-card-title>
+      </div>
+    </div>
+    <div class="m-t-16">
+      <apx-chart
+        [series]="lineChartOptions.series"
+        [chart]="lineChartOptions.chart"
+        [xaxis]="lineChartOptions.xaxis"
+        [yaxis]="lineChartOptions.yaxis"
+        [grid]="lineChartOptions.grid"
+        [stroke]="lineChartOptions.stroke"
+        [tooltip]="lineChartOptions.tooltip"
+        [dataLabels]="lineChartOptions.dataLabels"
+        [legend]="lineChartOptions.legend"
+        [colors]="lineChartOptions.colors"
+        [markers]="lineChartOptions.markers"
+      ></apx-chart>
+    </div>
+  </mat-card-content>
+</mat-card>
