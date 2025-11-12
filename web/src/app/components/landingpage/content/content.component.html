@@ -145,29 +145,31 @@
 </div>
 
 <!-- ============================================
-    METRICS BAR
-    ============================================ -->
+     METRICS BAR
+     ============================================ -->
 <div class="metrics-bar">
   <div class="container">
     <mat-card class="shadow-lg metrics-card">
       <mat-card-content class="metrics-content">
         <div class="row text-center">
-          @for(metric of metrics; track metric.value) {
-            <div class="col-lg-3 col-md-3 col-sm-6 col-6 m-b-md-0 m-b-24">
-              <div class="metric-item">
-                <div class="metric-icon-wrapper m-auto m-b-14">
-                  <i class="iconify" [attr.data-icon]="metric.icon"></i>
-                </div>
-                <h2 class="m-0 metric-number" style="color: #1a1a1a;">{{ metric.value }}</h2>
-                <p class="f-s-14 text-muted m-t-10 m-0 f-w-600">{{ metric.label | translate }}</p>
+          <div class="col-lg-3 col-md-3 col-sm-6 col-6 m-b-md-0 m-b-24"
+               *ngFor="let metric of metrics; trackBy: trackByValue">
+            <div class="metric-item">
+              <div class="metric-icon-wrapper m-auto m-b-14">
+                <i class="iconify" [attr.data-icon]="metric.icon"></i>
               </div>
+              <h2 class="m-0 metric-number" [style.color]="metric.color">{{ metric.value }}</h2>
+              <p class="f-s-14 text-muted m-t-10 m-0 f-w-600">
+                {{ metric.label }}
+              </p>
             </div>
-          }
+          </div>
         </div>
       </mat-card-content>
     </mat-card>
   </div>
 </div>
+
 
 <!-- ============================================
     SYSTEM COMPONENTS
@@ -181,52 +183,55 @@
           {{ 'SECTIONS.COMPONENTS' | translate }}
         </span>
         <h2 class="section-title-main">
-          {{ 'COMPONENTS.TITLE' | translate }} <span class="gradient-text">{{ 'COMPONENTS.TITLE_HIGHLIGHT' | translate }}</span>
+          {{ 'COMPONENTS.TITLE' | translate }}
+          <span class="gradient-text">{{ 'COMPONENTS.TITLE_HIGHLIGHT' | translate }}</span>
         </h2>
         <p class="section-description">
           {{ 'COMPONENTS.DESCRIPTION' | translate }}
         </p>
       </div>
     </div>
-    
+
     <div class="row g-3">
-      @for(component of systemComponents; track component.name) {
-        <div class="col-lg-4 col-md-6">
-          <mat-card class="component-card h-100">
-            <mat-card-content class="p-24">
-              <div class="d-flex align-items-start m-b-20">
-                <div class="component-icon-wrapper">
-                  <div class="icon-background"></div>
-                  <i class="iconify component-icon" [attr.data-icon]="component.icon"></i>
-                </div>
-                <div class="m-l-16 flex-grow-1">
-                  <span class="component-number">0{{ component.id }}</span>
-                  <h4 class="component-title m-t-6">{{ component.name | translate }}</h4>
-                </div>
+      <div
+        class="col-lg-4 col-md-6"
+        *ngFor="let component of systemComponents; trackBy: trackByName"
+      >
+        <mat-card class="component-card h-100">
+          <mat-card-content class="p-24">
+            <div class="d-flex align-items-start m-b-20">
+              <div class="component-icon-wrapper">
+                <div class="icon-background"></div>
+                <i class="iconify component-icon" [attr.data-icon]="component.icon"></i>
               </div>
-
-              <p class="component-description">{{ component.description | translate }}</p>
-
-              <div class="features-list">
-                <h6 class="features-title">
-                  <i class="iconify m-r-8" data-icon="mdi:check-all"></i>
-                  {{ 'COMPONENTS.KEY_FEATURES' | translate }}
-                </h6>
-                <ul class="list-unstyled m-0">
-                  @for(feature of component.features; track feature) {
-                    <li class="feature-item">
-                      <div class="feature-check">
-                        <i class="iconify" data-icon="mdi:check-bold"></i>
-                      </div>
-                      <span>{{ feature | translate }}</span>
-                    </li>
-                  }
-                </ul>
+              <div class="m-l-16 flex-grow-1">
+                <span class="component-number">0{{ component.id }}</span>
+                <h4 class="component-title m-t-6">{{ component.name }}</h4>
               </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
-      }
+            </div>
+
+            <p class="component-description">{{ component.description }}</p>
+
+            <div class="features-list">
+              <h6 class="features-title">
+                <i class="iconify m-r-8" data-icon="mdi:check-all"></i>
+                {{ 'COMPONENTS.KEY_FEATURES' | translate }}
+              </h6>
+              <ul class="list-unstyled m-0">
+                <li
+                  class="feature-item"
+                  *ngFor="let feature of component.features; trackBy: trackByFeature"
+                >
+                  <div class="feature-check">
+                    <i class="iconify" data-icon="mdi:check-bold"></i>
+                  </div>
+                  <span>{{ feature }}</span>
+                </li>
+              </ul>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
     </div>
   </div>
 </div>
@@ -268,13 +273,15 @@
     </div>
   </div>
 </div>
-
 <!-- ============================================
     BENEFITS
     ============================================ -->
+<!-- ============================================
+     BENEFITS
+     ============================================ -->
 <div class="benefits-section">
   <div class="benefits-decoration"></div>
-  
+
   <div class="container position-relative benefits-container">
     <div class="row align-items-center">
       <div class="col-lg-5 m-b-lg-0 m-b-48">
@@ -283,40 +290,19 @@
           {{ 'SECTIONS.BENEFITS' | translate }}
         </span>
         <h2 class="section-title-main benefits-title">
-          {{ 'BENEFITS.TITLE' | translate }} <span class="gradient-text">{{ 'BENEFITS.TITLE_HIGHLIGHT' | translate }}</span>
+          {{ 'BENEFITS.TITLE' | translate }}
+          <span class="gradient-text">{{ 'BENEFITS.TITLE_HIGHLIGHT' | translate }}</span>
         </h2>
-        <p class="section-description benefits-desc">
-          {{ 'BENEFITS.DESCRIPTION' | translate }}
-        </p>
 
         <div class="benefits-list">
-          <div class="benefit-list-item">
+          <!-- Recorremos el array ITEMS dentro del objeto BENEFITS -->
+          <div class="benefit-list-item" *ngFor="let benefit of benefits.ITEMS; trackBy: trackByValue">
             <div class="benefit-check-icon">
-              <i class="iconify" data-icon="mdi:shield-check"></i>
+              <i class="iconify" [attr.data-icon]="benefit.icon"></i>
             </div>
             <div>
-              <h6 class="benefit-list-title">{{ 'BENEFITS.PROACTIVE' | translate }}</h6>
-              <span class="benefit-list-text">{{ 'BENEFITS.PROACTIVE_DESC' | translate }}</span>
-            </div>
-          </div>
-          
-          <div class="benefit-list-item">
-            <div class="benefit-check-icon">
-              <i class="iconify" data-icon="mdi:lightning-bolt"></i>
-            </div>
-            <div>
-              <h6 class="benefit-list-title">{{ 'BENEFITS.RESPONSE' | translate }}</h6>
-              <span class="benefit-list-text">{{ 'BENEFITS.RESPONSE_DESC' | translate }}</span>
-            </div>
-          </div>
-          
-          <div class="benefit-list-item">
-            <div class="benefit-check-icon">
-              <i class="iconify" data-icon="mdi:certificate"></i>
-            </div>
-            <div>
-              <h6 class="benefit-list-title">{{ 'BENEFITS.COMPLIANCE' | translate }}</h6>
-              <span class="benefit-list-text">{{ 'BENEFITS.COMPLIANCE_DESC' | translate }}</span>
+              <h6 class="benefit-list-title">{{ benefit.title }}</h6>
+              <span class="benefit-list-text">{{ benefit.description }}</span>
             </div>
           </div>
         </div>
@@ -329,27 +315,26 @@
 
       <div class="col-lg-7">
         <div class="row g-3">
-          @for(benefit of benefits; track benefit.title) {
-            <div class="col-md-6">
-              <mat-card class="benefit-card h-100">
-                <mat-card-content class="p-24">
-                  <div class="benefit-icon-wrapper">
-                    <i class="iconify" [attr.data-icon]="benefit.icon"></i>
-                  </div>
-                  <h5 class="benefit-card-title">{{ benefit.title | translate }}</h5>
-                  <p class="benefit-card-description">{{ benefit.description | translate }}</p>
-                  <div class="benefit-card-arrow">
-                    <i class="iconify" data-icon="mdi:arrow-right"></i>
-                  </div>
-                </mat-card-content>
-              </mat-card>
-            </div>
-          }
+          <div class="col-md-6" *ngFor="let benefit of benefits.ITEMS; trackBy: trackByValue">
+            <mat-card class="benefit-card h-100">
+              <mat-card-content class="p-24">
+                <div class="benefit-icon-wrapper">
+                  <i class="iconify" [attr.data-icon]="benefit.icon"></i>
+                </div>
+                <h5 class="benefit-card-title">{{ benefit.title }}</h5>
+                <p class="benefit-card-description">{{ benefit.description }}</p>
+                <div class="benefit-card-arrow">
+                  <i class="iconify" data-icon="mdi:arrow-right"></i>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 
 <!-- ============================================
     EXPERT TEAM

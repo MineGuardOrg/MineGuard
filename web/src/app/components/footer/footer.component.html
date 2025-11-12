@@ -26,127 +26,52 @@
           </svg>
           
           <div class="text-light">
-            <div class="f-s-24 f-w-700 m-b-0" style="line-height: 1.1;">MINERÍA</div>
-            <div class="f-s-24 f-w-700" style="line-height: 1.1;">SEGURA</div>
+            <div class="f-s-24 f-w-700 m-b-0" style="line-height: 1.1;">{{ 'FOOTER.BRAND.NAME_LINE1' | translate }}</div>
           </div>
         </div>
         <div class="f-s-14 m-t-16 text-light text-center">
-          <p class="m-b-8">Sistema de Monitoreo en Tiempo Real</p>
-          <p class="m-b-4">📍 Universidad Tecnológica de Tijuana</p>
-          <p class="m-b-4">📧 MineGuard&#64;gmail.com</p>
-          <p>📞 +52 55 1234 5678</p>
+          <p class="m-b-8">{{ 'FOOTER.BRAND.TAGLINE' | translate }}</p>
+          <p class="m-b-4">📍 {{ 'FOOTER.CONTACT.LOCATION' | translate }}</p>
+          <p class="m-b-4">📧 {{ 'FOOTER.CONTACT.EMAIL' | translate }}</p>
+          <p>📞 {{ 'FOOTER.CONTACT.PHONE' | translate }}</p>
         </div>
-        <div class="f-s-12 m-t-16 text-light opacity-75">© 2025 Monitoreo Integral de Minería Segura</div>
+        <div class="f-s-12 m-t-16 text-light opacity-75">{{ 'FOOTER.COPYRIGHT' | translate }}</div>
       </div>
 
       <!-- Columna: Enlaces del sistema -->
       <div class="col-12 col-md-4 m-t-24">
         <h6 class="m-0 f-s-18 f-w-600 m-b-16 text-light">
-          <strong>Sistema</strong>
+          <strong>{{ 'FOOTER.SYSTEM.TITLE' | translate }}</strong>
         </h6>
 
-        <div class="f-s-14 m-t-12">
-          <a
-            [routerLink]="['/casco-inteligente']"
-            class="text-light text-decoration-none d-block m-b-8"
-            >Casco Inteligente</a
-          >
-        </div>
-
-        <div class="f-s-14 m-t-12">
-          <a
-            [routerLink]="['/aplicacion-movil']"
-            class="text-light text-decoration-none d-block m-b-8"
-            >Aplicación Móvil</a
-          >
-        </div>
-
-        <div class="f-s-14 m-t-12">
-          <a
-            [routerLink]="['/plataforma-web']"
-            class="text-light text-decoration-none d-block m-b-8"
-            >Plataforma Web</a
-          >
-        </div>
-
-        <div class="f-s-14 m-t-12">
-          <a
-            [routerLink]="['/sensores']"
-            class="text-light text-decoration-none d-block m-b-8"
-            >Sensores y Tecnología</a
-          >
-        </div>
-
-        <div class="f-s-14 m-t-12">
-          <a
-            [routerLink]="['/demo']"
-            class="text-light text-decoration-none d-block m-b-8"
-            >Solicitar Demo</a
-          >
+        <div class="f-s-14 m-t-12" *ngFor="let link of footerData?.SYSTEM?.LINKS">
+          <a [routerLink]="[link.route]" class="text-light text-decoration-none d-block m-b-8">
+            {{ link.label }}
+          </a>
         </div>
       </div>
 
       <!-- Columna: Documentación y legal -->
       <div class="col-12 col-md-4 m-t-24">
         <h6 class="m-0 f-s-18 f-w-600 m-b-16 text-light">
-          <strong>Documentación</strong>
+          <strong>{{ 'FOOTER.DOCUMENTATION.TITLE' | translate }}</strong>
         </h6>
 
-        <div class="f-s-14 m-t-12">
-          <a
-            [routerLink]="['/srs']"
-            class="text-light text-decoration-none d-block m-b-8"
-            >Especificación de Requerimientos</a
-          >
-        </div>
-
-        <div class="f-s-14 m-t-12">
-          <a
-            [routerLink]="['/manual-usuario']"
-            class="text-light text-decoration-none d-block m-b-8"
-            >Manual de Usuario</a
-          >
-        </div>
-
-        <div class="f-s-14 m-t-12">
-          <a
-            [routerLink]="['/normativas']"
-            class="text-light text-decoration-none d-block m-b-8"
-            >Cumplimiento Normativo</a
-          >
-        </div>
-
-        <div class="f-s-14 m-t-12">
-          <a
-            [routerLink]="['/privacidad']"
-            class="text-light text-decoration-none d-block m-b-8"
-            >Política de Privacidad</a
-          >
-        </div>
-
-        <div class="f-s-14 m-t-12">
-          <a
-            [routerLink]="['/terminos']"
-            class="text-light text-decoration-none d-block m-b-8"
-            >Términos de Servicio</a
-          >
+        <div class="f-s-14 m-t-12" *ngFor="let link of footerData?.DOCUMENTATION?.LINKS">
+          <a [routerLink]="[link.route]" class="text-light text-decoration-none d-block m-b-8">
+            {{ link.label }}
+          </a>
         </div>
 
         <!-- Redes sociales -->
         <div class="m-t-24">
-          <h6 class="m-0 f-s-16 f-w-600 m-b-12 text-light">Síguenos</h6>
+          <h6 class="m-0 f-s-16 f-w-600 m-b-12 text-light">{{ 'FOOTER.SOCIAL.TITLE' | translate }}</h6>
           <div class="hstack gap-16 justify-content-center justify-content-md-start">
-            <a href="#" class="text-light text-decoration-none">
-              <span class="iconify" data-icon="mdi:linkedin" width="20"></span>
-            </a>
-            <a href="#" class="text-light text-decoration-none">
-              <span class="iconify" data-icon="mdi:twitter" width="20"></span>
-            </a>
-            <a href="#" class="text-light text-decoration-none">
-              <span class="iconify" data-icon="mdi:youtube" width="20"></span>
-            </a>
-            <a href="#" class="text-light text-decoration-none">
-              <span class="iconify" data-icon="mdi:github" width="20"></span>
+            <a *ngFor="let social of footerData?.SOCIAL?.LINKS" 
+               [href]="social.url" 
+               class="text-light text-decoration-none"
+               [attr.aria-label]="social.label">
+              <span class="iconify" [attr.data-icon]="social.icon" width="20"></span>
             </a>
           </div>
         </div>
@@ -164,10 +89,10 @@
     <div class="row text-center m-t-20">
       <div class="col-12">
         <p class="f-s-12 text-light opacity-75 m-b-8">
-          Sistema desarrollado por el equipo de Monitoreo Integral de Minería Segura
+          {{ 'FOOTER.ADDITIONAL_INFO.DEVELOPED_BY' | translate }}
         </p>
         <p class="f-s-10 text-light opacity-50">
-          Certificado NOM-023-STPS-2012 | Cumplimiento de seguridad minera
+          {{ 'FOOTER.ADDITIONAL_INFO.CERTIFICATION' | translate }}
         </p>
       </div>
     </div>
