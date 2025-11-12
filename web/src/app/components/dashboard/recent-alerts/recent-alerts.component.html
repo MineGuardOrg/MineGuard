@@ -13,7 +13,7 @@
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <input
             matInput
-            placeholder="Search User"
+            placeholder="Search"
             (keyup)="applyFilter($any($event.target).value)"
           />
           <mat-icon matSuffix>
@@ -25,88 +25,82 @@
 
     <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" class="w-100">
-        <ng-container matColumnDef="#">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">#</th>
-          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+        <ng-container matColumnDef="hora">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Hora</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.hora | date : "HH:mm" }}
+          </td>
         </ng-container>
 
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Name</th>
+        <ng-container matColumnDef="tipo">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Tipo</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            <mat-chip
+              [ngClass]="{
+                'bg-error text-white': element.tipo === 'Gases tóxicos',
+                'bg-warning text-white':
+                  element.tipo === 'Ritmo cardíaco anormal',
+                'bg-primary text-white':
+                  element.tipo === 'Temperatura corporal alta',
+                'bg-accent text-white': element.tipo === 'Caídas/Impactos'
+              }"
+              class="f-s-12"
+            >
+              {{ element.tipo }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="empleado">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Empleado
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14 f-w-500">
+            {{ element.empleado }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="area">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Área</th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.area }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="severidad">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Severidad
+          </th>
           <td mat-cell *matCellDef="let element">
-            <div class="d-flex align-items-center">
-              <img
-                class="rounded-circle"
-                [src]="element.imagePath"
-                width="40"
-              />
-              <div class="m-l-16">
-                <p class="f-w-600 mat-subtitle-1 f-s-16 m-t-0">
-                  {{ element.Name }}
-                </p>
-                <small class="mat-body-1 f-s-14">{{ element.Position }}</small>
-              </div>
-            </div>
+            <mat-chip
+              [ngClass]="{
+                'bg-error text-white': element.severidad === 'Crítica',
+                'bg-warning text-white': element.severidad === 'Alta',
+                'bg-accent text-white': element.severidad === 'Media',
+                'bg-success text-white': element.severidad === 'Baja'
+              }"
+              class="f-s-12"
+            >
+              {{ element.severidad }}
+            </mat-chip>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="email">
+        <ng-container matColumnDef="acciones">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Email
-          </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.Email }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="mobile">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Mobile
-          </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.Mobile }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="date of joining">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Date of Joining
-          </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.DateOfJoining | date : "fullDate" }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="salary">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Salary
-          </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.Salary }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="projects">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Projects
-          </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.Projects }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Action
+            Acciones
           </th>
           <td mat-cell *matCellDef="let element" class="action-link">
             <a
               (click)="openDialog('Update', element)"
               class="m-r-10 cursor-pointer"
+              matTooltip="Editar"
               ><i-tabler name="edit" class="icon-18"></i-tabler
             ></a>
             <a
               (click)="openDialog('Delete', element)"
               class="m-r-10 cursor-pointer"
+              matTooltip="Eliminar"
             >
               <i-tabler name="trash" class="icon-18"></i-tabler>
             </a>

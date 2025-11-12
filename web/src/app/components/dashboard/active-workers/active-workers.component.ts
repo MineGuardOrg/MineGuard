@@ -28,117 +28,88 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
 
-export interface Employee {
+export interface Worker {
   id: number;
-  Name: string;
-  Position: string;
-  Email: string;
-  Mobile: number;
-  DateOfJoining: Date;
-  Salary: number;
-  Projects: number;
-  imagePath: string;
+  trabajador: string;
+  area: string;
+  ritmoCardiaco: number;
+  temperatura: number;
+  bateria: number;
+  estado: string;
 }
 
-const employees = [
+const workers = [
   {
     id: 1,
-    Name: 'Johnathan Deo',
-    Position: 'Seo Expert',
-    Email: 'r@gmail.com',
-    Mobile: 9786838,
-    DateOfJoining: new Date('01-2-2020'),
-    Salary: 12000,
-    Projects: 10,
-    imagePath: 'assets/images/profile/user-2.jpg',
+    trabajador: 'Juan Pérez',
+    area: 'Túnel Principal',
+    ritmoCardiaco: 72,
+    temperatura: 36.5,
+    bateria: 85,
+    estado: 'Activo',
   },
   {
     id: 2,
-    Name: 'Mark Zukerburg',
-    Position: 'Web Developer',
-    Email: 'mark@gmail.com',
-    Mobile: 8786838,
-    DateOfJoining: new Date('04-2-2020'),
-    Salary: 12000,
-    Projects: 10,
-    imagePath: 'assets/images/profile/user-3.jpg',
+    trabajador: 'María González',
+    area: 'Zona de Extracción A',
+    ritmoCardiaco: 68,
+    temperatura: 36.8,
+    bateria: 92,
+    estado: 'Activo',
   },
   {
     id: 3,
-    Name: 'Sam smith',
-    Position: 'Web Designer',
-    Email: 'sam@gmail.com',
-    Mobile: 7788838,
-    DateOfJoining: new Date('02-2-2020'),
-    Salary: 12000,
-    Projects: 10,
-    imagePath: 'assets/images/profile/user-4.jpg',
+    trabajador: 'Carlos López',
+    area: 'Área de Maquinaria',
+    ritmoCardiaco: 75,
+    temperatura: 37.1,
+    bateria: 78,
+    estado: 'Alerta',
   },
   {
     id: 4,
-    Name: 'John Deo',
-    Position: 'Tester',
-    Email: 'john@gmail.com',
-    Mobile: 8786838,
-    DateOfJoining: new Date('03-2-2020'),
-    Salary: 12000,
-    Projects: 11,
-    imagePath: 'assets/images/profile/user-5.jpg',
+    trabajador: 'Ana Martínez',
+    area: 'Escaleras Sector B',
+    ritmoCardiaco: 82,
+    temperatura: 36.9,
+    bateria: 65,
+    estado: 'Activo',
   },
   {
     id: 5,
-    Name: 'Genilia',
-    Position: 'Actor',
-    Email: 'genilia@gmail.com',
-    Mobile: 8786838,
-    DateOfJoining: new Date('05-2-2020'),
-    Salary: 12000,
-    Projects: 19,
-    imagePath: 'assets/images/profile/user-6.jpg',
+    trabajador: 'Roberto Silva',
+    area: 'Ventilación Norte',
+    ritmoCardiaco: 90,
+    temperatura: 37.3,
+    bateria: 45,
+    estado: 'Crítico',
   },
   {
     id: 6,
-    Name: 'Jack Sparrow',
-    Position: 'Content Writer',
-    Email: 'jac@gmail.com',
-    Mobile: 8786838,
-    DateOfJoining: new Date('05-21-2020'),
-    Salary: 12000,
-    Projects: 5,
-    imagePath: 'assets/images/profile/user-7.jpg',
+    trabajador: 'Luis Torres',
+    area: 'Zona de Carga',
+    ritmoCardiaco: 70,
+    temperatura: 36.7,
+    bateria: 88,
+    estado: 'Activo',
   },
   {
     id: 7,
-    Name: 'Tom Cruise',
-    Position: 'Actor',
-    Email: 'tom@gmail.com',
-    Mobile: 8786838,
-    DateOfJoining: new Date('02-15-2019'),
-    Salary: 12000,
-    Projects: 9,
-    imagePath: 'assets/images/profile/user-3.jpg',
+    trabajador: 'Sofia Ramírez',
+    area: 'Túnel Secundario',
+    ritmoCardiaco: 65,
+    temperatura: 36.4,
+    bateria: 73,
+    estado: 'Descanso',
   },
   {
     id: 8,
-    Name: 'Hary Porter',
-    Position: 'Actor',
-    Email: 'hary@gmail.com',
-    Mobile: 8786838,
-    DateOfJoining: new Date('07-3-2019'),
-    Salary: 12000,
-    Projects: 7,
-    imagePath: 'assets/images/profile/user-6.jpg',
-  },
-  {
-    id: 9,
-    Name: 'Kristen Ronaldo',
-    Position: 'Player',
-    Email: 'kristen@gmail.com',
-    Mobile: 8786838,
-    DateOfJoining: new Date('01-15-2019'),
-    Salary: 12000,
-    Projects: 1,
-    imagePath: 'assets/images/profile/user-5.jpg',
+    trabajador: 'Diego Morales',
+    area: 'Plataforma Sur',
+    ritmoCardiaco: 78,
+    temperatura: 36.6,
+    bateria: 91,
+    estado: 'Activo',
   },
 ];
 
@@ -160,16 +131,15 @@ export class AppActiveWorkersComponent implements AfterViewInit {
     Object.create(null);
   searchText: any;
   displayedColumns: string[] = [
-    '#',
-    'name',
-    'email',
-    'mobile',
-    'date of joining',
-    'salary',
-    'projects',
-    'action',
+    'trabajador',
+    'area',
+    'ritmoCardiaco',
+    'temperatura',
+    'bateria',
+    'estado',
+    'acciones',
   ];
-  dataSource = new MatTableDataSource(employees);
+  dataSource = new MatTableDataSource(workers);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
     Object.create(null);
 
@@ -200,41 +170,37 @@ export class AppActiveWorkersComponent implements AfterViewInit {
   }
 
   // tslint:disable-next-line - Disables all
-  addRowData(row_obj: Employee): void {
+  addRowData(row_obj: Worker): void {
     this.dataSource.data.unshift({
-      id: employees.length + 1,
-      Name: row_obj.Name,
-      Position: row_obj.Position,
-      Email: row_obj.Email,
-      Mobile: row_obj.Mobile,
-      DateOfJoining:  row_obj.DateOfJoining,
-      Salary: row_obj.Salary,
-      Projects: row_obj.Projects,
-      imagePath: row_obj.imagePath,
+      id: workers.length + 1,
+      trabajador: row_obj.trabajador,
+      area: row_obj.area,
+      ritmoCardiaco: row_obj.ritmoCardiaco,
+      temperatura: row_obj.temperatura,
+      bateria: row_obj.bateria,
+      estado: row_obj.estado,
     });
     this.dialog.open(AppAddKichenSinkComponent);
     this.table.renderRows();
   }
 
   // tslint:disable-next-line - Disables all
-  updateRowData(row_obj: Employee): boolean | any {
+  updateRowData(row_obj: Worker): boolean | any {
     this.dataSource.data = this.dataSource.data.filter((value: any) => {
       if (value.id === row_obj.id) {
-        value.Name = row_obj.Name;
-        value.Position = row_obj.Position;
-        value.Email = row_obj.Email;
-        value.Mobile = row_obj.Mobile;
-        value.DateOfJoining = row_obj.DateOfJoining;
-        value.Salary = row_obj.Salary;
-        value.Projects = row_obj.Projects;
-        value.imagePath = row_obj.imagePath;
+        value.trabajador = row_obj.trabajador;
+        value.area = row_obj.area;
+        value.ritmoCardiaco = row_obj.ritmoCardiaco;
+        value.temperatura = row_obj.temperatura;
+        value.bateria = row_obj.bateria;
+        value.estado = row_obj.estado;
       }
       return true;
     });
   }
 
   // tslint:disable-next-line - Disables all
-  deleteRowData(row_obj: Employee): boolean | any {
+  deleteRowData(row_obj: Worker): boolean | any {
     this.dataSource.data = this.dataSource.data.filter((value: any) => {
       return value.id !== row_obj.id;
     });
@@ -260,19 +226,10 @@ export class AppActiveWorkersDialogContentComponent {
     public datePipe: DatePipe,
     public dialogRef: MatDialogRef<AppActiveWorkersDialogContentComponent>,
     // @Optional() is used to prevent error if no data is passed
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Employee
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Worker
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
-    // if (this.local_data.DateOfJoining !== undefined) {
-    //   this.joiningDate = this.datePipe.transform(
-    //     new Date(this.local_data.DateOfJoining),
-    //     'yyyy-MM-dd'
-    //   );
-    // }
-    if (this.local_data.imagePath === undefined) {
-      this.local_data.imagePath = 'assets/images/profile/user-1.jpg';
-    }
   }
 
   doAction(): void {

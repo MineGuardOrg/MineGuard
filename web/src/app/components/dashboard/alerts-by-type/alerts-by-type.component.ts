@@ -80,10 +80,8 @@ export class AppAlertsByTypeComponent {
         bar: {
           horizontal: false,
           barHeight: '60%',
-          columnWidth: '35%',
-          borderRadius: [6],
-          borderRadiusApplication: 'end',
-          borderRadiusWhenStacked: 'all',
+          columnWidth: '25%',
+          borderRadius: 0,
         },
       },
       dataLabels: {
