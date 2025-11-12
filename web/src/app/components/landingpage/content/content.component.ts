@@ -1,16 +1,15 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
-import { CommonModule } from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { CoreService } from 'src/app/services/core.service';
-import { ViewportScroller } from '@angular/common';
 import { AppDialogOverviewComponent } from '../../../pages/template/ui-components/dialog/dialog.component';
 import { FormsModule } from '@angular/forms';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
-interface systemComponents {
+interface SystemComponent {
   id: number;
   name: string;
   description: string;
@@ -18,7 +17,7 @@ interface systemComponents {
   features: string[];
 }
 
-interface keyFeatures {
+interface KeyFeature {
   id: number;
   icon: string;
   color: string;
@@ -26,19 +25,25 @@ interface keyFeatures {
   description: string;
 }
 
-interface teamMembers {
+interface TeamMember {
   id: number;
   name: string;
   role: string;
   avatar: string;
 }
 
-interface metrics {
+interface Metric {
   id: number;
   icon: string;
   color: string;
   value: string;
   label: string;
+}
+
+interface BenefitsSection {
+  TITLE: string;
+  TITLE_HIGHLIGHT: string;
+  ITEMS: KeyFeature[];
 }
 
 @Component({
@@ -48,7 +53,7 @@ interface metrics {
   templateUrl: './content.component.html',
   styleUrls: ['./content.component.scss']
 })
-export class AppContentComponent {
+export class AppContentComponent implements OnInit {
   @Input() showToggle = true;
   @Output() toggleMobileNav = new EventEmitter<void>();
   @Output() toggleMobileFilterNav = new EventEmitter<void>();
@@ -56,17 +61,49 @@ export class AppContentComponent {
 
   options = this.settings.getOptions();
 
+  systemComponents: SystemComponent[] = [];
+  keyFeatures: KeyFeature[] = [];
+  teamMembers: TeamMember[] = [];
+  metrics: Metric[] = [];
+  technologies: string[] = [];
+  benefits: BenefitsSection = { TITLE: '', TITLE_HIGHLIGHT: '', ITEMS: [] };
+
+  currentLang: string = 'es'; // idioma por defecto
+
   constructor(
     private settings: CoreService,
     private scroller: ViewportScroller,
     public dialog: MatDialog,
     private translate: TranslateService
-  ) {}
+  ) {
+    this.translate.setDefaultLang('es');
 
-  openDialog(
-    enterAnimationDuration: string,
-    exitAnimationDuration: string
-  ): void {
+    // Cargar idioma guardado en localStorage (si existe)
+    const savedLang = localStorage.getItem('lang');
+    if (savedLang) {
+      this.currentLang = savedLang;
+      this.translate.use(this.currentLang);
+    }
+  }
+
+  ngOnInit(): void {
+    this.loadTranslations(this.currentLang);
+
+    // Escucha cambios de idioma
+    this.translate.onLangChange.subscribe(event => {
+      this.currentLang = event.lang;
+      localStorage.setItem('lang', this.currentLang); // Guardar idioma
+      this.loadTranslations(this.currentLang);
+    });
+  }
+
+  switchLanguage(): void {
+    this.currentLang = this.currentLang === 'es' ? 'en' : 'es';
+    this.translate.use(this.currentLang);
+    localStorage.setItem('lang', this.currentLang); // Guardar idioma
+  }
+
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
     const dialogRef = this.dialog.open(AppDialogOverviewComponent, {
       width: '400px',
       maxWidth: '90vw',
@@ -76,198 +113,41 @@ export class AppContentComponent {
     });
 
     document.body.style.overflow = 'hidden';
-
     dialogRef.afterClosed().subscribe(() => {
       document.body.style.overflow = '';
     });
   }
 
-  // Componentes del Sistema Minero Seguro
-  systemComponents: systemComponents[] = [
-    {
-      id: 1,
-      name: 'Casco Inteligente',
-      description: 'Dispositivo wearable con sensores biométricos y ambientales integrados para monitoreo continuo',
-      icon: 'mdi:hard-hat',
-      features: [
-        'Monitoreo de ritmo cardíaco en tiempo real',
-        'Detección de temperatura corporal',
-        'Sensor de caídas e impactos',
-        'Detección de gases tóxicos (CO, CH4, H2S)',
-        'Transmisión Bluetooth 5.0'
-      ]
-    },
-    {
-      id: 2,
-      name: 'Aplicación Móvil',
-      description: 'Interfaz intuitiva para capataces y jefes de cuadrilla con control total del equipo',
-      icon: 'mdi:cellphone',
-      features: [
-        'Visualización de datos en tiempo real',
-        'Sistema de alertas inmediatas',
-        'Almacenamiento local de registros',
-        'Sincronización automática con plataforma web',
-        'Modo offline para zonas sin cobertura'
-      ]
-    },
-    {
-      id: 3,
-      name: 'Plataforma Web',
-      description: 'Sistema centralizado de monitoreo y análisis para supervisores y gerencia',
-      icon: 'mdi:monitor-dashboard',
-      features: [
-        'Dashboard interactivo en tiempo real',
-        'Análisis predictivo con Machine Learning',
-        'Reportes históricos personalizables',
-        'Gestión de múltiples usuarios y permisos',
-        'Exportación de datos y métricas'
-      ]
-    }
-  ];
+  /**
+   * Carga los datos del idioma actual desde assets/i18n/[lang].json
+   */
+  loadTranslations(lang: string): void {
+    this.translate.get([
+      'SYSTEM_COMPONENTS',
+      'KEY_FEATURES',
+      'TEAM_MEMBERS',
+      'METRICS',
+      'BENEFITS',
+      'TECHNOLOGIES'
+    ]).subscribe(translations => {
+      this.systemComponents = translations['SYSTEM_COMPONENTS'];
+      this.keyFeatures = translations['KEY_FEATURES'];
+      this.teamMembers = translations['TEAM_MEMBERS'];
+      this.metrics = translations['METRICS'];
+      this.benefits = translations['BENEFITS'];
+      this.technologies = translations['TECHNOLOGIES'];
+    });
+  }
 
-  // Características Clave del Sistema
-  keyFeatures: keyFeatures[] = [
-    {
-      id: 1,
-      color: 'primary',
-      icon: 'mdi:heart-pulse',
-      title: 'Monitoreo Biométrico',
-      description: 'Seguimiento continuo y preciso de signos vitales de los mineros en tiempo real'
-    },
-    {
-      id: 2,
-      color: 'accent',
-      icon: 'mdi:gas-cylinder',
-      title: 'Detección de Gases',
-      description: 'Alerta inmediata ante presencia de gases tóxicos con precisión certificada'
-    },
-    {
-      id: 3,
-      color: 'warn',
-      icon: 'mdi:alert-octagon',
-      title: 'Alertas Instantáneas',
-      description: 'Notificaciones en tiempo real ante cualquier emergencia detectada'
-    },
-    {
-      id: 4,
-      color: 'primary',
-      icon: 'mdi:chart-box',
-      title: 'Análisis Predictivo',
-      description: 'Machine Learning para identificación temprana de patrones de riesgo'
-    }
-  ];
+  trackByValue(index: number, item: any): any {
+    return item.id || index;
+  }
 
-  // Miembros del Equipo
-  teamMembers: teamMembers[] = [
-    {
-      id: 1,
-      name: 'Vanessa Balderas Martínez',
-      role: 'Líder de Proyecto',
-      avatar: '/assets/images/team/vanessa.jpg'
-    },
-    {
-      id: 2,
-      name: 'Juan Antonio Avalos García',
-      role: 'Desarrollador Hardware',
-      avatar: '/assets/images/team/juan.jpg'
-    },
-    {
-      id: 3,
-      name: 'Angel Alejandro Chávez Castillón',
-      role: 'Desarrollador Software',
-      avatar: '/assets/images/team/angel.jpg'
-    },
-    {
-      id: 4,
-      name: 'Isaac De Guerreroosio Arenas',
-      role: 'Especialista en Sensores',
-      avatar: '/assets/images/team/isaac.jpg'
-    },
-    {
-      id: 5,
-      name: 'Alexander Parra Espinosa',
-      role: 'Arquitecto de Sistema',
-      avatar: '/assets/images/team/alexander.jpg'
-    }
-  ];
+  trackByName(index: number, item: any): any {
+    return item.name;
+  }
 
-  // Métricas del Sistema
-  metrics: metrics[] = [
-    {
-      id: 1,
-      color: 'primary',
-      icon: 'mdi:speedometer',
-      value: '< 3s',
-      label: 'Tiempo de Respuesta'
-    },
-    {
-      id: 2,
-      color: 'accent',
-      icon: 'mdi:shield-check',
-      value: '99%',
-      label: 'Disponibilidad del Sistema'
-    },
-    {
-      id: 3,
-      color: 'success',
-      icon: 'mdi:account-group',
-      value: '50+',
-      label: 'Usuarios Simultáneos'
-    },
-    {
-      id: 4,
-      color: 'warning',
-      icon: 'mdi:battery-high',
-      value: '12h',
-      label: 'Autonomía del Casco'
-    }
-  ];
-
-  // Tecnologías Utilizadas
-  technologies: string[] = [
-    'Sensores Biométricos',
-    'Bluetooth 5.0',
-    'Machine Learning',
-    'Angular Framework',
-    'Android SDK',
-    'Cloud Computing',
-    'Cifrado AES-256',
-    'APIs RESTful',
-    'WebSockets',
-    'PostgreSQL',
-    'Redis Cache',
-    'Docker'
-  ];
-
-  // Beneficios del Sistema
-  benefits: keyFeatures[] = [
-    {
-      id: 1,
-      color: 'primary',
-      icon: 'mdi:shield-account',
-      title: 'Reducción de Accidentes',
-      description: 'Prevención proactiva de riesgos laborales con alertas tempranas y monitoreo continuo'
-    },
-    {
-      id: 2,
-      color: 'accent',
-      icon: 'mdi:hospital-box',
-      title: 'Respuesta Rápida',
-      description: 'Actuación inmediata ante emergencias con geolocalización precisa del personal'
-    },
-    {
-      id: 3,
-      color: 'warn',
-      icon: 'mdi:chart-line',
-      title: 'Análisis de Datos',
-      description: 'Toma de decisiones inteligentes basada en información histórica y en tiempo real'
-    },
-    {
-      id: 4,
-      color: 'primary',
-      icon: 'mdi:file-document-multiple',
-      title: 'Cumplimiento Normativo',
-      description: 'Adecuación total a NOM-032-STPS y regulaciones internacionales de seguridad minera'
-    }
-  ];
+  trackByFeature(index: number, item: any): any {
+    return item;
+  }
 }

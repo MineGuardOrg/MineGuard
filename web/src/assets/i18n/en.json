@@ -237,15 +237,99 @@
         "button": "Request Training"
       }
     },
-    "footer": {
-      "title": "About",
-      "option1": "Who are we?",
-      "option2": "System",
-      "option3": "Training",
-      "option4": "Contact",
-      "option5": "Help and assistance",
-      "option6": "Security Policy"
+   
+  "FOOTER": {
+    "BRAND": {
+      "NAME_LINE1": "MineGuard",
+      "NAME_LINE2": "MINING",
+      "TAGLINE": "Sistema de Monitoreo en Tiempo Real"
     },
+    "CONTACT": {
+      "LOCATION": "Universidad Tecnológica de Tijuana",
+      "EMAIL": "MineGuard@gmail.com",
+      "PHONE": "+52 55 1234 5678"
+    },
+    "COPYRIGHT": "© 2025 Monitoreo Integral de Minería Segura",
+    "SYSTEM": {
+      "TITLE": "System",
+      "LINKS": [
+        {
+          "route": "/casco-inteligente",
+          "label": "Smart Helmet"
+        },
+        {
+          "route": "/aplicacion-movil",
+          "label": "Mobile Application"
+        },
+        {
+          "route": "/plataforma-web",
+          "label": "Web Platform"
+        },
+        {
+          "route": "/sensores",
+          "label": "Sensors and Technology"
+        },
+        {
+          "route": "/demo",
+          "label": "Request Demo"
+        }
+      ]
+    },
+    "DOCUMENTATION": {
+      "TITLE": "Documentation",
+      "LINKS": [
+        {
+          "route": "/srs",
+          "label": "Requirements Specification"
+        },
+        {
+          "route": "/manual-usuario",
+          "label": "User Manual"
+        },
+        {
+          "route": "/normativas",
+          "label": "Regulatory Compliance"
+        },
+        {
+          "route": "/privacidad",
+          "label": "Privacy Policy"
+        },
+        {
+          "route": "/terminos",
+          "label": "Terms of Service"
+        }
+      ]
+    },
+    "SOCIAL": {
+      "TITLE": "Follow Us",
+      "LINKS": [
+        {
+          "url": "#",
+          "icon": "mdi:linkedin",
+          "label": "LinkedIn"
+        },
+        {
+          "url": "#",
+          "icon": "mdi:twitter",
+          "label": "Twitter"
+        },
+        {
+          "url": "#",
+          "icon": "mdi:youtube",
+          "label": "YouTube"
+        },
+        {
+          "url": "#",
+          "icon": "mdi:github",
+          "label": "GitHub"
+        }
+      ]
+    },
+    "ADDITIONAL_INFO": {
+      "DEVELOPED_BY": "System developed by the Comprehensive Safe Mining Monitoring team",
+      "CERTIFICATION": "NOM-023-STPS-2012 Certified | Mining safety compliance"
+    }
+  },
       "HEADER": {
     "HOME": "Home",
     "DASHBOARD": "Dashboard",
@@ -309,17 +393,7 @@
     "TITLE_HIGHLIGHT": "Vanguard",
     "DESCRIPTION": "Technological innovation specifically designed for high-risk mining environments with the highest safety standards"
   },
-  "BENEFITS": {
-    "TITLE": "Transform the",
-    "TITLE_HIGHLIGHT": "Operational Safety",
-    "DESCRIPTION": "Reduce accidents by up to 60% with our intelligent monitoring system. Guaranteed regulatory compliance.",
-    "PROACTIVE": "Proactive Prevention",
-    "PROACTIVE_DESC": "Predictive AI system that identifies risks before they occur",
-    "RESPONSE": "Immediate Response",
-    "RESPONSE_DESC": "Alerts in less than 3 seconds with precise geolocation",
-    "COMPLIANCE": "Total Compliance",
-    "COMPLIANCE_DESC": "Compliance with NOM-032-STPS and international regulations"
-  },
+
   "TEAM": {
     "TITLE": "Experts in",
     "TITLE_HIGHLIGHT": "Industrial Safety",
@@ -334,12 +408,6 @@
     "TITLE": "Ready to Transform Your Operation's Safety?",
     "SUBTITLE": "Join over 100 mining companies that trust our system to protect their workers' lives",
     "FOOTER": "No commitment • 24h response • Dedicated support"
-  },
-  "METRICS": {
-    "COMPANIES": "Companies",
-    "SAVED_LIVES": "Lives Saved",
-    "SYSTEMS": "Active Systems",
-    "COUNTRIES": "Countries"
   },
   "COMPONENT_ITEMS": {
     "HARDWARE": "Intelligent Hardware",
@@ -407,5 +475,91 @@
     "JEST": "Jest Testing",
     "CYPRESS": "Cypress E2E",
     "GITLAB": "GitLab CI/CD"
-  }
+  },
+ 
+  "SYSTEM_COMPONENTS": [
+    {
+      "id": 1,
+      "name": "Smart Helmet",
+      "description": "Wearable device with integrated biometric and environmental sensors for continuous monitoring",
+      "icon": "mdi:hard-hat",
+      "features": [
+        "Real-time heart rate monitoring",
+        "Body temperature detection",
+        "Fall and impact sensor",
+        "Toxic gas detection (CO, CH4, H2S)",
+        "Bluetooth 5.0 transmission"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Mobile Application",
+      "description": "Intuitive interface for foremen and supervisors with full equipment control",
+      "icon": "mdi:cellphone",
+      "features": [
+        "Real-time data visualization",
+        "Instant alert system",
+        "Local record storage",
+        "Automatic synchronization with web platform",
+        "Offline mode for no-coverage zones"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Web Platform",
+      "description": "Centralized monitoring and analytics system for supervisors and management",
+      "icon": "mdi:monitor-dashboard",
+      "features": [
+        "Real-time interactive dashboard",
+        "Predictive analytics with Machine Learning",
+        "Customizable historical reports",
+        "Multi-user and permissions management",
+        "Data export and metrics"
+      ]
+    }
+  ],
+  "KEY_FEATURES": [
+    { "id": 1, "color": "primary", "icon": "mdi:heart-pulse", "title": "Biometric Monitoring", "description": "Continuous and precise tracking of miners’ vital signs in real time" },
+    { "id": 2, "color": "accent", "icon": "mdi:gas-cylinder", "title": "Gas Detection", "description": "Immediate alert when toxic gases are detected with certified accuracy" },
+    { "id": 3, "color": "warn", "icon": "mdi:alert-octagon", "title": "Instant Alerts", "description": "Real-time notifications for any detected emergency" },
+    { "id": 4, "color": "primary", "icon": "mdi:chart-box", "title": "Predictive Analytics", "description": "Machine Learning for early identification of risk patterns" }
+  ],
+  "TEAM_MEMBERS": [
+    { "id": 1, "name": "Vanessa Balderas Martínez", "role": "Project Leader", "avatar": "/assets/images/team/vanessa.jpg" },
+    { "id": 2, "name": "Juan Antonio Avalos García", "role": "Hardware Developer", "avatar": "/assets/images/team/juan.jpg" },
+    { "id": 3, "name": "Angel Alejandro Chávez Castillón", "role": "Software Developer", "avatar": "/assets/images/team/angel.jpg" },
+    { "id": 4, "name": "Isaac De Guerreroosio Arenas", "role": "Sensor Specialist", "avatar": "/assets/images/team/isaac.jpg" },
+    { "id": 5, "name": "Alexander Parra Espinosa", "role": "System Architect", "avatar": "/assets/images/team/alexander.jpg" }
+  ],
+  "METRICS": [
+    { "id": 1, "color": "primary", "icon": "mdi:speedometer", "value": "< 3s", "label": "Response Time" },
+    { "id": 2, "color": "accent", "icon": "mdi:shield-check", "value": "99%", "label": "System Availability" },
+    { "id": 3, "color": "success", "icon": "mdi:account-group", "value": "50+", "label": "Concurrent Users" },
+    { "id": 4, "color": "warning", "icon": "mdi:battery-high", "value": "12h", "label": "Helmet Battery Life" }
+  ],
+  "BENEFITS": {
+  "TITLE": "System Benefits",
+  "TITLE_HIGHLIGHT": "Mining Safe",
+  "ITEMS": [
+    { "id": 1, "color": "primary", "icon": "mdi:shield-account", "title": "Accident Reduction", "description": "Proactive prevention of workplace risks with early alerts and continuous monitoring" },
+    { "id": 2, "color": "accent", "icon": "mdi:hospital-box", "title": "Quick Response", "description": "Immediate action in emergencies with precise staff geolocation" },
+    { "id": 3, "color": "warn", "icon": "mdi:chart-line", "title": "Data Analysis", "description": "Smart decision-making based on historical and real-time information" },
+    { "id": 4, "color": "primary", "icon": "mdi:file-document-multiple", "title": "Regulatory Compliance", "description": "Full compliance with NOM-032-STPS and international mining safety regulations" }
+  ]
+},
+
+  "TECHNOLOGIES": [
+    "Biometric Sensors",
+    "Bluetooth 5.0",
+    "Machine Learning",
+    "Angular Framework",
+    "Android SDK",
+    "Cloud Computing",
+    "AES-256 Encryption",
+    "RESTful APIs",
+    "WebSockets",
+    "PostgreSQL",
+    "Redis Cache",
+    "Docker"
+  ]
 }
