@@ -1,5 +1,5 @@
 # Modelos del módulo Auth (Entidades + Esquemas)
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, field_validator
 from datetime import datetime
 from typing import Optional
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, TIMESTAMP
@@ -56,21 +56,78 @@ class UserCreateSchema(BaseModel):
     employee_number: str
     first_name: str
     last_name: str
-    email: str
+    email: EmailStr  # Valida formato de email
     password: str
     role_id: int
     area_id: Optional[int] = None
     position_id: Optional[int] = None
     supervisor_id: Optional[int] = None
 
+    @field_validator('employee_number')
+    @classmethod
+    def validate_employee_number(cls, v):
+        """Valida que el número de empleado no esté vacío"""
+        if not v or not v.strip():
+            raise ValueError('Employee number cannot be empty')
+        return v.strip()
+
+    @field_validator('first_name', 'last_name')
+    @classmethod
+    def validate_names(cls, v):
+        """Valida que los nombres no estén vacíos"""
+        if not v or not v.strip():
+            raise ValueError('Name cannot be empty')
+        return v.strip()
+
+    @field_validator('password')
+    @classmethod
+    def validate_password(cls, v):
+        """Valida que la contraseña tenga longitud mínima"""
+        if not v or len(v) < 8:
+            raise ValueError('Password must be at least 8 characters')
+        return v
+
 class UserRegisterSchema(BaseModel):
     """Schema para registro público - solo campos básicos"""
     employee_number: str
     first_name: str
     last_name: str
-    email: str
+    email: EmailStr  # Valida formato de email automáticamente
     password: str
     role_id: Optional[int] = None  # Opcional, por defecto será User (id=2)
+
+    @field_validator('employee_number')
+    @classmethod
+    def validate_employee_number(cls, v):
+        """Valida que el número de empleado no esté vacío"""
+        if not v or not v.strip():
+            raise ValueError('Employee number cannot be empty')
+        if len(v.strip()) < 3:
+            raise ValueError('Employee number must be at least 3 characters')
+        return v.strip()
+
+    @field_validator('first_name', 'last_name')
+    @classmethod
+    def validate_names(cls, v):
+        """Valida que los nombres no estén vacíos"""
+        if not v or not v.strip():
+            raise ValueError('Name cannot be empty')
+        if len(v.strip()) < 2:
+            raise ValueError('Name must be at least 2 characters')
+        return v.strip()
+
+    @field_validator('password')
+    @classmethod
+    def validate_password(cls, v):
+        """Valida que la contraseña tenga longitud mínima"""
+        if not v or len(v) < 8:
+            raise ValueError('Password must be at least 8 characters')
+        # Opcional: agregar más validaciones de complejidad
+        # if not any(c.isupper() for c in v):
+        #     raise ValueError('Password must contain at least one uppercase letter')
+        # if not any(c.isdigit() for c in v):
+        #     raise ValueError('Password must contain at least one digit')
+        return v
 
 class UserSchema(BaseModel):
     """Schema para respuesta de usuario (sin password)"""
