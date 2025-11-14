@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+.git/
+.gitignore
+.metadata/
+pytest_cache/
+migrations/
+*.db
+*.sqlite3
