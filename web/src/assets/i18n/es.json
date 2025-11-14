@@ -404,7 +404,8 @@
     "DESCRIPTION": "Infraestructura robusta construida con las mejores herramientas del mercado para garantizar escalabilidad y confiabilidad 24/7"
   },
   "CTA": {
-    "TITLE": "¿Listo para Transformar la Seguridad de su Operación?",
+    "TITLE_1": "¿Listo para Transformar la ",
+    "TITLE_2": "Seguridad de su Operación?",
     "SUBTITLE": "Únase a más de 100 empresas mineras que confían en nuestro sistema para proteger la vida de sus trabajadores",
     "FOOTER": "Sin compromiso • Respuesta 24h • Soporte dedicado"
   },

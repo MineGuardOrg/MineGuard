@@ -1,101 +1,204 @@
-<!-- ------------------------------------------------------------------
-    footer
-    ------------------------------------------------------------------ -->
-<footer class="p-b-30 bg-dark">
+<!-- ==================================================================
+     FOOTER MEJORADO - SISTEMA DE GESTIÓN MINERA
+     ================================================================== -->
+<footer class="mining-footer p-b-30">
+
+  <!-- Línea superior animada -->
+  <div class="mining-line-top"></div>
+
   <div class="container">
     <div class="row text-center text-md-start">
-      <!-- Columna: logo e información de contacto -->
+
+      <!-- ============================================================
+           COLUMNA 1: BRANDING Y CONTACTO
+           ============================================================ -->
       <div class="col-12 col-md-4 d-flex flex-column align-items-center justify-content-center m-t-24">
-        <div class="branding d-flex align-items-center justify-content-center gap-3">
-          <!-- SVG del Casco -->
-          <svg viewBox="0 0 500 500" style="width: 3.5rem; height: 3.5rem; margin-right: 12px;" xmlns="http://www.w3.org/2000/svg">
-            <style type="text/css">
-              .st6{fill:none;stroke:#FFA500;stroke-width:35;stroke-linecap:round;stroke-linejoin:round;}
-              .st7{fill:none;stroke:#FFA500;stroke-width:25;opacity:0.8;stroke-linecap:round;}
-              .st8{fill:none;stroke:#FFA500;stroke-width:25;opacity:0.6;stroke-linecap:round;}
-            </style>
-            <g id="helmet">
-              <path class="st6" d="M65.76,338.47v-74.52c0,0,5.4-69.9,58.27-105.24l5.78-19.27c0,0,8.81-8.35,26.18-14.46l10.03,4.82l11.85-4.82 l6.42-13.81c0,0,17.03-7.71,38.87-7.71l5.46,7.71c0,0,20.88-2.25,40.8-0.64l6.75-7.07c0,0,17.67,0,36.94,7.71 c0,0,3.21,8.35,4.5,11.24l17.35,8.03l8.03-4.82c0,0,15.74,5.78,25.7,16.38l8.35,16.7c0,0,47.54,29.55,53.97,106.65l3.21,73.24l0,0 c9.7,0,17.56,7.86,17.56,17.56v33.95c0,3.85-3.36,6.84-7.18,6.39C407.7,392.11,234.2,374,55.45,396.45 c-3.84,0.48-7.23-2.51-7.23-6.38v-34.13C48.19,346.27,56.07,338.43,65.76,338.47L65.76,338.47z"></path>
-              <g>
-                <path class="st7" d="M317.6,122.41l7.34,3.4c0,0,10.71,84.94-3.67,210.86C321.27,336.67,329.16,242.23,317.6,122.41z"></path>
-                <path class="st8" d="M177.87,124.98l-7.12,2.89c0,0,1.03,104.29,15.97,208.8C186.71,336.67,174.76,216.53,177.87,124.98z"></path>
-                <path class="st7" d="M377.03,158.71l5.59,4.17c0,0,6.51,87.11-11.05,173.79C371.57,336.67,383.77,247.59,377.03,158.71z"></path>
-                <path class="st8" d="M123.97,158.71l-5.59,4.17c0,0-6.51,87.11,11.05,173.79C129.43,336.67,117.22,247.59,123.97,158.71z"></path>
+
+        <!-- Logo y nombre -->
+        <div class="mining-branding d-flex align-items-center justify-content-center gap-3">
+
+          <!-- SVG del Casco con efectos -->
+          <div class="helmet-container">
+            <svg viewBox="0 0 500 500" class="helmet-svg" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+
+              <style>
+                .st6 { fill:none; stroke:#FDB71A; stroke-width:35; stroke-linecap:round; stroke-linejoin:round; filter:url(#glow); }
+                .st7 { fill:none; stroke:#FFD54F; stroke-width:25; opacity:0.8; stroke-linecap:round; }
+                .st8 { fill:none; stroke:#E69F00; stroke-width:25; opacity:0.6; stroke-linecap:round; }
+              </style>
+
+              <g id="helmet">
+                <path class="st6"
+                  d="M65.76,338.47v-74.52c0,0,5.4-69.9,58.27-105.24l5.78-19.27c0,0,8.81-8.35,26.18-14.46l10.03,4.82l11.85-4.82
+                  l6.42-13.81c0,0,17.03-7.71,38.87-7.71l5.46,7.71c0,0,20.88-2.25,40.8-0.64l6.75-7.07c0,0,17.67,0,36.94,7.71
+                  c0,0,3.21,8.35,4.5,11.24l17.35,8.03l8.03-4.82c0,0,15.74,5.78,25.7,16.38l8.35,16.7c0,0,47.54,29.55,53.97,106.65l3.21,73.24l0,0
+                  c9.7,0,17.56,7.86,17.56,17.56v33.95c0,3.85-3.36,6.84-7.18,6.39C407.7,392.11,234.2,374,55.45,396.45
+                  c-3.84,0.48-7.23-2.51-7.23-6.38v-34.13C48.19,346.27,56.07,338.43,65.76,338.47z" />
+
+                <!-- Líneas decorativas del casco -->
+                <g class="helmet-lines">
+                  <path class="st7" d="M317.6,122.41l7.34,3.4c0,0,10.71,84.94-3.67,210.86C321.27,336.67,329.16,242.23,317.6,122.41z" />
+                  <path class="st8" d="M177.87,124.98l-7.12,2.89c0,0,1.03,104.29,15.97,208.8C186.71,336.67,174.76,216.53,177.87,124.98z" />
+                  <path class="st7" d="M377.03,158.71l5.59,4.17c0,0,6.51,87.11-11.05,173.79C371.57,336.67,383.77,247.59,377.03,158.71z" />
+                  <path class="st8" d="M123.97,158.71l-5.59,4.17c0,0-6.51,87.11,11.05,173.79C129.43,336.67,117.22,247.59,123.97,158.71z" />
+                </g>
               </g>
-            </g>
-          </svg>
-          
+            </svg>
+
+            <!-- Partículas -->
+            <div class="helmet-particles">
+              <span class="particle"></span>
+              <span class="particle"></span>
+              <span class="particle"></span>
+              <span class="particle"></span>
+            </div>
+          </div>
+
+          <!-- Nombre -->
           <div class="text-light">
-            <div class="f-s-24 f-w-700 m-b-0" style="line-height: 1.1;">{{ 'FOOTER.BRAND.NAME_LINE1' | translate }}</div>
+            <div class="brand-name f-s-24 f-w-700 m-b-0">
+              {{ 'FOOTER.BRAND.NAME_LINE1' | translate }}
+            </div>
           </div>
         </div>
-        <div class="f-s-14 m-t-16 text-light text-center">
-          <p class="m-b-8">{{ 'FOOTER.BRAND.TAGLINE' | translate }}</p>
-          <p class="m-b-4">📍 {{ 'FOOTER.CONTACT.LOCATION' | translate }}</p>
-          <p class="m-b-4">📧 {{ 'FOOTER.CONTACT.EMAIL' | translate }}</p>
-          <p>📞 {{ 'FOOTER.CONTACT.PHONE' | translate }}</p>
+
+        <!-- Información de contacto -->
+        <div class="contact-info f-s-14 m-t-16 text-light text-center">
+
+          <p class="tagline m-b-12">
+            {{ 'FOOTER.BRAND.TAGLINE' | translate }}
+          </p>
+
+          <div class="contact-item m-b-8">
+            <mat-icon class="contact-icon">location_on</mat-icon>
+            <span>{{ 'FOOTER.CONTACT.LOCATION' | translate }}</span>
+          </div>
+
+          <div class="contact-item m-b-8">
+            <mat-icon class="contact-icon">email</mat-icon>
+            <span>{{ 'FOOTER.CONTACT.EMAIL' | translate }}</span>
+          </div>
+
+          <div class="contact-item m-b-8">
+            <mat-icon class="contact-icon">phone</mat-icon>
+            <span>{{ 'FOOTER.CONTACT.PHONE' | translate }}</span>
+          </div>
+
         </div>
-        <div class="f-s-12 m-t-16 text-light opacity-75">{{ 'FOOTER.COPYRIGHT' | translate }}</div>
+
+        <!-- Copyright -->
+        <div class="copyright f-s-12 m-t-16 text-light">
+          {{ 'FOOTER.COPYRIGHT' | translate }}
+        </div>
+
       </div>
 
-      <!-- Columna: Enlaces del sistema -->
+      <!-- ============================================================
+           COLUMNA 2: ENLACES DEL SISTEMA
+           ============================================================ -->
       <div class="col-12 col-md-4 m-t-24">
-        <h6 class="m-0 f-s-18 f-w-600 m-b-16 text-light">
-          <strong>{{ 'FOOTER.SYSTEM.TITLE' | translate }}</strong>
+
+        <h6 class="footer-title m-0 f-s-18 f-w-600 m-b-16 text-light">
+          {{ 'FOOTER.SYSTEM.TITLE' | translate }}
         </h6>
 
-        <div class="f-s-14 m-t-12" *ngFor="let link of footerData?.SYSTEM?.LINKS">
-          <a [routerLink]="[link.route]" class="text-light text-decoration-none d-block m-b-8">
+        <div
+          class="links-section f-s-14 m-t-12"
+          *ngFor="let link of footerData?.SYSTEM?.LINKS">
+
+          <a [routerLink]="[link.route]"
+             class="footer-link text-light text-decoration-none d-block m-b-8">
+            <span class="link-arrow"></span>
             {{ link.label }}
           </a>
+
         </div>
+
       </div>
 
-      <!-- Columna: Documentación y legal -->
+      <!-- ============================================================
+           COLUMNA 3: DOCUMENTACIÓN Y REDES SOCIALES
+           ============================================================ -->
       <div class="col-12 col-md-4 m-t-24">
-        <h6 class="m-0 f-s-18 f-w-600 m-b-16 text-light">
-          <strong>{{ 'FOOTER.DOCUMENTATION.TITLE' | translate }}</strong>
+
+        <h6 class="footer-title m-0 f-s-18 f-w-600 m-b-16 text-light">
+          {{ 'FOOTER.DOCUMENTATION.TITLE' | translate }}
         </h6>
 
-        <div class="f-s-14 m-t-12" *ngFor="let link of footerData?.DOCUMENTATION?.LINKS">
-          <a [routerLink]="[link.route]" class="text-light text-decoration-none d-block m-b-8">
+        <div
+          class="links-section f-s-14 m-t-12"
+          *ngFor="let link of footerData?.DOCUMENTATION?.LINKS">
+
+          <a [routerLink]="[link.route]"
+             class="footer-link text-light text-decoration-none d-block m-b-8">
+            <span class="link-arrow"></span>
             {{ link.label }}
           </a>
+
         </div>
 
         <!-- Redes sociales -->
-        <div class="m-t-24">
-          <h6 class="m-0 f-s-16 f-w-600 m-b-12 text-light">{{ 'FOOTER.SOCIAL.TITLE' | translate }}</h6>
-          <div class="hstack gap-16 justify-content-center justify-content-md-start">
-            <a *ngFor="let social of footerData?.SOCIAL?.LINKS" 
-               [href]="social.url" 
-               class="text-light text-decoration-none"
-               [attr.aria-label]="social.label">
+        <div class="social-section m-t-24 ">
+
+          <h6 class="footer-subtitle m-0 f-s-16 f-w-600 m-b-12 text-light">
+            {{ 'FOOTER.SOCIAL.TITLE' | translate }}
+          </h6>
+
+          <div class="social-links hstack gap-16 justify-content-center justify-content-md-start">
+
+            <a *ngFor="let social of footerData?.SOCIAL?.LINKS"
+               [href]="social.url"
+               class="social-icon text-light text-decoration-none"
+               [attr.aria-label]="social.label"
+               target="_blank"
+               rel="noopener noreferrer">
               <span class="iconify" [attr.data-icon]="social.icon" width="20"></span>
             </a>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
 
-    <!-- Línea divisoria -->
+    <!-- ============================================================
+         LÍNEA DIVISORIA ANIMADA
+         ============================================================ -->
     <div class="row m-t-30">
       <div class="col-12">
-        <hr class="border-light opacity-25">
+        <div class="mining-divider"></div>
       </div>
     </div>
 
-    <!-- Información adicional -->
+    <!-- ============================================================
+         INFORMACIÓN ADICIONAL
+         ============================================================ -->
     <div class="row text-center m-t-20">
       <div class="col-12">
-        <p class="f-s-12 text-light opacity-75 m-b-8">
+        <p class="developed-by f-s-12 text-light m-b-8">
           {{ 'FOOTER.ADDITIONAL_INFO.DEVELOPED_BY' | translate }}
         </p>
-        <p class="f-s-10 text-light opacity-50">
+        <p class="certification f-s-10 text-light">
           {{ 'FOOTER.ADDITIONAL_INFO.CERTIFICATION' | translate }}
         </p>
       </div>
     </div>
+
   </div>
+
+  <!-- Efecto de brillo inferior -->
+  <div class="mining-glow-bottom"></div>
+
 </footer>
 <!-- end footer -->
