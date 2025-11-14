@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 from fastapi import HTTPException, status
 import logging
 
+from app.shared.exceptions import ValidationError, DuplicateError, AuthenticationError
+
 # TypeVars para generics
 T = TypeVar('T')  # Para el modelo/entidad
 CreateSchemaType = TypeVar('CreateSchemaType')
@@ -92,6 +94,24 @@ class BaseService(Generic[T, CreateSchemaType, UpdateSchemaType, ResponseSchemaT
             
         except HTTPException:
             raise
+        except (ValidationError, DuplicateError, AuthenticationError) as e:
+            # Manejar excepciones personalizadas con códigos apropiados
+            logger.error(f"❌ Error al crear {self.model_name}: {str(e)}")
+            if isinstance(e, DuplicateError):
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail=str(e)
+                )
+            elif isinstance(e, ValidationError):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=str(e)
+                )
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail=str(e)
+                )
         except Exception as e:
             logger.error(f"❌ Error al crear {self.model_name}: {str(e)}")
             raise HTTPException(
