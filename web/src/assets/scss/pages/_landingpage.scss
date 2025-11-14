@@ -1,3 +1,14 @@
+
+// ==================================================================
+// VARIABLES DE COLOR
+// ==================================================================
+$accent: #FDB71A;
+$accent-dark: #E69F00;
+$accent-light: #FFD54F;
+$orange: #FF6B35;
+
+
+
 .demos-dd {
   max-width: 1200px !important;
 }
@@ -34,8 +45,16 @@
 
 .topbar-xl {
   height: 80px;
-  z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999; // Para que quede sobre todo
+  background: #fff; // Opcional si quieres que no sea transparente al hacer scroll
 }
+
+
+
 
 html.cdk-global-scrollblock {
   top: unset !important;
@@ -223,5 +242,337 @@ html.cdk-global-scrollblock {
   }
   .bg-size-cover {
     background-size: cover;
+  }
+}
+
+
+
+// ==================================================================
+// BRANDING HEADER
+// ==================================================================
+.branding {
+  position: relative;
+  z-index: 100;
+  
+  .header-brand-link {
+    gap: 12px;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+    
+    &:hover {
+      transform: scale(1.05);
+      
+      .helmet-header-container {
+        animation: header-helmet-bounce 0.6s ease-in-out;
+      }
+      
+      .helmet-header-svg {
+        filter: drop-shadow(0 6px 20px rgba($accent, 0.6));
+        
+        .helmet-main {
+          animation: helmet-pulse-header 0.8s ease-in-out;
+        }
+        
+        .helmet-lines-header path {
+          animation: lines-flash 1s ease-in-out;
+        }
+      }
+      
+      .helmet-energy-particles .energy-particle {
+        animation: particle-orbit 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+      }
+      
+      .helmet-glow-ring {
+        animation: glow-ring-expand 1s ease-out forwards;
+      }
+      
+      .brand-name-header {
+        color: $accent;
+        text-shadow: 0 0 20px rgba($accent, 0.6);
+        letter-spacing: 1px;
+      }
+    }
+  }
+}
+
+
+// ==================================================================
+// CONTENEDOR DEL CASCO
+// ==================================================================
+.helmet-header-container {
+  position: relative;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.helmet-header-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 4px 12px rgba($accent, 0.4));
+  transition: all 0.4s ease;
+  animation: helmet-float-header 3s ease-in-out infinite;
+  position: relative;
+  z-index: 2;
+  
+  .helmet-main {
+    transition: all 0.3s ease;
+  }
+  
+  .helmet-lines-header path {
+    transition: opacity 0.3s ease;
+    
+    &.line-1 { animation-delay: 0s; }
+    &.line-2 { animation-delay: 0.2s; }
+    &.line-3 { animation-delay: 0.4s; }
+    &.line-4 { animation-delay: 0.6s; }
+  }
+}
+
+
+// ==================================================================
+// PARTÍCULAS DE ENERGÍA
+// ==================================================================
+.helmet-energy-particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  
+  .energy-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: $accent-light;
+    border-radius: 50%;
+    opacity: 0;
+    box-shadow: 0 0 8px rgba($accent, 0.8);
+    
+    &:nth-child(1) {
+      top: 0%;
+      left: 50%;
+      animation-delay: 0s;
+    }
+    &:nth-child(2) {
+      top: 25%;
+      right: 0%;
+      animation-delay: 0.3s;
+    }
+    &:nth-child(3) {
+      top: 50%;
+      right: 0%;
+      animation-delay: 0.6s;
+    }
+    &:nth-child(4) {
+      bottom: 0%;
+      left: 50%;
+      animation-delay: 0.9s;
+    }
+    &:nth-child(5) {
+      top: 50%;
+      left: 0%;
+      animation-delay: 1.2s;
+    }
+    &:nth-child(6) {
+      top: 25%;
+      left: 0%;
+      animation-delay: 1.5s;
+    }
+  }
+}
+
+
+// ==================================================================
+// ANILLO DE RESPLANDOR
+// ==================================================================
+.helmet-glow-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  height: 90%;
+  border: 2px solid rgba($accent, 0);
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 0;
+}
+
+
+// ==================================================================
+// NOMBRE DE LA MARCA
+// ==================================================================
+.brand-name-header {
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.5px;
+  color: #000;
+  transition: all 0.4s ease;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, $accent, $orange);
+    transition: width 0.4s ease;
+  }
+  
+  .header-brand-link:hover &::after {
+    width: 100%;
+  }
+}
+
+
+// ==================================================================
+// ANIMACIONES KEYFRAMES
+// ==================================================================
+
+// Flotación suave del casco
+@keyframes helmet-float-header {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-4px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(0) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-4px) rotate(-2deg);
+  }
+}
+
+// Rebote al hover
+@keyframes header-helmet-bounce {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  50% {
+    transform: scale(0.95) rotate(0deg);
+  }
+  75% {
+    transform: scale(1.05) rotate(5deg);
+  }
+}
+
+// Pulso del casco principal
+@keyframes helmet-pulse-header {
+  0%, 100% {
+    stroke-width: 35;
+    opacity: 1;
+  }
+  50% {
+    stroke-width: 38;
+    opacity: 0.9;
+  }
+}
+
+// Flash en las líneas
+@keyframes lines-flash {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 5px rgba($accent, 0.8));
+  }
+}
+
+// Órbita de partículas
+@keyframes particle-orbit {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--orbit-x), var(--orbit-y)) scale(1.5);
+  }
+}
+
+// Expansión del anillo de resplandor
+@keyframes glow-ring-expand {
+  0% {
+    width: 90%;
+    height: 90%;
+    opacity: 0;
+    border-color: rgba($accent, 0);
+  }
+  50% {
+    opacity: 1;
+    border-color: rgba($accent, 0.6);
+  }
+  100% {
+    width: 140%;
+    height: 140%;
+    opacity: 0;
+    border-color: rgba($accent, 0);
+  }
+}
+
+// Variables para órbitas de partículas
+.energy-particle {
+  &:nth-child(1) { --orbit-x: 0px; --orbit-y: -40px; }
+  &:nth-child(2) { --orbit-x: 35px; --orbit-y: -20px; }
+  &:nth-child(3) { --orbit-x: 40px; --orbit-y: 0px; }
+  &:nth-child(4) { --orbit-x: 0px; --orbit-y: 40px; }
+  &:nth-child(5) { --orbit-x: -40px; --orbit-y: 0px; }
+  &:nth-child(6) { --orbit-x: -35px; --orbit-y: -20px; }
+}
+
+
+// ==================================================================
+// RESPONSIVE
+// ==================================================================
+@media (max-width: 768px) {
+  .helmet-header-container {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  
+  .brand-name-header {
+    font-size: 1.1rem;
+  }
+}
+
+
+// ==================================================================
+// ACCESIBILIDAD
+// ==================================================================
+.header-brand-link:focus,
+.header-brand-link:focus-visible {
+  outline: 2px solid $accent;
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .helmet-header-svg,
+  .helmet-energy-particles,
+  .helmet-glow-ring,
+  .brand-name-header {
+    animation: none !important;
+    transition: none !important;
   }
 }

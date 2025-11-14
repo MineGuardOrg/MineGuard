@@ -44,6 +44,7 @@ interface FooterData {
     TranslateModule
   ],
   templateUrl: './footer.component.html',
+  styleUrls: ['./footer.component.scss']
 })
 export class AppFooterComponent implements OnInit {
   

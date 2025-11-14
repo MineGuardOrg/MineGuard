@@ -405,7 +405,8 @@
     "DESCRIPTION": "Robust infrastructure built with the best market tools to ensure 24/7 scalability and reliability"
   },
   "CTA": {
-    "TITLE": "Ready to Transform Your Operation's Safety?",
+    "TITLE_1": "Ready to Transform Your ",
+    "TITLE_2": "Operation's Safety?",
     "SUBTITLE": "Join over 100 mining companies that trust our system to protect their workers' lives",
     "FOOTER": "No commitment • 24h response • Dedicated support"
   },

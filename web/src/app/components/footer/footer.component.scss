@@ -1,0 +1,582 @@
+// ==================================================================
+// PALETA DE COLORES
+// ==================================================================
+$accent: #FDB71A;            // Amarillo dorado minero
+$accent-dark: #E69F00;       // Amarillo oscuro
+$accent-light: #FFD54F;      // Amarillo claro
+$orange: #FF6B35;            // Naranja señalización
+
+$dark-bg: #1a1a1a;
+$dark-bg-light: #2c2b2b;
+$dark-bg-darker: #0d0d0d;
+
+$text-light: #ffffff;
+$text-muted: rgba(255, 255, 255, 0.75);
+$text-dim: rgba(255, 255, 255, 0.5);
+
+
+// ==================================================================
+// MIXINS
+// ==================================================================
+@mixin glow($color, $intensity: 0.4) {
+  box-shadow: 0 0 20px rgba($color, $intensity);
+}
+
+@mixin smooth-transition($property: all, $duration: 0.3s) {
+  transition: $property $duration ease;
+}
+
+
+// ==================================================================
+// 1. FOOTER BASE
+// ==================================================================
+.mining-footer {
+  background: $dark-bg-light;
+  position: relative;
+  overflow: hidden;
+  padding-top: 50px;
+
+  .container {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+// Línea superior animada
+.mining-line-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    $accent 20%,
+    $accent-light 40%,
+    $accent 60%,
+    $orange 80%,
+    transparent 100%
+  );
+
+  @include glow($accent, 0.6);
+  animation: mining-scan 3s ease-in-out infinite;
+  z-index: 3;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba($accent, 0.8),
+      transparent
+    );
+
+    animation: energy-pulse 2s ease-in-out infinite;
+  }
+}
+
+// Brillo inferior
+.mining-glow-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba($accent, 0.4),
+    transparent
+  );
+
+  @include glow($accent, 0.3);
+  animation: glow-pulse 3s ease-in-out infinite alternate;
+}
+
+
+// ==================================================================
+// 2. LOGO Y BRANDING
+// ==================================================================
+.mining-branding {
+  @include smooth-transition(transform, 0.4s);
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.08);
+
+    .helmet-svg {
+      animation: helmet-shake 0.5s ease-in-out;
+    }
+
+    .helmet-particles .particle {
+      animation: particle-burst 1s ease-out forwards;
+    }
+  }
+}
+
+.helmet-container {
+  position: relative;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-right: 12px;
+}
+
+.helmet-svg {
+  width: 100%;
+  height: 100%;
+
+  filter: drop-shadow(0 4px 12px rgba($accent, 0.4));
+  @include smooth-transition();
+  animation: helmet-float 3s ease-in-out infinite;
+
+  .st6 {
+    animation: helmet-glow 2s ease-in-out infinite alternate;
+  }
+
+  .helmet-lines path {
+    animation: lines-shimmer 3s ease-in-out infinite;
+  }
+}
+
+// Partículas decorativas
+.helmet-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+
+    background: $accent-light;
+    border-radius: 50%;
+    opacity: 0;
+
+    @include glow($accent, 0.8);
+
+    &:nth-child(1) { top: 0; left: 50%; }
+    &:nth-child(2) { top: 50%; right: 0; }
+    &:nth-child(3) { bottom: 0; left: 50%; }
+    &:nth-child(4) { top: 50%; left: 0; }
+  }
+}
+
+.brand-name {
+  color: $accent !important;
+  letter-spacing: 1px;
+
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba($accent, 0.3);
+
+  animation: text-glow 3s ease-in-out infinite alternate;
+}
+
+
+// ==================================================================
+// 3. CONTACTO
+// ==================================================================
+.contact-info {
+  .tagline {
+    color: $text-muted;
+    font-style: italic;
+    opacity: 0.9;
+  }
+
+  .contact-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+
+    @include smooth-transition();
+
+    &:hover {
+      color: $accent-light !important;
+      transform: translateX(5px);
+
+      .contact-icon {
+        transform: scale(1.2) rotate(8deg);
+        color: $accent-light !important;
+      }
+    }
+  }
+
+  .contact-icon {
+    font-size: 20px;
+    color: $accent;
+    @include smooth-transition(transform, 0.3s);
+  }
+}
+
+.copyright {
+  color: $text-dim;
+  @include smooth-transition();
+
+  &:hover {
+    color: $accent !important;
+  }
+}
+
+
+// ==================================================================
+// 4. TÍTULOS
+// ==================================================================
+.footer-title {
+  color: $text-light !important;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  padding-bottom: 12px;
+  display: inline-block;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    width: 60px;
+    height: 3px;
+
+    background: linear-gradient(90deg, $accent, $orange, transparent);
+    @include glow($accent, 0.5);
+
+    animation: title-line-pulse 2s ease-in-out infinite;
+  }
+}
+
+.footer-subtitle {
+  color: $accent-light !important;
+  letter-spacing: 1px;
+}
+
+
+// ==================================================================
+// 5. ENLACES
+// ==================================================================
+.links-section {
+  .footer-link {
+    color: $text-muted !important;
+    padding-left: 24px;
+    position: relative;
+    display: inline-block;
+
+    @include smooth-transition();
+
+    .link-arrow {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 0;
+      height: 0;
+      opacity: 0;
+
+      transform: translateY(-50%);
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 8px solid $accent;
+
+      transition: all 0.3s ease;
+      filter: drop-shadow(0 0 4px rgba($accent, 0.6));
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 24px;
+      width: 0;
+      height: 2px;
+
+      background: linear-gradient(90deg, $accent, $orange);
+      @include smooth-transition(width, 0.4s);
+    }
+
+    &:hover {
+      color: $accent !important;
+      padding-left: 28px;
+
+      text-shadow: 0 0 10px rgba($accent, 0.5);
+
+      .link-arrow {
+        opacity: 1;
+        left: 4px;
+      }
+
+      &::after {
+        width: calc(100% - 28px);
+      }
+    }
+  }
+}
+
+
+// ==================================================================
+// 6. REDES SOCIALES
+// ==================================================================
+.social-links {
+  .social-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba($accent, 0.08);
+    border: 2px solid rgba($accent, 0.3);
+    border-radius: 50%;
+
+    position: relative;
+    overflow: hidden;
+
+    @include smooth-transition();
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+
+      width: 0;
+      height: 0;
+
+      border-radius: 50%;
+      background: radial-gradient(circle, $accent 0%, $orange 100%);
+
+      opacity: 0;
+      transform: translate(-50%, -50%);
+
+      @include smooth-transition(all, 0.5s);
+    }
+
+    .iconify {
+      color: $accent-light !important;
+      position: relative;
+      z-index: 1;
+      @include smooth-transition();
+    }
+
+    &:hover {
+      background: rgba($accent, 0.15);
+      border-color: $accent;
+
+      transform: translateY(-6px) rotate(15deg);
+      @include glow($accent, 0.6);
+
+      &::before {
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+      }
+
+      .iconify {
+        color: $accent !important;
+        transform: scale(1.4) rotate(-15deg);
+      }
+    }
+  }
+}
+
+
+// ==================================================================
+// 7. LÍNEA DIVISORIA
+// ==================================================================
+.mining-divider {
+  height: 2px;
+  overflow: hidden;
+
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba($accent, 0.3) 25%,
+    rgba($accent, 0.6) 50%,
+    rgba($accent, 0.3) 75%,
+    transparent 100%
+  );
+
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba($accent-light, 0.8),
+      transparent
+    );
+
+    animation: divider-scan 3s ease-in-out infinite;
+    filter: blur(2px);
+  }
+}
+
+
+// ==================================================================
+// 8. INFO EXTRA
+// ==================================================================
+.developed-by {
+  color: $text-muted;
+  @include smooth-transition();
+
+  &:hover {
+    color: $accent-light !important;
+  }
+}
+
+.certification {
+  color: $text-dim;
+  @include smooth-transition();
+
+  &:hover {
+    color: $text-muted !important;
+  }
+}
+
+
+// ==================================================================
+// 9. ANIMACIONES
+// ==================================================================
+@keyframes mining-scan {
+  0%, 100% { background-position: -200% center; }
+  50% { background-position: 200% center; }
+}
+
+@keyframes energy-pulse {
+  0%, 100% { opacity: 0.3; transform: scaleX(0.8); }
+  50% { opacity: 1; transform: scaleX(1.2); }
+}
+
+@keyframes glow-pulse {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.8; }
+}
+
+@keyframes helmet-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes helmet-glow {
+  0% { filter: drop-shadow(0 0 5px rgba($accent, 0.5)); }
+  100% { filter: drop-shadow(0 0 15px rgba($accent, 0.9)); }
+}
+
+@keyframes helmet-shake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+@keyframes lines-shimmer {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes particle-burst {
+  0% { opacity: 0; transform: translate(0, 0) scale(0); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(1); }
+}
+
+.helmet-particles .particle {
+  &:nth-child(1) { --tx: 0px; --ty: -30px; }
+  &:nth-child(2) { --tx: 30px; --ty: 0px; }
+  &:nth-child(3) { --tx: 0px; --ty: 30px; }
+  &:nth-child(4) { --tx: -30px; --ty: 0px; }
+}
+
+@keyframes text-glow {
+  0% {
+    text-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.5),
+      0 0 20px rgba($accent, 0.3);
+  }
+  100% {
+    text-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.5),
+      0 0 40px rgba($accent, 0.6);
+  }
+}
+
+@keyframes title-line-pulse {
+  0%, 100% { width: 60px; opacity: 0.8; }
+  50% { width: 80px; opacity: 1; }
+}
+
+@keyframes divider-scan {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+
+// ==================================================================
+// 10. RESPONSIVE
+// ==================================================================
+@media (max-width: 768px) {
+  .footer-title::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .links-section .footer-link {
+    text-align: center;
+    padding-left: 0;
+
+    .link-arrow {
+      display: none;
+    }
+
+    &::after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    &:hover {
+      padding-left: 0;
+
+      &::after {
+        width: 80%;
+      }
+    }
+  }
+
+  .social-links {
+    justify-content: center !important;
+  }
+}
+
+
+// ==================================================================
+// 11. ACCESIBILIDAD
+// ==================================================================
+a:focus,
+a:focus-visible {
+  outline: 2px solid $accent;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
