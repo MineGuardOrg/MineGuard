@@ -331,9 +331,9 @@
   },
       "HEADER": {
     "HOME": "Inicio",
-    "DASHBOARD": "Panel",
-    "DEVICES": "Dispositivos",
-    "DEMO": "Solicitar Demo",
+    "COMPONENTS": "Componentes",
+    "FEATURES": "Características",
+    "BENEFITS": "Beneficios",
     "LOGIN": "Iniciar Sesión",
     "REGISTER": "Registrarse",
     "WORKERS": "Trabajadores",
@@ -350,7 +350,7 @@
   },
   "BUTTONS": {
     "REQUEST_DEMO": "Solicitar Demo",
-    "WATCH_VIDEO": "Ver Video",
+    "WATCH_LOGIN": "Iniciar Sesión",
     "GET_STARTED": "Comenzar Ahora"
   },
   "BADGES": {

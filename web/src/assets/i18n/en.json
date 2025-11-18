@@ -332,9 +332,9 @@
   },
       "HEADER": {
     "HOME": "Home",
-    "DASHBOARD": "Dashboard",
-    "DEVICES": "Devices",
-    "DEMO": "Request Demo",
+    "COMPONENTS": "Components",
+    "FEATURES": "Features",
+    "BENEFITS": "Benefits",
     "LOGIN": "Login",
     "REGISTER": "Register",
     "WORKERS": "Workers",
@@ -351,7 +351,7 @@
   },
   "BUTTONS": {
     "REQUEST_DEMO": "Request Demo",
-    "WATCH_VIDEO": "Watch Video",
+    "WATCH_LOGIN": "Login",
     "GET_STARTED": "Get Started Now"
   },
   "BADGES": {

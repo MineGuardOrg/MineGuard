@@ -1,7 +1,7 @@
 <!-- ============================================
     HERO SECTION - Compact and Structured
     ============================================ -->
-<div class="hero-section">
+<div class="hero-section" > >
   <div class="hero-background"></div>
   
   <div class="container position-relative hero-container">
@@ -26,9 +26,9 @@
               <i class="iconify m-r-8" data-icon="mdi:rocket-launch"></i>
               {{ 'BUTTONS.REQUEST_DEMO' | translate }}
             </button>
-            <button mat-stroked-button class="hero-btn-secondary">
+            <button [routerLink]="['/auth/boxed-login']" mat-stroked-button class="hero-btn-secondary">
               <i class="iconify m-r-8" data-icon="mdi:play-circle"></i>
-              {{ 'BUTTONS.WATCH_VIDEO' | translate }}
+              {{ 'BUTTONS.WATCH_LOGIN' | translate }}
             </button>
           </div>
           
@@ -53,91 +53,7 @@
       <!-- Dashboard Column -->
       <div class="col-lg-6 col-md-12">
         <div class="position-relative hero-card-container">
-          <mat-card class="hero-dashboard">
-            <mat-card-content class="p-0">
-              <!-- Dashboard Header -->
-              <div class="dashboard-header">
-                <div class="d-flex align-items-center justify-content-between m-b-16">
-                  <div>
-                    <h5 class="f-w-700 m-0 f-s-16">{{ 'DASHBOARD.TITLE' | translate }}</h5>
-                    <span class="f-s-12" style="opacity: 0.9;">{{ 'DASHBOARD.SUBTITLE' | translate }}</span>
-                  </div>
-                  <div class="pulse-dot">
-                    <span class="badge p-x-12 p-y-6 status-badge">
-                      <i class="iconify m-r-4" data-icon="mdi:circle"></i> {{ 'STATUS.ACTIVE' | translate }}
-                    </span>
-                  </div>
-                </div>
-                
-                <div class="d-flex gap-2">
-                  <div class="flex-fill text-center dashboard-stat">
-                    <div class="f-s-22 f-w-700">47</div>
-                    <div class="f-s-10 f-w-600" style="opacity: 0.9;">{{ 'DASHBOARD.WORKERS' | translate }}</div>
-                  </div>
-                  <div class="flex-fill text-center dashboard-stat">
-                    <div class="f-s-22 f-w-700">99.9%</div>
-                    <div class="f-s-10 f-w-600" style="opacity: 0.9;">{{ 'DASHBOARD.UPTIME' | translate }}</div>
-                  </div>
-                  <div class="flex-fill text-center dashboard-stat">
-                    <div class="f-s-22 f-w-700">0</div>
-                    <div class="f-s-10 f-w-600" style="opacity: 0.9;">{{ 'DASHBOARD.INCIDENTS' | translate }}</div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Dashboard Body -->
-              <div class="dashboard-body">
-                <div class="m-b-20">
-                  <div class="d-flex justify-content-between align-items-center m-b-10">
-                    <span class="f-s-13 f-w-700 dashboard-label">{{ 'DASHBOARD.CAPACITY' | translate }}</span>
-                    <span class="f-w-700 f-s-16" style="color: #FDB71A;">94%</span>
-                  </div>
-                  <mat-progress-bar mode="determinate" value="94" color="primary" class="custom-progress"></mat-progress-bar>
-                </div>
-
-                <div class="row g-2">
-                  <div class="col-6">
-                    <div class="status-card success-card">
-                      <div class="d-flex align-items-center justify-content-between m-b-8">
-                        <i class="iconify text-success" data-icon="mdi:heart-pulse"></i>
-                        <span class="badge bg-success f-s-9 p-x-8 p-y-3 f-w-700">+5.2%</span>
-                      </div>
-                      <div class="f-s-11 text-muted m-b-6 f-w-700 text-uppercase">{{ 'STATUS.NORMAL' | translate }}</div>
-                      <div class="f-s-28 f-w-800 text-success">45</div>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="status-card warning-card">
-                      <div class="d-flex align-items-center justify-content-between m-b-8">
-                        <i class="iconify" style="color: #FDB71A;" data-icon="mdi:alert-circle"></i>
-                        <span class="badge f-s-9 p-x-8 p-y-3 f-w-700" style="background: #FDB71A; color: #1a1a1a;">{{ 'STATUS.ATTENTION' | translate }}</span>
-                      </div>
-                      <div class="f-s-11 text-muted m-b-6 f-w-700 text-uppercase">{{ 'STATUS.ALERTS' | translate }}</div>
-                      <div class="f-s-28 f-w-800" style="color: #FDB71A;">2</div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Update Indicator -->
-                <div class="m-t-16 p-14 update-indicator">
-                  <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                      <div class="f-s-11 text-muted m-b-4 f-w-600">{{ 'DASHBOARD.LAST_UPDATE' | translate }}</div>
-                      <div class="f-s-12 f-w-700 update-time">
-                        <i class="iconify text-success m-r-4 f-s-11" data-icon="mdi:check-circle"></i>
-                        {{ 'DASHBOARD.UPDATE_TIME' | translate }}
-                      </div>
-                    </div>
-                    <div class="mini-wave">
-                      <svg width="50" height="24" viewBox="0 0 50 24">
-                        <path d="M0,12 Q12,4 24,12 T48,12" stroke="#FDB71A" stroke-width="2" fill="none"/>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </mat-card-content>
-          </mat-card>
+           <img src="../../../../assets/images/logos/casco.png" alt="casco"  class="floating-helmet">
         </div>
       </div>
     </div>
@@ -174,7 +90,7 @@
 <!-- ============================================
     SYSTEM COMPONENTS
     ============================================ -->
-<div class="components-section">
+<div class="components-section" id="components">
   <div class="container">
     <div class="row justify-content-center m-b-48">
       <div class="col-lg-8 text-center">
@@ -279,13 +195,13 @@
 <!-- ============================================
      BENEFITS
      ============================================ -->
-<div class="benefits-section">
+<div class="benefits-section" id="benefits">
   <div class="benefits-decoration"></div>
 
-  <div class="container position-relative benefits-container">
-    <div class="row align-items-center">
-      <div class="col-lg-5 m-b-lg-0 m-b-48">
-        <span class="section-badge success">
+  <div class="container">
+    <div class="row justify-content-center m-b-48">
+      <div class="col-lg-8 text-center">
+        <span class="section-badge accent">
           <i class="iconify m-r-6" data-icon="mdi:trophy-variant"></i>
           {{ 'SECTIONS.BENEFITS' | translate }}
         </span>
@@ -293,7 +209,11 @@
           {{ 'BENEFITS.TITLE' | translate }}
           <span class="gradient-text">{{ 'BENEFITS.TITLE_HIGHLIGHT' | translate }}</span>
         </h2>
+      </div>
+    </div>
 
+    <div class="row justify-content-center">
+      <div class="col-lg-5 m-b-lg-0 m-b-48">
         <div class="benefits-list">
           <!-- Recorremos el array ITEMS dentro del objeto BENEFITS -->
           <div class="benefit-list-item" *ngFor="let benefit of benefits.ITEMS; trackBy: trackByValue">
@@ -332,7 +252,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div>  
 </div>
 
 
@@ -343,8 +263,8 @@
   <div class="container">
     <div class="row justify-content-center m-b-48">
       <div class="col-lg-8 text-center">
-        <span class="section-badge primary">
-          <i class="iconify m-r-6" data-icon="mdi:account-group"></i>
+        <span class="section-badge accent">
+          <i class="iconify m-r-6" data-icon="mdi:account-group" ></i>
           {{ 'SECTIONS.TEAM' | translate }}
         </span>
         <h2 class="section-title-main">

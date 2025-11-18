@@ -1,7 +1,7 @@
 <mat-sidenav-container>
   <mat-sidenav-content>
     <!-- HEADER -->
-    <mat-toolbar class="topbar topbar-xl m-auto">
+    <mat-toolbar class="topbar topbar-xl m-auto" >
       <div class="container full-width p-xs-6">
         <!-- LOGO -->
 <div class="branding p-x-0">
@@ -93,19 +93,19 @@
         <!-- NAV LINKS -->
         <span class="flex-1-auto"></span>
         <div class="d-none d-lg-flex">
-          <button mat-button class="m-x-8 f-s-16 f-w-500" [routerLink]="['/landingpage']">
+          <button mat-button class="m-x-8 f-s-16 f-w-500"   fragment="home" [routerLink]="['/landingpage']">
             {{ 'HEADER.HOME' | translate }}
           </button>
-          <button mat-button class="m-x-8 f-s-16 f-w-500" [routerLink]="['/dashboard']">
-            {{ 'HEADER.DASHBOARD' | translate }}
+          <button mat-button class="m-x-8 f-s-16 f-w-500" fragment="components" [routerLink]="['/landingpage']">
+            {{ 'HEADER.COMPONENTS' | translate }}
           </button>
-          <button mat-button class="m-x-8 f-s-16 f-w-500" [routerLink]="['/dispositivos']">
-            {{ 'HEADER.DEVICES' | translate }}
+          <button mat-button class="m-x-8 f-s-16 f-w-500" fragment="features" [routerLink]="['/landingpage']">
+            {{ 'HEADER.FEATURES' | translate }}
           </button>
-          <button mat-button class="m-x-8 f-s-16 f-w-500" [routerLink]="['/demo']">
-            {{ 'HEADER.DEMO' | translate }}
+          <button mat-button class="m-x-8 f-s-16 f-w-500" fragment="benefits" [routerLink]="['/landingpage']">
+            {{ 'HEADER.BENEFITS' | translate }}
           </button>
-            <button mat-stroked-button class="m-x-8" color="primary" style="font-weight:bold; background-color: #FFA500; color: rgb(0, 0, 0); border: 2px solid #000; border-radius: 4px;"
+            <button mat-stroked-button class="m-x-8" style="font-weight:bold; background-color: #FFA500; color: rgb(0, 0, 0); border: 2px solid #000; border-radius: 4px;"
             [routerLink]="['/auth/boxed-login']">
             {{ 'HEADER.LOGIN' | translate }}
             </button>

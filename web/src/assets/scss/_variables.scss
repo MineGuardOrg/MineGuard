@@ -9,7 +9,7 @@ $background: white;
 $cardbg: white;
 $toolbar: white;
 $cardshadow: 0px 2px 4px -1px rgba(175, 182, 201, 0.2);
-$hoverBgColor: #f6f9fc;
+$hoverBgColor: #fffbf0;  // Cambiado a amarillo claro
 
 // Dark color variable
 $darksidebarbg: #1a2537;
@@ -21,8 +21,8 @@ $darkcardshadow: rgba(145, 158, 171, 0.3) 0px 0px 2px 0px,
 $darkborderColor: #333f55;
 $darkformborderColor: #465670;
 $darkhoverbgcolor: #333f55;
-$darkthemelightprimary: #253662;
-$darkthemelightaccent: #1c455d;
+$darkthemelightprimary: #4d3a2a;  // Cambiado a amarillo oscuro
+$darkthemelightaccent: #4d3a2a;   // Cambiado a amarillo oscuro
 $darkthemelightwarning: #4d3a2a;
 $darkthemelighterror: #4b313d;
 $darkthemelightsuccess: #1b3c48;
@@ -39,28 +39,30 @@ $borderColor: #e0e6eb;
 $borderformColor: #e0e6eb;
 $bordertableColor: #111c2d0d;
 
-// custom
-$primary: #00669C;
-$accent: #23cece;
+// custom - COLORES AMARILLOS
+$primary: #FDB71A;           // ⭐ Amarillo dorado minero (principal)
+$accent: #FF6B35;            // Naranja como acento
+$accent-dark: #E69F00;       // Amarillo oscuro
+$accent-light: #FFD54F;      // Amarillo claro
 $warning: #F8C20A;
 $error: #EF4444;
 $success: #10B981;
 $white: #F9FAFB;
 $dark: #29343D;
 $dark-200: #0A2540;
+$orange: #FF6B35;            // Naranja
 
-$light: #f2f6fa;
-$muted: #526b7a;
+$light: #fffbf0;             // Cambiado a amarillo muy claro
+$muted: #7a6b52;             // Cambiado a tono tierra/amarillo apagado
 
 $gray-100: #7c8fac;
 $gray-200: #f6f7f9;
 $bordercheckboxColor: #bdc3cd;
 
-$light-primary: #DBF1FF;
-$light-accent: #a6f7f5;
+$light-primary: #FFF3C9;     // Amarillo claro (antes azul)
+$light-accent: #FFE5DC;      // Naranja claro
 $light-warning: #FFF3C9;
 $light-error: #FFADAF;
-
 $light-success: #ebfaf0;
 
 // layout
@@ -73,7 +75,7 @@ $textPrimary: #29343d;
 
 $bodyColor: #526b7a;
 
-$body-bg: #f4f7fb;
+$body-bg: #fffef8;           // Cambiado a fondo amarillo muy sutil
 
 html {
   --mat-expansion-container-shape: 12px !important;
@@ -81,26 +83,26 @@ html {
   --mdc-elevated-card-container-shape: 12px !important;
   --mdc-elevated-card-container-shape: 12px !important;
   --mat-sidenav-container-divider-color: #e0e6eb !important;
-  --mat-standard-button-toggle-selected-state-background-color: #f2f6fa !important;
-  --mat-standard-button-toggle-selected-state-text-color: #526b7a !important;
+  --mat-standard-button-toggle-selected-state-background-color: #fffbf0 !important;  // Amarillo
+  --mat-standard-button-toggle-selected-state-text-color: #7a6b52 !important;        // Tierra/amarillo
   --mdc-switch-unselected-handle-color: #29343d !important;
   --mdc-switch-unselected-hover-handle-color: #29343d !important;
   --mdc-switch-unselected-focus-handle-color: #29343d !important;
   --mdc-switch-unselected-track-color: #bdc3cd !important;
-  --mdc-switch-unselected-hover-state-layer-color: #f2f6fa !important;
+  --mdc-switch-unselected-hover-state-layer-color: #fffbf0 !important;               // Amarillo
   --mat-stepper-header-icon-background-color: #7c8fac !important;
-  --mat-stepper-header-hover-state-layer-color: #f2f6fa !important;
-  --mat-expansion-header-hover-state-layer-color: #f2f6fa !important;
-  --mat-expansion-header-focus-state-layer-color: #f2f6fa !important;
-  --mat-icon-button-state-layer-color: #00669C !important;
+  --mat-stepper-header-hover-state-layer-color: #fffbf0 !important;                  // Amarillo
+  --mat-expansion-header-hover-state-layer-color: #fffbf0 !important;                // Amarillo
+  --mat-expansion-header-focus-state-layer-color: #fffbf0 !important;                // Amarillo
+  --mat-icon-button-state-layer-color: #FDB71A !important;                           // Amarillo dorado
   --mat-icon-button-hover-state-layer-opacity: 0.09 !important;
   --mdc-snackbar-container-color: #29343d !important;
-  --mdc-outlined-button-disabled-outline-color: rgb(226 236 249) !important;
+  --mdc-outlined-button-disabled-outline-color: rgb(255, 248, 230) !important;       // Amarillo claro
   --mdc-outlined-button-disabled-label-text-color: #7c8fac !important;
-  --mat-text-button-disabled-container-color: rgb(226 236 249) !important;
-  --mdc-filled-button-disabled-container-color: rgb(226 236 249) !important;
-  --mdc-protected-button-disabled-container-color:rgb(226 236 249) !important;
-  --mat-fab-disabled-state-container-color:rgb(226 236 249) !important;
+  --mat-text-button-disabled-container-color: rgb(255, 248, 230) !important;         // Amarillo claro
+  --mdc-filled-button-disabled-container-color: rgb(255, 248, 230) !important;       // Amarillo claro
+  --mdc-protected-button-disabled-container-color: rgb(255, 248, 230) !important;    // Amarillo claro
+  --mat-fab-disabled-state-container-color: rgb(255, 248, 230) !important;           // Amarillo claro
   --mdc-list-list-item-leading-icon-color: #526b7a !important;
   --mdc-list-list-item-hover-leading-icon-color: #526b7a !important;
 
@@ -109,14 +111,13 @@ html {
   }
 
   .mat-mdc-button .mat-mdc-button-persistent-ripple::before {
-    --mat-text-button-state-layer-color: #f2f6fa !important;
+    --mat-text-button-state-layer-color: #fffbf0 !important;  // Amarillo
   }
 
   .mat-mdc-standard-chip {
-    --mdc-chip-elevated-container-color: #f2f6fa !important;
-    // --mdc-chip-elevated-selected-container-color: #f2f6fa !important;
-    --mdc-chip-elevated-disabled-container-color: #f2f6fa !important;
-    --mdc-chip-flat-disabled-selected-container-color: #f2f6fa !important;
+    --mdc-chip-elevated-container-color: #fffbf0 !important;                        // Amarillo
+    --mdc-chip-elevated-disabled-container-color: #fffbf0 !important;               // Amarillo
+    --mdc-chip-flat-disabled-selected-container-color: #fffbf0 !important;          // Amarillo
   }
 
   .mat-mdc-form-field-infix {
@@ -129,11 +130,11 @@ html {
   }
 
   .mat-mdc-radio-button .mdc-radio .mdc-radio__background::before {
-    --mat-radio-ripple-color: #f2f6fa !important;
+    --mat-radio-ripple-color: #fffbf0 !important;  // Amarillo
   }
 
   .mdc-list-item:focus::before {
-    --mdc-list-list-item-focus-state-layer-color: #f2f6fa !important;
+    --mdc-list-list-item-focus-state-layer-color: #fffbf0 !important;  // Amarillo
   }
 }
 
@@ -155,7 +156,7 @@ html {
 
 .mdc-checkbox:hover .mdc-checkbox__ripple {
   --mdc-checkbox-unselected-hover-state-layer-opacity: 1;
-  --mdc-checkbox-unselected-hover-state-layer-color: #f2f6fa;
+  --mdc-checkbox-unselected-hover-state-layer-color: #fffbf0;  // Amarillo
 }
 
 .mdc-button {

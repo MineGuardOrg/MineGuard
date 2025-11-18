@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router'; // ✅ Añade RouterModule aquí
 import { MaterialModule } from '../../../material.module';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
@@ -49,7 +49,14 @@ interface BenefitsSection {
 @Component({
   selector: 'app-content',
   standalone: true,
-  imports: [MaterialModule, FormsModule, TablerIconsModule, CommonModule, TranslateModule],
+  imports: [
+    MaterialModule, 
+    FormsModule, 
+    TablerIconsModule, 
+    CommonModule, 
+    TranslateModule,
+    RouterModule  // ✅ Añade RouterModule aquí
+  ],
   templateUrl: './content.component.html',
   styleUrls: ['./content.component.scss']
 })
