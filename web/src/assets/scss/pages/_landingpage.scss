@@ -44,13 +44,13 @@ $orange: #FF6B35;
 }
 
 .topbar-xl {
-  height: 80px;
+  height: 85px;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 9999; // Para que quede sobre todo
-  background: #fff; // Opcional si quieres que no sea transparente al hacer scroll
+  background: transparent; // Opcional si quieres que no sea transparente al hacer scroll
 }
 
 
@@ -574,6 +574,16 @@ html.cdk-global-scrollblock {
   .brand-name-header {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+.main-landing-content {
+  padding-top: 80px;
+}
+
+@media (max-width: 768px) {
+  .main-landing-content {
+    padding-top: 60px;
   }
 }
 

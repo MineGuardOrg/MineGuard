@@ -335,6 +335,8 @@
     "COMPONENTS": "Components",
     "FEATURES": "Features",
     "BENEFITS": "Benefits",
+    "TECH": "Tech",
+    "TEAM": "Team",
     "LOGIN": "Login",
     "REGISTER": "Register",
     "WORKERS": "Workers",

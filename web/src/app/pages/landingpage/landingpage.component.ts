@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input, HostListener } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
 import { ViewportScroller } from '@angular/common';
 import { MaterialModule } from 'src/app/material.module';
@@ -44,6 +44,8 @@ export class AppLandingpageComponent {
   @Output() toggleMobileFilterNav = new EventEmitter<void>();
   @Output() toggleCollapsed = new EventEmitter<void>();
 
+  isScrolled = false;
+
   public selectedLanguage: any = {
     language: 'English',
     code: 'en',
@@ -66,21 +68,26 @@ export class AppLandingpageComponent {
     },
   ];
 
-constructor(
-  private settings: CoreService,
-  private scroller: ViewportScroller,
-  public dialog: MatDialog,
-  private translate: TranslateService
-) {
-  this.settings.loadLanguageFromStorage();
+  constructor(
+    private settings: CoreService,
+    private scroller: ViewportScroller,
+    public dialog: MatDialog,
+    private translate: TranslateService
+  ) {
+    this.settings.loadLanguageFromStorage();
 
-  const lang = this.settings.getLanguage();
-  this.translate.setDefaultLang('en');
-  this.translate.use(lang);
+    const lang = this.settings.getLanguage();
+    this.translate.setDefaultLang('en');
+    this.translate.use(lang);
 
-  this.selectedLanguage =
-    this.languages.find((l) => l.code === lang) || this.languages[0];
-}
+    this.selectedLanguage =
+      this.languages.find((l) => l.code === lang) || this.languages[0];
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.isScrolled = window.scrollY > 50;
+  }
 
   options = this.settings.getOptions();
 
@@ -117,7 +124,6 @@ constructor(
     {
       id: 1,
       icon: 'solar:chat-line-line-duotone',
-
       title: 'Chat Application',
       subtitle: 'Messages & Emails',
       link: '/apps/chat',
@@ -172,6 +178,7 @@ constructor(
       link: '/apps/courses',
     },
   ];
+  
   testimonials: testimonials[] = [
     {
       id: 1,

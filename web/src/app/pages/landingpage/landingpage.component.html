@@ -1,7 +1,7 @@
 <mat-sidenav-container>
   <mat-sidenav-content>
     <!-- HEADER -->
-    <mat-toolbar class="topbar topbar-xl m-auto" >
+    <mat-toolbar class="topbar-xl" [class.scrolled]="isScrolled">
       <div class="container full-width p-xs-6">
         <!-- LOGO -->
 <div class="branding p-x-0">
@@ -9,7 +9,7 @@
      [routerLink]="['/landingpage']">
     
     <!-- Contenedor del casco con efectos -->
-    <div class="helmet-header-container">
+    <div class="helmet-header-container" >
       <svg viewBox="0 0 500 500" class="helmet-header-svg" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <!-- Gradiente mejorado -->
@@ -105,6 +105,9 @@
           <button mat-button class="m-x-8 f-s-16 f-w-500" fragment="benefits" [routerLink]="['/landingpage']">
             {{ 'HEADER.BENEFITS' | translate }}
           </button>
+           <button mat-button class="m-x-8 f-s-16 f-w-500" fragment="tech" [routerLink]="['/landingpage']">
+            {{ 'HEADER.TECH' | translate }}
+          </button>
             <button mat-stroked-button class="m-x-8" style="font-weight:bold; background-color: #FFA500; color: rgb(0, 0, 0); border: 2px solid #000; border-radius: 4px;"
             [routerLink]="['/auth/boxed-login']">
             {{ 'HEADER.LOGIN' | translate }}
@@ -143,34 +146,31 @@
   </mat-sidenav-content>
 
   <!-- MOBILE SIDENAV -->
-  <mat-sidenav #filterNavRight mode="over" position="end" class="filter-sidebar">
+ <mat-sidenav #filterNavRight mode="over" position="end" class="filter-sidebar">
     <div class="p-x-16">
-      <a [routerLink]="['/auth/boxed-login']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+      <a [routerLink]="['/auth/boxed-login']" (click)="filterNavRight.close()" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
         <span class="text-primary f-s-15 m-l-8" style="font-weight:bold">{{ 'HEADER.LOGIN' | translate }}</span>
       </a>
-      <a [routerLink]="['/auth/boxed-register']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+      <a [routerLink]="['/auth/boxed-register']" (click)="filterNavRight.close()" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
         <span class="text-primary f-s-15 m-l-8" style="font-weight:bold">{{ 'HEADER.REGISTER' | translate }}</span>
       </a>
-      <a [routerLink]="['/dashboard']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
-        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.DASHBOARD' | translate }}</span>
+      <a [routerLink]="['/landingpage']" fragment="home" (click)="filterNavRight.close()" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.HOME' | translate }}</span>
       </a>
-      <a [routerLink]="['/trabajadores']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
-        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.WORKERS' | translate }}</span>
+      <a [routerLink]="['/landingpage']" fragment="components" (click)="filterNavRight.close()" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.COMPONENTS' | translate }}</span>
       </a>
-      <a [routerLink]="['/dispositivos']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
-        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.DEVICES' | translate }}</span>
+      <a [routerLink]="['/landingpage']" (click)="filterNavRight.close()"  fragment="features" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.FEATURES' | translate }}</span>
       </a>
-      <a [routerLink]="['/alertas']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
-        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.ALERTS' | translate }}</span>
+      <a [routerLink]="['/landingpage']" (click)="filterNavRight.close()" fragment="benefits" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.BENEFITS' | translate }}</span>
       </a>
-      <a [routerLink]="['/demo']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
-        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.DEMO' | translate }}</span>
+      <a [routerLink]="['/landingpage']" (click)="filterNavRight.close()"fragment="team" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.TEAM' | translate }}</span>
       </a>
-      <a [routerLink]="['/normativas']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
-        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.COMPLIANCE' | translate }}</span>
-      </a>
-      <a [routerLink]="['/privacidad']" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
-        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.PRIVACY' | translate }}</span>
+      <a [routerLink]="['/landingpage']" (click)="filterNavRight.close()"  fragment="tech" class="d-flex align-items-center text-decoration-none mat-body-1 p-y-16">
+        <span class="f-s-15 f-w-500 m-l-8">{{ 'HEADER.TECH' | translate }}</span>
       </a>
     </div>
   </mat-sidenav>

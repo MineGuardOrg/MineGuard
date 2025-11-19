@@ -1154,7 +1154,7 @@ $success: #10B981;           // Verde seguridad
   z-index: 0;
   animation: floatHelmet 3.5s ease-in-out infinite;
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.45));
-  transition: transform 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
   
   // Mejora de rendimiento
   will-change: transform;
@@ -1281,12 +1281,14 @@ $success: #10B981;           // Verde seguridad
 }
 
 // ============================================
-// RESPONSIVE DESIGN - PARTÍCULAS SOLO EN PANTALLAS MUY GRANDES
+// RESPONSIVE DESIGN - DESAPARICIÓN GRADUAL
 // ============================================
 
-// Pantallas extra grandes (1400px+) - Partículas al 100%
-@media (min-width: 1400px) {
+// Pantallas MUY grandes (1600px+) - Todo visible
+@media (min-width: 1600px) {
   .floating-helmet {
+    display: block;
+    opacity: 1;
     width: 500px;
     right: 80px;
     top: -200px;
@@ -1297,12 +1299,29 @@ $success: #10B981;           // Verde seguridad
   }
 }
 
-// Pantallas grandes (1200px - 1399px) - Partículas al 50%
-@media (max-width: 1399px) {
+// Pantallas grandes (1400px - 1599px) - Casco más pequeño
+@media (min-width: 1400px) and (max-width: 1599px) {
   .floating-helmet {
-    width: 480px;
-    right: 70px;
+    display: block;
+    opacity: 1;
+    width: 460px;
+    right: 60px;
     top: -190px;
+  }
+  
+  .floating-helmet::before {
+    opacity: 0.6;
+  }
+}
+
+// Pantallas medianas-grandes (1280px - 1399px) - Casco reducido
+@media (min-width: 1280px) and (max-width: 1399px) {
+  .floating-helmet {
+    display: block;
+    opacity: 1;
+    width: 420px;
+    right: 50px;
+    top: -180px;
   }
   
   .floating-helmet::before {
@@ -1310,105 +1329,75 @@ $success: #10B981;           // Verde seguridad
   }
 }
 
-// Tablets y menores (menos de 1200px) - SIN PARTÍCULAS
-@media (max-width: 1199px) {
+// Pantallas medianas (1200px - 1279px) - Casco pequeño, sin partículas
+@media (min-width: 1200px) and (max-width: 1279px) {
   .floating-helmet {
-    width: 420px;
-    right: 60px;
+    display: block;
+    opacity: 0.95;
+    width: 380px;
+    right: 40px;
     top: -170px;
   }
   
-  // DESAPARICIÓN COMPLETA DE PARTÍCULAS
   .floating-helmet::before {
     display: none;
   }
 }
 
-// Tablets (768px - 991px)
-@media (max-width: 991px) {
+// Laptops (1100px - 1199px) - Comienza a desvanecerse
+@media (min-width: 1100px) and (max-width: 1199px) {
   .floating-helmet {
-    width: 350px;
-    right: 40px;
-    top: -140px;
+    display: block;
+    opacity: 0.8;
+    width: 340px;
+    right: 30px;
+    top: -150px;
+  }
+  
+  .floating-helmet::before {
+    display: none;
+  }
+}
+
+// ============================================
+// PUNTO CRÍTICO: CASCO DESAPARECE AQUÍ
+// ============================================
+
+// Menos de 1100px - CASCO COMPLETAMENTE OCULTO
+@media (max-width: 1099px) {
+  .floating-helmet {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+  
+  .floating-helmet::before {
+    display: none !important;
   }
   
   .floating-helmet:hover {
-    transform: scale(1.05) rotate(-2deg);
-  }
-}
-
-// Móviles grandes (576px - 767px)
-@media (max-width: 767px) {
-  .floating-helmet {
-    width: 280px;
-    right: 20px;
-    top: -100px;
-  }
-  
-  @keyframes floatHelmet {
-    0% {
-      transform: translateY(0) rotate(0deg);
-    }
-    
-    50% {
-      transform: translateY(-8px) rotate(1.5deg);
-    }
-    
-    100% {
-      transform: translateY(0) rotate(0deg);
-    }
-  }
-}
-
-// Móviles (menos de 576px)
-@media (max-width: 575px) {
-  .floating-helmet {
-    width: 220px;
-    right: 15px;
-    top: -70px;
-  }
-}
-
-// Móviles medianos (menos de 480px)
-@media (max-width: 479px) {
-  .floating-helmet {
-    width: 180px;
-    right: 10px;
-    top: -50px;
-  }
-}
-
-// Móviles pequeños (menos de 400px)
-@media (max-width: 399px) {
-  .floating-helmet {
-    width: 150px;
-    right: 5px;
-    top: -40px;
-  }
-}
-
-// Móviles muy pequeños (menos de 320px)
-@media (max-width: 319px) {
-  .floating-helmet {
-    width: 120px;
-    right: 5px;
-    top: -30px;
+    transform: none !important;
   }
 }
 
 // ============================================
-// AJUSTES PARA ORIENTACIÓN LANDSCAPE
+// ORIENTACIÓN LANDSCAPE - OCULTAR SIEMPRE
 // ============================================
 
-@media (orientation: landscape) and (max-height: 600px) {
+@media (orientation: landscape) and (max-height: 700px) {
   .floating-helmet {
-    width: 180px;
-    top: -60px;
-    right: 20px;
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
-  
-  // Sin partículas en landscape
-  .floating-helmet::before {
-    display: none;
+}
+
+// Landscape en tablets/móviles
+@media (orientation: landscape) and (max-width: 1099px) {
+  .floating-helmet {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
 }
