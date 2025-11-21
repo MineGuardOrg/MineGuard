@@ -108,15 +108,43 @@
            <button mat-button class="m-x-8 f-s-16 f-w-500" fragment="tech" [routerLink]="['/landingpage']">
             {{ 'HEADER.TECH' | translate }}
           </button>
-            <button mat-stroked-button class="m-x-8" style="font-weight:bold; background-color: #FFA500; color: rgb(0, 0, 0); border: 2px solid #000; border-radius: 4px;"
-            [routerLink]="['/auth/boxed-login']">
-            {{ 'HEADER.LOGIN' | translate }}
-            </button>
+          <button mat-stroked-button class="m-x-8"   style="font-weight:bold; 
+               background-color: #FFA500; 
+               color: rgb(0, 0, 0); 
+               border: 2px solid #000; 
+               border-radius: 4px;
+               transition: all 0.3s ease;
+               padding: 10px 24px;"
+        onmouseover="this.style.transform='translateY(-2px)'; 
+                     this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.2)';
+                     this.style.backgroundColor='#FF8C00';
+                     this.style.borderColor='#000'"
+        onmouseout="this.style.transform='translateY(0)'; 
+                    this.style.boxShadow='none';
+                    this.style.backgroundColor='#FFA500';
+                    this.style.borderColor='#000'"
+        [routerLink]="['/auth/boxed-login']">
+  {{ 'HEADER.LOGIN' | translate }}
+</button>
 
-            <button mat-flat-button class="m-x-8" color="primary" style="font-weight:bold; background-color: #FFA500; color: black; border: 2px solid #000; border-radius: 4px;"
-            [routerLink]="['/auth/boxed-register']">
-            {{ 'HEADER.REGISTER' | translate }}
-            </button>
+<button mat-flat-button class="m-x-8" color="primary"   style="font-weight:bold; 
+               background-color: #FFA500; 
+               color: black; 
+               border: 2px solid #000; 
+               border-radius: 4px;
+               transition: all 0.3s ease;
+               padding: 10px 24px;"
+        onmouseover="this.style.transform='translateY(-2px)'; 
+                     this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.2)';
+                     this.style.backgroundColor='#FF8C00';
+                     this.style.borderColor='#000'"
+        onmouseout="this.style.transform='translateY(0)'; 
+                    this.style.boxShadow='none';
+                    this.style.backgroundColor='#FFA500';
+                    this.style.borderColor='#000'"
+        [routerLink]="['/auth/boxed-register']">
+  {{ 'HEADER.REGISTER' | translate }}
+</button>
 
           <button [matMenuTriggerFor]="flags" mat-mini-fab color="inherit">
             <img [src]="selectedLanguage.icon" class="rounded-circle object-cover icon-20 m-t-2" />
