@@ -19,19 +19,19 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
-import { RolesService } from './roles.service';
+import { MaintenanceService } from './maintenance.service';
 
-export interface Role {
+export interface Maintenance {
   id: number;
-  name: string;
   description: string;
-  is_active: boolean;
+  device_id: number;
+  performed_by: number;
   created_at: string;
-  updated_at: string | null;
+  updated_at: string;
 }
 
 @Component({
-  templateUrl: './roles.component.html',
+  templateUrl: './maintenance.component.html',
   standalone: true,
   imports: [
     MaterialModule,
@@ -42,39 +42,39 @@ export interface Role {
   ],
   providers: [DatePipe],
 })
-export class AppRolesComponent implements AfterViewInit {
+export class AppMaintenanceComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
   searchText: any;
   displayedColumns: string[] = [
     'id',
-    'name',
     'description',
-    'active',
-    'created',
+    'device_id',
+    'performed_by',
+    'created_at',
     'action',
   ];
-  dataSource = new MatTableDataSource<Role>([]);
+  dataSource = new MatTableDataSource<Maintenance>([]);
 
   constructor(
     public dialog: MatDialog,
     public datePipe: DatePipe,
-    private rolesService: RolesService
+    private maintenanceService: MaintenanceService
   ) {}
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-    this.loadRoles();
+    this.loadMaintenanceLogs();
   }
 
-  loadRoles(): void {
-    this.rolesService.getAll().subscribe({
-      next: (roles) => {
-        this.dataSource.data = roles;
+  loadMaintenanceLogs(): void {
+    this.maintenanceService.getAll().subscribe({
+      next: (logs) => {
+        this.dataSource.data = logs;
       },
       error: (err) => {
-        console.error('Error al obtener roles:', err);
+        console.error('Error al obtener registros de mantenimiento:', err);
       },
     });
   }
@@ -85,7 +85,7 @@ export class AppRolesComponent implements AfterViewInit {
 
   openDialog(action: string, obj: any): void {
     obj.action = action;
-    const dialogRef = this.dialog.open(AppRolesDialogComponent, {
+    const dialogRef = this.dialog.open(AppMaintenanceDialogComponent, {
       data: obj,
     });
 
@@ -100,43 +100,43 @@ export class AppRolesComponent implements AfterViewInit {
     });
   }
 
-  addRowData(row_obj: Role): void {
+  addRowData(row_obj: Maintenance): void {
     const currentData = this.dataSource.data;
     this.dataSource.data = [row_obj, ...currentData];
     this.table.renderRows();
   }
 
-  updateRowData(row_obj: Role): void {
-    this.rolesService.update(row_obj).subscribe({
+  updateRowData(row_obj: Maintenance): void {
+    this.maintenanceService.update(row_obj).subscribe({
       next: (res) => {
-        this.dataSource.data = this.dataSource.data.map((role) =>
-          role.id === res.id ? res : role
+        this.dataSource.data = this.dataSource.data.map((log) =>
+          log.id === res.id ? res : log
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al actualizar rol:', err);
+        console.error('Error al actualizar registro de mantenimiento:', err);
       },
     });
   }
 
-  deleteRowData(row_obj: Role): void {
-    this.rolesService.delete(row_obj.id).subscribe({
+  deleteRowData(row_obj: Maintenance): void {
+    this.maintenanceService.delete(row_obj.id).subscribe({
       next: () => {
         this.dataSource.data = this.dataSource.data.filter(
-          (role) => role.id !== row_obj.id
+          (log) => log.id !== row_obj.id
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al eliminar rol:', err);
+        console.error('Error al eliminar registro de mantenimiento:', err);
       },
     });
   }
 }
 
 @Component({
-  selector: 'app-roles-dialog-content',
+  selector: 'app-maintenance-dialog',
   standalone: true,
   imports: [
     MatDialogModule,
@@ -146,17 +146,17 @@ export class AppRolesComponent implements AfterViewInit {
     CommonModule,
   ],
   providers: [DatePipe],
-  templateUrl: 'roles-dialog-component.html',
+  templateUrl: 'maintenance-dialog-component.html',
 })
-export class AppRolesDialogComponent {
+export class AppMaintenanceDialogComponent {
   public action: string;
   local_data: any;
 
   constructor(
     public datePipe: DatePipe,
-    public dialogRef: MatDialogRef<AppRolesDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Role,
-    private rolesService: RolesService
+    public dialogRef: MatDialogRef<AppMaintenanceDialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Maintenance,
+    private maintenanceService: MaintenanceService
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
@@ -165,32 +165,33 @@ export class AppRolesDialogComponent {
   doAction(): void {
     if (this.action === 'Add') {
       const payload = {
-        name: this.local_data.name,
         description: this.local_data.description,
+        device_id: this.local_data.device_id,
+        performed_by: this.local_data.performed_by,
       };
 
-      this.rolesService.create(payload).subscribe({
+      this.maintenanceService.create(payload).subscribe({
         next: (res) => {
           this.dialogRef.close({ event: this.action, data: res });
         },
         error: (err) => {
-          console.error('Error al crear rol:', err);
+          console.error('Error al crear registro de mantenimiento:', err);
         },
       });
     } else if (this.action === 'Update') {
       const payload = {
         id: this.local_data.id,
-        name: this.local_data.name,
         description: this.local_data.description,
-        is_active: this.local_data.is_active,
+        device_id: this.local_data.device_id,
+        performed_by: this.local_data.performed_by,
       };
 
-      this.rolesService.update(payload).subscribe({
+      this.maintenanceService.update(payload).subscribe({
         next: (res) => {
           this.dialogRef.close({ event: this.action, data: res });
         },
         error: (err) => {
-          console.error('Error al actualizar rol:', err);
+          console.error('Error al actualizar registro de mantenimiento:', err);
         },
       });
     } else if (this.action === 'Delete') {

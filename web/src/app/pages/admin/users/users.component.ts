@@ -27,10 +27,17 @@ import { UsersService } from './users.service';
 
 export interface User {
   id: number;
-  name: string;
+  employee_number: string;
+  first_name: string;
+  last_name: string;
   email: string;
-  rol: string;
-  created: string;
+  role_id: number;
+  area_id: number | null;
+  position_id: number | null;
+  supervisor_id: number | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string | null;
 }
 
 @Component({
@@ -51,10 +58,12 @@ export class AppUsersComponent implements AfterViewInit {
 
   searchText: any;
   displayedColumns: string[] = [
-    '#',
+    'id',
+    'employee_number',
     'name',
     'email',
-    'rol',
+    'role',
+    'active',
     'created',
     'action',
   ];
@@ -74,7 +83,12 @@ export class AppUsersComponent implements AfterViewInit {
   loadUsers(): void {
     this.usersService.getAll().subscribe({
       next: (users) => {
-        this.dataSource.data = users;
+        // Mapear los usuarios para agregar el nombre completo
+        const mappedUsers = users.map((user: User) => ({
+          ...user,
+          fullName: `${user.first_name} ${user.last_name}`
+        }));
+        this.dataSource.data = mappedUsers;
       },
       error: (err) => {
         console.error('Error al obtener usuarios:', err);
@@ -88,7 +102,7 @@ export class AppUsersComponent implements AfterViewInit {
 
   openDialog(action: string, obj: any): void {
     obj.action = action;
-    const dialogRef = this.dialog.open(AppKichenSinkDialogContentComponent, {
+    const dialogRef = this.dialog.open(AppKichenSinkDialogComponent, {
       data: obj,
     });
 
@@ -142,14 +156,14 @@ export class AppUsersComponent implements AfterViewInit {
 
 @Component({
   // tslint:disable-next-line: component-selector
-  selector: 'app-dialog-content',
+  selector: 'app-dialog-component',
   standalone: true,
   imports: [MatDialogModule, FormsModule, MaterialModule, TablerIconsModule, CommonModule],
   providers: [DatePipe],
-  templateUrl: 'users-dialog-content.html',
+  templateUrl: 'users-dialog-component.html',
 })
 // tslint:disable-next-line: component-class-suffix
-export class AppKichenSinkDialogContentComponent {
+export class AppKichenSinkDialogComponent {
   public action: string;
   // tslint:disable-next-line - Disables all
   local_data: any;
@@ -157,7 +171,7 @@ export class AppKichenSinkDialogContentComponent {
 
   constructor(
     public datePipe: DatePipe,
-    public dialogRef: MatDialogRef<AppKichenSinkDialogContentComponent>,
+    public dialogRef: MatDialogRef<AppKichenSinkDialogComponent>,
     // @Optional() is used to prevent error if no data is passed
     @Optional() @Inject(MAT_DIALOG_DATA) public data: User,
     private usersService: UsersService // <-- Esto debe estar

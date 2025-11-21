@@ -5,7 +5,7 @@
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <input
             matInput
-            placeholder="Search User"
+            placeholder="Search Alert"
             (keyup)="applyFilter($any($event.target).value)"
           />
           <mat-icon matSuffix>
@@ -15,12 +15,13 @@
       </div>
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
         <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
-          Add User
+          Add Alert
         </button>
       </div>
     </div>
   </mat-card-content>
 </mat-card>
+
 <mat-card class="cardWithShadow">
   <mat-card-content class="p-24">
     <div class="table-responsive">
@@ -30,58 +31,48 @@
           <td mat-cell *matCellDef="let element">{{ element.id }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="employee_number">
+        <ng-container matColumnDef="alert_type">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Employee ID
+            Alert Type
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.employee_number }}
+            {{ element.alert_type }}
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Name</th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.fullName }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="email">
+        <ng-container matColumnDef="severity">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Email
-          </th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.email }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="role">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Role</th>
-          <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.role_id }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="active">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Status
+            Severity
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             <span
               class="badge"
-              [ngClass]="element.is_active ? 'bg-success' : 'bg-danger'"
+              [ngClass]="{
+                'bg-success': element.severity === 'low',
+                'bg-warning': element.severity === 'medium',
+                'bg-error': element.severity === 'high'
+              }"
             >
-              {{ element.is_active ? "Active" : "Inactive" }}
+              {{ element.severity | uppercase }}
             </span>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="created">
+        <ng-container matColumnDef="reading_id">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Register Date
+            Reading ID
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            {{ element.created_at | date : "short" }}
+            {{ element.reading_id }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="timestamp">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
+            Timestamp
+          </th>
+          <td mat-cell *matCellDef="let element" class="f-s-14">
+            {{ element.timestamp | date : "short" }}
           </td>
         </ng-container>
 

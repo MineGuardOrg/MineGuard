@@ -19,19 +19,19 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
-import { RolesService } from './roles.service';
+import { AreasService } from './areas.service';
 
-export interface Role {
+export interface Area {
   id: number;
   name: string;
-  description: string;
+  description: string | null;
   is_active: boolean;
   created_at: string;
   updated_at: string | null;
 }
 
 @Component({
-  templateUrl: './roles.component.html',
+  templateUrl: './areas.component.html',
   standalone: true,
   imports: [
     MaterialModule,
@@ -42,7 +42,7 @@ export interface Role {
   ],
   providers: [DatePipe],
 })
-export class AppRolesComponent implements AfterViewInit {
+export class AppAreasComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
@@ -55,26 +55,26 @@ export class AppRolesComponent implements AfterViewInit {
     'created',
     'action',
   ];
-  dataSource = new MatTableDataSource<Role>([]);
+  dataSource = new MatTableDataSource<Area>([]);
 
   constructor(
     public dialog: MatDialog,
     public datePipe: DatePipe,
-    private rolesService: RolesService
+    private areasService: AreasService
   ) {}
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-    this.loadRoles();
+    this.loadAreas();
   }
 
-  loadRoles(): void {
-    this.rolesService.getAll().subscribe({
-      next: (roles) => {
-        this.dataSource.data = roles;
+  loadAreas(): void {
+    this.areasService.getAll().subscribe({
+      next: (areas) => {
+        this.dataSource.data = areas;
       },
       error: (err) => {
-        console.error('Error al obtener roles:', err);
+        console.error('Error al obtener áreas:', err);
       },
     });
   }
@@ -85,7 +85,7 @@ export class AppRolesComponent implements AfterViewInit {
 
   openDialog(action: string, obj: any): void {
     obj.action = action;
-    const dialogRef = this.dialog.open(AppRolesDialogComponent, {
+    const dialogRef = this.dialog.open(AppAreasDialogComponent, {
       data: obj,
     });
 
@@ -100,43 +100,43 @@ export class AppRolesComponent implements AfterViewInit {
     });
   }
 
-  addRowData(row_obj: Role): void {
+  addRowData(row_obj: Area): void {
     const currentData = this.dataSource.data;
     this.dataSource.data = [row_obj, ...currentData];
     this.table.renderRows();
   }
 
-  updateRowData(row_obj: Role): void {
-    this.rolesService.update(row_obj).subscribe({
+  updateRowData(row_obj: Area): void {
+    this.areasService.update(row_obj).subscribe({
       next: (res) => {
-        this.dataSource.data = this.dataSource.data.map((role) =>
-          role.id === res.id ? res : role
+        this.dataSource.data = this.dataSource.data.map((area) =>
+          area.id === res.id ? res : area
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al actualizar rol:', err);
+        console.error('Error al actualizar área:', err);
       },
     });
   }
 
-  deleteRowData(row_obj: Role): void {
-    this.rolesService.delete(row_obj.id).subscribe({
+  deleteRowData(row_obj: Area): void {
+    this.areasService.delete(row_obj.id).subscribe({
       next: () => {
         this.dataSource.data = this.dataSource.data.filter(
-          (role) => role.id !== row_obj.id
+          (area) => area.id !== row_obj.id
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al eliminar rol:', err);
+        console.error('Error al eliminar área:', err);
       },
     });
   }
 }
 
 @Component({
-  selector: 'app-roles-dialog-content',
+  selector: 'app-areas-dialog',
   standalone: true,
   imports: [
     MatDialogModule,
@@ -146,17 +146,17 @@ export class AppRolesComponent implements AfterViewInit {
     CommonModule,
   ],
   providers: [DatePipe],
-  templateUrl: 'roles-dialog-component.html',
+  templateUrl: 'areas-dialog-component.html',
 })
-export class AppRolesDialogComponent {
+export class AppAreasDialogComponent {
   public action: string;
   local_data: any;
 
   constructor(
     public datePipe: DatePipe,
-    public dialogRef: MatDialogRef<AppRolesDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Role,
-    private rolesService: RolesService
+    public dialogRef: MatDialogRef<AppAreasDialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Area,
+    private areasService: AreasService
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
@@ -169,12 +169,12 @@ export class AppRolesDialogComponent {
         description: this.local_data.description,
       };
 
-      this.rolesService.create(payload).subscribe({
+      this.areasService.create(payload).subscribe({
         next: (res) => {
           this.dialogRef.close({ event: this.action, data: res });
         },
         error: (err) => {
-          console.error('Error al crear rol:', err);
+          console.error('Error al crear área:', err);
         },
       });
     } else if (this.action === 'Update') {
@@ -185,12 +185,12 @@ export class AppRolesDialogComponent {
         is_active: this.local_data.is_active,
       };
 
-      this.rolesService.update(payload).subscribe({
+      this.areasService.update(payload).subscribe({
         next: (res) => {
           this.dialogRef.close({ event: this.action, data: res });
         },
         error: (err) => {
-          console.error('Error al actualizar rol:', err);
+          console.error('Error al actualizar área:', err);
         },
       });
     } else if (this.action === 'Delete') {

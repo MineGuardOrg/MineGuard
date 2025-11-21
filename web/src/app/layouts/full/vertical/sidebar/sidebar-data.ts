@@ -2,106 +2,82 @@ import { NavItem } from './nav-item/nav-item';
 
 export const navItems: NavItem[] = [
   ////////////////////////////////////////// ADMIN ROUTES //////////////////////////////////////////
-  // {
-  //   navCap: 'Admin',
-  //   roles: ['Admin'],
-  // },
-  //   {
-  //   displayName: 'Database Maintenance',
-  //   iconName: 'solar:user-rounded-outline',
-  //   route: '/admin/maintenance',
-  //   roles: ['Admin'],
-  // },
-  // {
-  //   displayName: 'Users',
-  //   iconName: 'solar:user-rounded-outline',
-  //   route: '/admin/users',
-  //   roles: ['Admin'],
-  // },
-  // {
-  //   displayName: 'Lessons',
-  //   iconName: 'solar:notebook-bookmark-outline',
-  //   route: '/admin/lessons',
-  //   roles: ['Admin'],
-  // },
-  // {
-  //   displayName: 'Registrations',
-  //   iconName: 'solar:document-add-outline',
-  //   route: '/admin/registrations',
-  //   roles: ['Admin'],
-  // },
-  // {
-  //   displayName: 'Courses',
-  //   iconName: 'solar:notebook-linear',
-  //   route: '/admin/courses',
-  //   roles: ['Admin'],
-  // },
-  // {
-  //   displayName: 'Categories',
-  //   iconName: 'solar:checklist-outline',
-  //   route: '/admin/categories',
-  //   roles: ['Admin'],
-  // },
-  // {
-  //   displayName: 'LessonsComments',
-  //   iconName: 'solar:notification-unread-lines-outline',
-  //   route: '/admin/lessonsComments',
-  //   roles: ['Admin'],
-  // },
-  // {
-  //   displayName: 'Posts',
-  //   iconName: 'solar:posts-carousel-vertical-outline',
-  //   route: '/admin/posts',
-  //   roles: ['Admin'],
-  // },
-  // {
-  //   displayName: 'Reviews',
-  //   iconName: 'solar:verified-check-outline',
-  //   route: '/admin/reviews',
-  //   roles: ['Admin'],
-  // },
-  // {
-  //   displayName: 'Certificates',
-  //   iconName: 'solar:diploma-outline',
-  //   route: '/admin/certificate',
-  //   roles: ['Admin'],
-  // },
-  // {
-  //   displayName: 'PostsComments',
-  //   iconName: 'solar:notebook-bookmark-outline',
-  //   route: '/admin/postsComments',
-  //   roles: ['Admin'],
-  // },
-  // {
-  //   displayName: 'Resources',
-  //   iconName: 'solar:soundwave-circle-outline',
-  //   route: '/admin/resources',
-  //   roles: ['Admin'],
-  // },
-  // {
-  //   displayName: 'UsersAnswers',
-  //   iconName: 'solar:user-id-outline',
-  //   route: '/admin/usersAnswers',
-  //   roles: ['Admin'],
-  // },
-  // {
-  //   displayName: 'Lessons Progress',
-  //   iconName: 'solar:user-id-outline',
-  //   route: '/admin/lessons-progress',
-  //   roles: ['Admin'],
-  // },
-  // {
-  //   displayName: 'Messages',
-  //   iconName: 'solar:user-id-outline',
-  //   route: '/admin/messages',
-  //   roles: ['Admin'],
-  // },
-  // {
-  //   displayName: 'faqs',
-  //   iconName: 'solar:user-id-outline',
-  //   route: '/admin/faqs',
-  //   roles: ['Admin'],
-  // },
+  {
+    navCap: 'Admin',
+    roles: ['Admin'],
+  },
+  {
+    displayName: 'Alerts',
+    iconName: 'solar:bell-bing-line-duotone',
+    route: '/admin/alerts',
+    roles: ['Admin'],
+  },
+  {
+    displayName: 'Areas',
+    iconName: 'solar:map-point-line-duotone',
+    route: '/admin/areas',
+    roles: ['Admin'],
+  },
+  {
+    displayName: 'Database Maintenance',
+    iconName: 'solar:database-line-duotone',
+    route: '/admin/maintenance',
+    roles: ['Admin'],
+  },
+  {
+    displayName: 'Devices',
+    iconName: 'solar:devices-line-duotone',
+    route: '/admin/devices',
+    roles: ['Admin'],
+  },
+  {
+    displayName: 'Incidents',
+    iconName: 'solar:danger-triangle-line-duotone',
+    route: '/admin/incidents',
+    roles: ['Admin'],
+  },
+  {
+    displayName: 'Maintenance',
+    iconName: 'solar:wrench-line-duotone',
+    route: '/admin/maintenance-logs',
+    roles: ['Admin'],
+  },
+  {
+    displayName: 'Readings',
+    iconName: 'solar:chart-square-line-duotone',
+    route: '/admin/readings',
+    roles: ['Admin'],
+  },
+  {
+    displayName: 'Positions',
+    iconName: 'solar:map-point-wave-line-duotone',
+    route: '/admin/positions',
+    roles: ['Admin'],
+  },
+  {
+    displayName: 'Roles',
+    iconName: 'solar:shield-user-line-duotone',
+    route: '/admin/roles',
+    roles: ['Admin'],
+  },
+  {
+    displayName: 'Sensors',
+    iconName: 'solar:radar-2-line-duotone',
+    route: '/admin/sensors',
+    roles: ['Admin'],
+  },
+  {
+    displayName: 'Shifts',
+    iconName: 'solar:clock-circle-line-duotone',
+    route: '/admin/shifts',
+    roles: ['Admin'],
+  },
+  {
+    displayName: 'Users',
+    iconName: 'solar:users-group-rounded-line-duotone',
+    route: '/admin/users',
+    roles: ['Admin'],
+  },
   ////////////////////////////////////////// TEMPLATE ROUTES //////////////////////////////////////////
   {
     navCap: 'Template',

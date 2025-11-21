@@ -7,8 +7,8 @@ import { AuthService } from 'src/app/services/auth.service';
 @Injectable({
   providedIn: 'root',
 })
-export class UsersService {
-  private apiUrl = `${environment.apiUrl}/users`;
+export class ShiftsService {
+  private apiUrl = `${environment.apiUrl}/shifts`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -27,37 +27,37 @@ export class UsersService {
   }
 
   /**
-   * Obtiene todos los usuarios
+   * Obtiene todos los turnos
    */
   getAll(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/getall`, { headers: this.getHeaders() });
+    return this.http.get(`${this.apiUrl}/`, { headers: this.getHeaders() });
   }
 
   /**
-   * Obtiene un usuario por ID
+   * Obtiene un turno por ID
    */
   getById(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/getbyid/${id}`, { headers: this.getHeaders() });
+    return this.http.get(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
   /**
-   * Crea un nuevo usuario
+   * Crea un nuevo turno
    */
-  create(user: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/create`, user, { headers: this.getHeaders() });
+  create(shift: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/`, shift, { headers: this.getHeaders() });
   }
 
   /**
-   * Actualiza un usuario existente
+   * Actualiza un turno existente
    */
-  update(user: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/update/${user.id}`, user, { headers: this.getHeaders() });
+  update(shift: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${shift.id}`, shift, { headers: this.getHeaders() });
   }
 
   /**
-   * Elimina un usuario (soft delete)
+   * Elimina un turno
    */
   delete(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/delete/${id}`, { headers: this.getHeaders() });
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 }

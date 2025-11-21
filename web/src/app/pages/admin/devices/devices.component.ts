@@ -19,19 +19,20 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
-import { RolesService } from './roles.service';
+import { DevicesService } from './devices.service';
 
-export interface Role {
+export interface Device {
   id: number;
-  name: string;
-  description: string;
+  model: string;
+  user_id: number;
   is_active: boolean;
+  assigned_at: string;
   created_at: string;
   updated_at: string | null;
 }
 
 @Component({
-  templateUrl: './roles.component.html',
+  templateUrl: './devices.component.html',
   standalone: true,
   imports: [
     MaterialModule,
@@ -42,39 +43,39 @@ export interface Role {
   ],
   providers: [DatePipe],
 })
-export class AppRolesComponent implements AfterViewInit {
+export class AppDevicesComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
   searchText: any;
   displayedColumns: string[] = [
     'id',
-    'name',
-    'description',
+    'model',
+    'user_id',
     'active',
-    'created',
+    'assigned',
     'action',
   ];
-  dataSource = new MatTableDataSource<Role>([]);
+  dataSource = new MatTableDataSource<Device>([]);
 
   constructor(
     public dialog: MatDialog,
     public datePipe: DatePipe,
-    private rolesService: RolesService
+    private devicesService: DevicesService
   ) {}
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-    this.loadRoles();
+    this.loadDevices();
   }
 
-  loadRoles(): void {
-    this.rolesService.getAll().subscribe({
-      next: (roles) => {
-        this.dataSource.data = roles;
+  loadDevices(): void {
+    this.devicesService.getAll().subscribe({
+      next: (devices) => {
+        this.dataSource.data = devices;
       },
       error: (err) => {
-        console.error('Error al obtener roles:', err);
+        console.error('Error al obtener dispositivos:', err);
       },
     });
   }
@@ -85,7 +86,7 @@ export class AppRolesComponent implements AfterViewInit {
 
   openDialog(action: string, obj: any): void {
     obj.action = action;
-    const dialogRef = this.dialog.open(AppRolesDialogComponent, {
+    const dialogRef = this.dialog.open(AppDevicesDialogComponent, {
       data: obj,
     });
 
@@ -100,43 +101,43 @@ export class AppRolesComponent implements AfterViewInit {
     });
   }
 
-  addRowData(row_obj: Role): void {
+  addRowData(row_obj: Device): void {
     const currentData = this.dataSource.data;
     this.dataSource.data = [row_obj, ...currentData];
     this.table.renderRows();
   }
 
-  updateRowData(row_obj: Role): void {
-    this.rolesService.update(row_obj).subscribe({
+  updateRowData(row_obj: Device): void {
+    this.devicesService.update(row_obj).subscribe({
       next: (res) => {
-        this.dataSource.data = this.dataSource.data.map((role) =>
-          role.id === res.id ? res : role
+        this.dataSource.data = this.dataSource.data.map((device) =>
+          device.id === res.id ? res : device
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al actualizar rol:', err);
+        console.error('Error al actualizar dispositivo:', err);
       },
     });
   }
 
-  deleteRowData(row_obj: Role): void {
-    this.rolesService.delete(row_obj.id).subscribe({
+  deleteRowData(row_obj: Device): void {
+    this.devicesService.delete(row_obj.id).subscribe({
       next: () => {
         this.dataSource.data = this.dataSource.data.filter(
-          (role) => role.id !== row_obj.id
+          (device) => device.id !== row_obj.id
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al eliminar rol:', err);
+        console.error('Error al eliminar dispositivo:', err);
       },
     });
   }
 }
 
 @Component({
-  selector: 'app-roles-dialog-content',
+  selector: 'app-devices-dialog',
   standalone: true,
   imports: [
     MatDialogModule,
@@ -146,17 +147,17 @@ export class AppRolesComponent implements AfterViewInit {
     CommonModule,
   ],
   providers: [DatePipe],
-  templateUrl: 'roles-dialog-component.html',
+  templateUrl: 'devices-dialog-component.html',
 })
-export class AppRolesDialogComponent {
+export class AppDevicesDialogComponent {
   public action: string;
   local_data: any;
 
   constructor(
     public datePipe: DatePipe,
-    public dialogRef: MatDialogRef<AppRolesDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Role,
-    private rolesService: RolesService
+    public dialogRef: MatDialogRef<AppDevicesDialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Device,
+    private devicesService: DevicesService
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
@@ -165,32 +166,32 @@ export class AppRolesDialogComponent {
   doAction(): void {
     if (this.action === 'Add') {
       const payload = {
-        name: this.local_data.name,
-        description: this.local_data.description,
+        model: this.local_data.model,
+        user_id: this.local_data.user_id,
       };
 
-      this.rolesService.create(payload).subscribe({
+      this.devicesService.create(payload).subscribe({
         next: (res) => {
           this.dialogRef.close({ event: this.action, data: res });
         },
         error: (err) => {
-          console.error('Error al crear rol:', err);
+          console.error('Error al crear dispositivo:', err);
         },
       });
     } else if (this.action === 'Update') {
       const payload = {
         id: this.local_data.id,
-        name: this.local_data.name,
-        description: this.local_data.description,
+        model: this.local_data.model,
+        user_id: this.local_data.user_id,
         is_active: this.local_data.is_active,
       };
 
-      this.rolesService.update(payload).subscribe({
+      this.devicesService.update(payload).subscribe({
         next: (res) => {
           this.dialogRef.close({ event: this.action, data: res });
         },
         error: (err) => {
-          console.error('Error al actualizar rol:', err);
+          console.error('Error al actualizar dispositivo:', err);
         },
       });
     } else if (this.action === 'Delete') {

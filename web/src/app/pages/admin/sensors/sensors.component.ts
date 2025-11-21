@@ -19,19 +19,22 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
-import { RolesService } from './roles.service';
+import { SensorsService } from './sensors.service';
 
-export interface Role {
+export interface Sensor {
   id: number;
   name: string;
   description: string;
+  unit: string;
+  type: string;
+  device_id: number;
   is_active: boolean;
   created_at: string;
   updated_at: string | null;
 }
 
 @Component({
-  templateUrl: './roles.component.html',
+  templateUrl: './sensors.component.html',
   standalone: true,
   imports: [
     MaterialModule,
@@ -42,7 +45,7 @@ export interface Role {
   ],
   providers: [DatePipe],
 })
-export class AppRolesComponent implements AfterViewInit {
+export class AppSensorsComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
@@ -50,31 +53,32 @@ export class AppRolesComponent implements AfterViewInit {
   displayedColumns: string[] = [
     'id',
     'name',
-    'description',
+    'type',
+    'unit',
+    'device_id',
     'active',
-    'created',
     'action',
   ];
-  dataSource = new MatTableDataSource<Role>([]);
+  dataSource = new MatTableDataSource<Sensor>([]);
 
   constructor(
     public dialog: MatDialog,
     public datePipe: DatePipe,
-    private rolesService: RolesService
+    private sensorsService: SensorsService
   ) {}
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-    this.loadRoles();
+    this.loadSensors();
   }
 
-  loadRoles(): void {
-    this.rolesService.getAll().subscribe({
-      next: (roles) => {
-        this.dataSource.data = roles;
+  loadSensors(): void {
+    this.sensorsService.getAll().subscribe({
+      next: (sensors) => {
+        this.dataSource.data = sensors;
       },
       error: (err) => {
-        console.error('Error al obtener roles:', err);
+        console.error('Error al obtener sensores:', err);
       },
     });
   }
@@ -85,7 +89,7 @@ export class AppRolesComponent implements AfterViewInit {
 
   openDialog(action: string, obj: any): void {
     obj.action = action;
-    const dialogRef = this.dialog.open(AppRolesDialogComponent, {
+    const dialogRef = this.dialog.open(AppSensorsDialogComponent, {
       data: obj,
     });
 
@@ -100,43 +104,43 @@ export class AppRolesComponent implements AfterViewInit {
     });
   }
 
-  addRowData(row_obj: Role): void {
+  addRowData(row_obj: Sensor): void {
     const currentData = this.dataSource.data;
     this.dataSource.data = [row_obj, ...currentData];
     this.table.renderRows();
   }
 
-  updateRowData(row_obj: Role): void {
-    this.rolesService.update(row_obj).subscribe({
+  updateRowData(row_obj: Sensor): void {
+    this.sensorsService.update(row_obj).subscribe({
       next: (res) => {
-        this.dataSource.data = this.dataSource.data.map((role) =>
-          role.id === res.id ? res : role
+        this.dataSource.data = this.dataSource.data.map((sensor) =>
+          sensor.id === res.id ? res : sensor
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al actualizar rol:', err);
+        console.error('Error al actualizar sensor:', err);
       },
     });
   }
 
-  deleteRowData(row_obj: Role): void {
-    this.rolesService.delete(row_obj.id).subscribe({
+  deleteRowData(row_obj: Sensor): void {
+    this.sensorsService.delete(row_obj.id).subscribe({
       next: () => {
         this.dataSource.data = this.dataSource.data.filter(
-          (role) => role.id !== row_obj.id
+          (sensor) => sensor.id !== row_obj.id
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al eliminar rol:', err);
+        console.error('Error al eliminar sensor:', err);
       },
     });
   }
 }
 
 @Component({
-  selector: 'app-roles-dialog-content',
+  selector: 'app-sensors-dialog',
   standalone: true,
   imports: [
     MatDialogModule,
@@ -146,17 +150,17 @@ export class AppRolesComponent implements AfterViewInit {
     CommonModule,
   ],
   providers: [DatePipe],
-  templateUrl: 'roles-dialog-component.html',
+  templateUrl: 'sensors-dialog-component.html',
 })
-export class AppRolesDialogComponent {
+export class AppSensorsDialogComponent {
   public action: string;
   local_data: any;
 
   constructor(
     public datePipe: DatePipe,
-    public dialogRef: MatDialogRef<AppRolesDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Role,
-    private rolesService: RolesService
+    public dialogRef: MatDialogRef<AppSensorsDialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Sensor,
+    private sensorsService: SensorsService
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
@@ -167,14 +171,17 @@ export class AppRolesDialogComponent {
       const payload = {
         name: this.local_data.name,
         description: this.local_data.description,
+        unit: this.local_data.unit,
+        type: this.local_data.type,
+        device_id: this.local_data.device_id,
       };
 
-      this.rolesService.create(payload).subscribe({
+      this.sensorsService.create(payload).subscribe({
         next: (res) => {
           this.dialogRef.close({ event: this.action, data: res });
         },
         error: (err) => {
-          console.error('Error al crear rol:', err);
+          console.error('Error al crear sensor:', err);
         },
       });
     } else if (this.action === 'Update') {
@@ -182,15 +189,18 @@ export class AppRolesDialogComponent {
         id: this.local_data.id,
         name: this.local_data.name,
         description: this.local_data.description,
+        unit: this.local_data.unit,
+        type: this.local_data.type,
+        device_id: this.local_data.device_id,
         is_active: this.local_data.is_active,
       };
 
-      this.rolesService.update(payload).subscribe({
+      this.sensorsService.update(payload).subscribe({
         next: (res) => {
           this.dialogRef.close({ event: this.action, data: res });
         },
         error: (err) => {
-          console.error('Error al actualizar rol:', err);
+          console.error('Error al actualizar sensor:', err);
         },
       });
     } else if (this.action === 'Delete') {

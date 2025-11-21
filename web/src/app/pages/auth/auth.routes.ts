@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 
 import { AppErrorComponent } from './error/error.component';
 import { AppMaintenanceComponent } from './maintenance/maintenance.component';
-import { AppSideForgotPasswordComponent } from './side-forgot-password/side-forgot-password.component';
 import { AppBoxedForgotPasswordComponent } from './boxed-forgot-password/boxed-forgot-password.component';
 import { AppBoxedLoginComponent } from './boxed-login/boxed-login.component';
 import { AppBoxedRegisterComponent } from './boxed-register/boxed-register.component';
@@ -35,10 +34,6 @@ export const AuthRoutes: Routes = [
       {
         path: 'maintenance',
         component: AppMaintenanceComponent,
-      },
-      {
-        path: 'side-forgot-pwd',
-        component: AppSideForgotPasswordComponent,
       },
     ],
   },

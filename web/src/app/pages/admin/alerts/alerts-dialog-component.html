@@ -1,0 +1,93 @@
+<h2 class="f-w-500 m-b-24" mat-dialog-title>
+  <strong>{{ action }} Alert</strong>
+</h2>
+
+@if (action !== 'Delete') {
+<mat-dialog-content style="max-width: 600px">
+  <form #alertForm="ngForm">
+    <div class="row">
+      <div class="col-lg-12">
+        <mat-label class="f-w-600 m-b-8 d-block">Alert Type</mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="text"
+            matInput
+            required
+            id="alert_type"
+            name="alert_type"
+            [(ngModel)]="local_data.alert_type"
+            placeholder="Alert Type"
+          />
+          <mat-icon matPrefix>
+            <i-tabler name="alert-triangle" class="icon-20 d-flex"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-6">
+        <mat-label class="f-w-600 m-b-8 d-block">Severity</mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select
+            [(ngModel)]="local_data.severity"
+            name="severity"
+            required
+          >
+            <mat-option value="low">Low</mat-option>
+            <mat-option value="medium">Medium</mat-option>
+            <mat-option value="high">High</mat-option>
+          </mat-select>
+          <mat-icon matPrefix>
+            <i-tabler name="mood-crazy-happy" class="icon-20 d-flex"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-6">
+        <mat-label class="f-w-600 m-b-8 d-block">Reading ID</mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="number"
+            matInput
+            required
+            id="reading_id"
+            name="reading_id"
+            [(ngModel)]="local_data.reading_id"
+            placeholder="Reading ID"
+          />
+          <mat-icon matPrefix>
+            <i-tabler name="hash" class="icon-20 d-flex"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end mt-3">
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="doAction()"
+        [disabled]="!alertForm.valid"
+        class="m-r-8"
+      >
+        {{ action }}
+      </button>
+      <button mat-stroked-button (click)="closeDialog()" color="warn">
+        Cancel
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>
+} @else {
+<mat-dialog-content>
+  <p class="m-t-16">
+    Are you sure you want to delete the alert
+    <strong>#{{ local_data.id }}</strong> ({{ local_data.alert_type }})?
+  </p>
+  <div class="d-flex justify-content-end m-t-24">
+    <button mat-flat-button color="warn" (click)="doAction()" class="m-r-8">
+      Delete
+    </button>
+    <button mat-stroked-button (click)="closeDialog()">Cancel</button>
+  </div>
+</mat-dialog-content>
+}

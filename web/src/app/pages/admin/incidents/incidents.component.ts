@@ -19,19 +19,21 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
-import { RolesService } from './roles.service';
+import { IncidentsService } from './incidents.service';
 
-export interface Role {
+export interface Incident {
   id: number;
-  name: string;
   description: string;
-  is_active: boolean;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  user_id: number;
+  device_id: number;
+  reading_id: number;
   created_at: string;
   updated_at: string | null;
 }
 
 @Component({
-  templateUrl: './roles.component.html',
+  templateUrl: './incidents.component.html',
   standalone: true,
   imports: [
     MaterialModule,
@@ -42,39 +44,41 @@ export interface Role {
   ],
   providers: [DatePipe],
 })
-export class AppRolesComponent implements AfterViewInit {
+export class AppIncidentsComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
   searchText: any;
   displayedColumns: string[] = [
     'id',
-    'name',
     'description',
-    'active',
+    'severity',
+    'user_id',
+    'device_id',
+    'reading_id',
     'created',
     'action',
   ];
-  dataSource = new MatTableDataSource<Role>([]);
+  dataSource = new MatTableDataSource<Incident>([]);
 
   constructor(
     public dialog: MatDialog,
     public datePipe: DatePipe,
-    private rolesService: RolesService
+    private incidentsService: IncidentsService
   ) {}
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-    this.loadRoles();
+    this.loadIncidents();
   }
 
-  loadRoles(): void {
-    this.rolesService.getAll().subscribe({
-      next: (roles) => {
-        this.dataSource.data = roles;
+  loadIncidents(): void {
+    this.incidentsService.getAll().subscribe({
+      next: (incidents) => {
+        this.dataSource.data = incidents;
       },
       error: (err) => {
-        console.error('Error al obtener roles:', err);
+        console.error('Error al obtener reportes de incidentes:', err);
       },
     });
   }
@@ -83,9 +87,24 @@ export class AppRolesComponent implements AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  getSeverityClass(severity: string): string {
+    switch (severity) {
+      case 'low':
+        return 'bg-success';
+      case 'medium':
+        return 'bg-warning';
+      case 'high':
+        return 'bg-error';
+      case 'critical':
+        return 'bg-error';
+      default:
+        return 'bg-secondary';
+    }
+  }
+
   openDialog(action: string, obj: any): void {
     obj.action = action;
-    const dialogRef = this.dialog.open(AppRolesDialogComponent, {
+    const dialogRef = this.dialog.open(AppIncidentsDialogComponent, {
       data: obj,
     });
 
@@ -100,43 +119,43 @@ export class AppRolesComponent implements AfterViewInit {
     });
   }
 
-  addRowData(row_obj: Role): void {
+  addRowData(row_obj: Incident): void {
     const currentData = this.dataSource.data;
     this.dataSource.data = [row_obj, ...currentData];
     this.table.renderRows();
   }
 
-  updateRowData(row_obj: Role): void {
-    this.rolesService.update(row_obj).subscribe({
+  updateRowData(row_obj: Incident): void {
+    this.incidentsService.update(row_obj).subscribe({
       next: (res) => {
-        this.dataSource.data = this.dataSource.data.map((role) =>
-          role.id === res.id ? res : role
+        this.dataSource.data = this.dataSource.data.map((incident) =>
+          incident.id === res.id ? res : incident
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al actualizar rol:', err);
+        console.error('Error al actualizar reporte de incidente:', err);
       },
     });
   }
 
-  deleteRowData(row_obj: Role): void {
-    this.rolesService.delete(row_obj.id).subscribe({
+  deleteRowData(row_obj: Incident): void {
+    this.incidentsService.delete(row_obj.id).subscribe({
       next: () => {
         this.dataSource.data = this.dataSource.data.filter(
-          (role) => role.id !== row_obj.id
+          (incident) => incident.id !== row_obj.id
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al eliminar rol:', err);
+        console.error('Error al eliminar reporte de incidente:', err);
       },
     });
   }
 }
 
 @Component({
-  selector: 'app-roles-dialog-content',
+  selector: 'app-incidents-dialog',
   standalone: true,
   imports: [
     MatDialogModule,
@@ -146,17 +165,17 @@ export class AppRolesComponent implements AfterViewInit {
     CommonModule,
   ],
   providers: [DatePipe],
-  templateUrl: 'roles-dialog-component.html',
+  templateUrl: 'incidents-dialog-component.html',
 })
-export class AppRolesDialogComponent {
+export class AppIncidentsDialogComponent {
   public action: string;
   local_data: any;
 
   constructor(
     public datePipe: DatePipe,
-    public dialogRef: MatDialogRef<AppRolesDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Role,
-    private rolesService: RolesService
+    public dialogRef: MatDialogRef<AppIncidentsDialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Incident,
+    private incidentsService: IncidentsService
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
@@ -165,32 +184,37 @@ export class AppRolesDialogComponent {
   doAction(): void {
     if (this.action === 'Add') {
       const payload = {
-        name: this.local_data.name,
         description: this.local_data.description,
+        severity: this.local_data.severity,
+        user_id: this.local_data.user_id,
+        device_id: this.local_data.device_id,
+        reading_id: this.local_data.reading_id,
       };
 
-      this.rolesService.create(payload).subscribe({
+      this.incidentsService.create(payload).subscribe({
         next: (res) => {
           this.dialogRef.close({ event: this.action, data: res });
         },
         error: (err) => {
-          console.error('Error al crear rol:', err);
+          console.error('Error al crear reporte de incidente:', err);
         },
       });
     } else if (this.action === 'Update') {
       const payload = {
         id: this.local_data.id,
-        name: this.local_data.name,
         description: this.local_data.description,
-        is_active: this.local_data.is_active,
+        severity: this.local_data.severity,
+        user_id: this.local_data.user_id,
+        device_id: this.local_data.device_id,
+        reading_id: this.local_data.reading_id,
       };
 
-      this.rolesService.update(payload).subscribe({
+      this.incidentsService.update(payload).subscribe({
         next: (res) => {
           this.dialogRef.close({ event: this.action, data: res });
         },
         error: (err) => {
-          console.error('Error al actualizar rol:', err);
+          console.error('Error al actualizar reporte de incidente:', err);
         },
       });
     } else if (this.action === 'Delete') {

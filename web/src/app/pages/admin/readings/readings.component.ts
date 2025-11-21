@@ -19,19 +19,18 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
-import { RolesService } from './roles.service';
+import { ReadingsService } from './readings.service';
 
-export interface Role {
+export interface Reading {
   id: number;
-  name: string;
-  description: string;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string | null;
+  value: number;
+  sensor_id: number;
+  user_id: number;
+  timestamp: string;
 }
 
 @Component({
-  templateUrl: './roles.component.html',
+  templateUrl: './readings.component.html',
   standalone: true,
   imports: [
     MaterialModule,
@@ -42,39 +41,39 @@ export interface Role {
   ],
   providers: [DatePipe],
 })
-export class AppRolesComponent implements AfterViewInit {
+export class AppReadingsComponent implements AfterViewInit {
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
 
   searchText: any;
   displayedColumns: string[] = [
     'id',
-    'name',
-    'description',
-    'active',
-    'created',
+    'value',
+    'sensor_id',
+    'user_id',
+    'timestamp',
     'action',
   ];
-  dataSource = new MatTableDataSource<Role>([]);
+  dataSource = new MatTableDataSource<Reading>([]);
 
   constructor(
     public dialog: MatDialog,
     public datePipe: DatePipe,
-    private rolesService: RolesService
+    private readingsService: ReadingsService
   ) {}
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-    this.loadRoles();
+    this.loadReadings();
   }
 
-  loadRoles(): void {
-    this.rolesService.getAll().subscribe({
-      next: (roles) => {
-        this.dataSource.data = roles;
+  loadReadings(): void {
+    this.readingsService.getAll().subscribe({
+      next: (readings) => {
+        this.dataSource.data = readings;
       },
       error: (err) => {
-        console.error('Error al obtener roles:', err);
+        console.error('Error al obtener lecturas:', err);
       },
     });
   }
@@ -85,7 +84,7 @@ export class AppRolesComponent implements AfterViewInit {
 
   openDialog(action: string, obj: any): void {
     obj.action = action;
-    const dialogRef = this.dialog.open(AppRolesDialogComponent, {
+    const dialogRef = this.dialog.open(AppReadingsDialogComponent, {
       data: obj,
     });
 
@@ -100,43 +99,43 @@ export class AppRolesComponent implements AfterViewInit {
     });
   }
 
-  addRowData(row_obj: Role): void {
+  addRowData(row_obj: Reading): void {
     const currentData = this.dataSource.data;
     this.dataSource.data = [row_obj, ...currentData];
     this.table.renderRows();
   }
 
-  updateRowData(row_obj: Role): void {
-    this.rolesService.update(row_obj).subscribe({
+  updateRowData(row_obj: Reading): void {
+    this.readingsService.update(row_obj).subscribe({
       next: (res) => {
-        this.dataSource.data = this.dataSource.data.map((role) =>
-          role.id === res.id ? res : role
+        this.dataSource.data = this.dataSource.data.map((reading) =>
+          reading.id === res.id ? res : reading
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al actualizar rol:', err);
+        console.error('Error al actualizar lectura:', err);
       },
     });
   }
 
-  deleteRowData(row_obj: Role): void {
-    this.rolesService.delete(row_obj.id).subscribe({
+  deleteRowData(row_obj: Reading): void {
+    this.readingsService.delete(row_obj.id).subscribe({
       next: () => {
         this.dataSource.data = this.dataSource.data.filter(
-          (role) => role.id !== row_obj.id
+          (reading) => reading.id !== row_obj.id
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al eliminar rol:', err);
+        console.error('Error al eliminar lectura:', err);
       },
     });
   }
 }
 
 @Component({
-  selector: 'app-roles-dialog-content',
+  selector: 'app-readings-dialog',
   standalone: true,
   imports: [
     MatDialogModule,
@@ -146,17 +145,17 @@ export class AppRolesComponent implements AfterViewInit {
     CommonModule,
   ],
   providers: [DatePipe],
-  templateUrl: 'roles-dialog-component.html',
+  templateUrl: 'readings-dialog-component.html',
 })
-export class AppRolesDialogComponent {
+export class AppReadingsDialogComponent {
   public action: string;
   local_data: any;
 
   constructor(
     public datePipe: DatePipe,
-    public dialogRef: MatDialogRef<AppRolesDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Role,
-    private rolesService: RolesService
+    public dialogRef: MatDialogRef<AppReadingsDialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Reading,
+    private readingsService: ReadingsService
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
@@ -165,32 +164,33 @@ export class AppRolesDialogComponent {
   doAction(): void {
     if (this.action === 'Add') {
       const payload = {
-        name: this.local_data.name,
-        description: this.local_data.description,
+        value: this.local_data.value,
+        sensor_id: this.local_data.sensor_id,
+        user_id: this.local_data.user_id,
       };
 
-      this.rolesService.create(payload).subscribe({
+      this.readingsService.create(payload).subscribe({
         next: (res) => {
           this.dialogRef.close({ event: this.action, data: res });
         },
         error: (err) => {
-          console.error('Error al crear rol:', err);
+          console.error('Error al crear lectura:', err);
         },
       });
     } else if (this.action === 'Update') {
       const payload = {
         id: this.local_data.id,
-        name: this.local_data.name,
-        description: this.local_data.description,
-        is_active: this.local_data.is_active,
+        value: this.local_data.value,
+        sensor_id: this.local_data.sensor_id,
+        user_id: this.local_data.user_id,
       };
 
-      this.rolesService.update(payload).subscribe({
+      this.readingsService.update(payload).subscribe({
         next: (res) => {
           this.dialogRef.close({ event: this.action, data: res });
         },
         error: (err) => {
-          console.error('Error al actualizar rol:', err);
+          console.error('Error al actualizar lectura:', err);
         },
       });
     } else if (this.action === 'Delete') {

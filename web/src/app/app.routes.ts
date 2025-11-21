@@ -94,38 +94,10 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'teaching',
-        loadChildren: () =>
-          import('./pages/landingpage/teaching/teaching.routes').then(
-            (m) => m.TeachingRoutes
-          ),
-      },
-      {
         path: 'aboutus',
         loadChildren: () =>
           import('./pages/landingpage/aboutus/aboutus.routes').then(
             (m) => m.AboutUsRoutes
-          ),
-      },
-      {
-        path: 'help',
-        loadChildren: () =>
-          import('./pages/landingpage/help/help.routes').then(
-            (m) => m.HelpRoutes
-          ),
-      },
-      {
-        path: 'privacy',
-        loadChildren: () =>
-          import('./pages/landingpage/privacy/privacy.routes').then(
-            (m) => m.PrivacyRoutes
-          ),
-      },
-      {
-        path: 'employment',
-        loadChildren: () =>
-          import('./pages/landingpage/employment/employment.routes').then(
-            (m) => m.EmploymentRoutes
           ),
       },
     ],

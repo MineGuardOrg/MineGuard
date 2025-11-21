@@ -7,8 +7,8 @@ import { AuthService } from 'src/app/services/auth.service';
 @Injectable({
   providedIn: 'root',
 })
-export class UsersService {
-  private apiUrl = `${environment.apiUrl}/users`;
+export class PositionsService {
+  private apiUrl = `${environment.apiUrl}/positions`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -27,37 +27,37 @@ export class UsersService {
   }
 
   /**
-   * Obtiene todos los usuarios
+   * Obtiene todas las posiciones
    */
   getAll(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/getall`, { headers: this.getHeaders() });
+    return this.http.get(`${this.apiUrl}/`, { headers: this.getHeaders() });
   }
 
   /**
-   * Obtiene un usuario por ID
+   * Obtiene una posición por ID
    */
   getById(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/getbyid/${id}`, { headers: this.getHeaders() });
+    return this.http.get(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
   /**
-   * Crea un nuevo usuario
+   * Crea una nueva posición
    */
-  create(user: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/create`, user, { headers: this.getHeaders() });
+  create(position: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/`, position, { headers: this.getHeaders() });
   }
 
   /**
-   * Actualiza un usuario existente
+   * Actualiza una posición existente
    */
-  update(user: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/update/${user.id}`, user, { headers: this.getHeaders() });
+  update(position: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${position.id}`, position, { headers: this.getHeaders() });
   }
 
   /**
-   * Elimina un usuario (soft delete)
+   * Elimina una posición
    */
   delete(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/delete/${id}`, { headers: this.getHeaders() });
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 }
