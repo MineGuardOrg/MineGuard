@@ -1,4 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import FileResponse
+from pathlib import Path
 from app.modules.database_maintenance.service import DatabaseMaintenanceService
 from app.modules.database_maintenance.models import BackupResponse
 from app.modules.auth.service import AuthService
@@ -9,12 +11,12 @@ database_maintenance_router = APIRouter()
 auth_service = AuthService()
 
 
-@database_maintenance_router.post("/backup", response_model=BackupResponse)
+@database_maintenance_router.post("/backup")
 async def create_database_backup(
     current_user: dict = Depends(get_current_user)
 ):
     """
-    Crea un backup completo de la base de datos MySQL.
+    Crea un backup completo de la base de datos MySQL y lo descarga automáticamente.
     
     El backup incluye:
     - Todos los datos de todas las tablas
@@ -24,7 +26,7 @@ async def create_database_backup(
     - Eventos programados
     - Soporte completo para caracteres especiales (UTF-8)
     
-    El archivo se guarda en backend/sql con formato: backup_YYYYMMDD_HHMMSS.sql
+    El archivo se guarda en backend/sql y se descarga automáticamente con formato: backup_YYYYMMDD.sql
     
     **Requiere autenticación**
     """
@@ -37,7 +39,19 @@ async def create_database_backup(
         service = DatabaseMaintenanceService()
         result = service.create_backup()
         
-        return BackupResponse(**result)
+        # Obtener la ruta completa del archivo
+        backup_dir = Path(__file__).resolve().parents[3] / "sql"
+        backup_path = backup_dir / result["backup_file"]
+        
+        # Retornar el archivo para descarga
+        return FileResponse(
+            path=str(backup_path),
+            filename=result["backup_file"],
+            media_type="application/sql",
+            headers={
+                "Content-Disposition": f"attachment; filename={result['backup_file']}"
+            }
+        )
         
     except DatabaseError as e:
         raise HTTPException(status_code=500, detail=e.message)

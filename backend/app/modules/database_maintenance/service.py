@@ -66,7 +66,7 @@ class DatabaseMaintenanceService:
         try:
             # Generar nombre del archivo con fecha
             backup_date = datetime.now()
-            filename = f"backup_{backup_date.strftime('%Y%m%d_%H%M%S')}.sql"
+            filename = f"backup_{backup_date.strftime('%Y%m%d')}.sql"
             backup_path = self.backup_dir / filename
             
             # Conectar a la base de datos
