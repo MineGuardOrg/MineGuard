@@ -65,6 +65,7 @@ export class AppWorkoutByShiftComponent {
         fontFamily: 'inherit',
         foreColor: '#a1aab2',
         height: 300,
+        width: 800,
         type: 'area',
         toolbar: {
           show: false,

@@ -21,6 +21,7 @@ from app.modules.connection.router import connection_router
 from app.modules.ml_training_data.router import ml_training_data_router
 from app.modules.ml_prediction.router import ml_prediction_router
 from app.modules.dashboard.router import dashboard_router
+from app.modules.database_maintenance.router import database_maintenance_router
 
 app = FastAPI(title="MineGuard API", version="1.0.0")
 
@@ -44,6 +45,7 @@ app.include_router(area_router, prefix="/areas", tags=["Areas"])
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(connection_router, prefix="/connections", tags=["Connections"])
 app.include_router(dashboard_router, prefix="/dashboard", tags=["Dashboard"])
+app.include_router(database_maintenance_router, prefix="/database-maintenance", tags=["DatabaseMaintenance"])
 app.include_router(device_router, prefix="/devices", tags=["Devices"])
 app.include_router(incident_report_router, prefix="/incidents", tags=["Incidents"])
 app.include_router(maintenance_log_router, prefix="/maintenance", tags=["Maintenance"])
