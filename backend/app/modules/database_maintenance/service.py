@@ -1,5 +1,8 @@
 import os
 import pymysql
+import csv
+import zipfile
+import shutil
 from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
@@ -192,3 +195,127 @@ class DatabaseMaintenanceService:
         finally:
             if connection:
                 connection.close()
+    
+    def create_csv_backup(self) -> dict:
+        """
+        Crea un backup en formato CSV con cada tabla en un archivo separado
+        Todos los archivos CSV se comprimen en un ZIP
+        Retorna información sobre el backup creado
+        """
+        connection = None
+        temp_dir = None
+        try:
+            # Generar nombre del archivo con fecha
+            backup_date = datetime.now()
+            timestamp = backup_date.strftime('%Y%m%d_%H%M%S')
+            zip_filename = f"backup_csv_{timestamp}.zip"
+            zip_path = self.backup_dir / zip_filename
+            
+            # Crear directorio temporal para los CSVs
+            temp_dir = self.backup_dir / f"temp_{timestamp}"
+            temp_dir.mkdir(exist_ok=True)
+            
+            # Conectar a la base de datos
+            connection = self._get_connection()
+            cursor = connection.cursor()
+            
+            # Obtener todas las tablas
+            cursor.execute("SHOW TABLES")
+            tables = [table[0] for table in cursor.fetchall()]
+            
+            if not tables:
+                raise DatabaseError("No se encontraron tablas en la base de datos")
+            
+            # Crear archivo README con información del backup
+            readme_path = temp_dir / "README.txt"
+            with open(readme_path, 'w', encoding='utf-8') as readme:
+                readme.write(f"MineGuard Database CSV Backup\n")
+                readme.write(f"================================\n\n")
+                readme.write(f"Database: {self.db_name}\n")
+                readme.write(f"Host: {self.db_host}\n")
+                readme.write(f"Date: {backup_date.strftime('%Y-%m-%d')}\n")
+                readme.write(f"Total Tables: {len(tables)}\n\n")
+                readme.write(f"Tables included:\n")
+                for table in tables:
+                    readme.write(f"  - {table}.csv\n")
+                readme.write(f"\nEach CSV file contains the complete data from its corresponding table.\n")
+                readme.write(f"Encoding: UTF-8 with BOM (compatible with Excel)\n")
+            
+            # Exportar cada tabla a CSV
+            total_rows = 0
+            for table in tables:
+                csv_path = temp_dir / f"{table}.csv"
+                
+                # Obtener datos de la tabla
+                cursor.execute(f"SELECT * FROM `{table}`")
+                rows = cursor.fetchall()
+                
+                # Obtener nombres de columnas
+                cursor.execute(f"SHOW COLUMNS FROM `{table}`")
+                columns = [col[0] for col in cursor.fetchall()]
+                
+                # Escribir CSV con UTF-8 BOM para compatibilidad con Excel
+                with open(csv_path, 'w', newline='', encoding='utf-8-sig') as csv_file:
+                    writer = csv.writer(csv_file, quoting=csv.QUOTE_MINIMAL)
+                    
+                    # Escribir encabezados
+                    writer.writerow(columns)
+                    
+                    # Escribir datos
+                    for row in rows:
+                        # Convertir None a string vacío y manejar otros tipos
+                        clean_row = []
+                        for value in row:
+                            if value is None:
+                                clean_row.append('')
+                            elif isinstance(value, (bytes, bytearray)):
+                                clean_row.append(f"0x{value.hex()}")
+                            elif isinstance(value, datetime):
+                                clean_row.append(value.strftime('%Y-%m-%d'))
+                            else:
+                                clean_row.append(str(value))
+                        writer.writerow(clean_row)
+                    
+                    total_rows += len(rows)
+            
+            cursor.close()
+            
+            # Crear archivo ZIP con todos los CSVs
+            with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                # Agregar README
+                zipf.write(readme_path, arcname="README.txt")
+                
+                # Agregar todos los archivos CSV
+                for table in tables:
+                    csv_path = temp_dir / f"{table}.csv"
+                    if csv_path.exists():
+                        zipf.write(csv_path, arcname=f"{table}.csv")
+            
+            # Limpiar directorio temporal
+            shutil.rmtree(temp_dir)
+            temp_dir = None
+            
+            # Obtener tamaño del archivo ZIP
+            file_size_bytes = zip_path.stat().st_size
+            file_size_mb = round(file_size_bytes / (1024 * 1024), 2)
+            
+            return {
+                "success": True,
+                "message": f"Backup CSV creado exitosamente con {len(tables)} tablas y {total_rows} registros",
+                "backup_file": zip_filename,
+                "backup_date": backup_date,
+                "file_size_mb": file_size_mb,
+                "tables_count": len(tables),
+                "total_rows": total_rows
+            }
+            
+        except pymysql.Error as e:
+            raise DatabaseError(f"Error de base de datos al crear backup CSV: {str(e)}")
+        except Exception as e:
+            raise DatabaseError(f"Error inesperado al crear backup CSV: {str(e)}")
+        finally:
+            if connection:
+                connection.close()
+            # Limpiar directorio temporal si existe
+            if temp_dir and temp_dir.exists():
+                shutil.rmtree(temp_dir)

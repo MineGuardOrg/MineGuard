@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Optional
 
 
 class BackupResponse(BaseModel):
@@ -9,3 +10,14 @@ class BackupResponse(BaseModel):
     backup_file: str
     backup_date: datetime
     file_size_mb: float
+
+
+class CSVBackupResponse(BaseModel):
+    """Respuesta del endpoint de backup CSV"""
+    success: bool
+    message: str
+    backup_file: str
+    backup_date: datetime
+    file_size_mb: float
+    tables_count: int
+    total_rows: int
