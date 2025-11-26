@@ -20,6 +20,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
 import { RolesService } from './roles.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface Role {
   id: number;
@@ -32,6 +33,7 @@ export interface Role {
 
 @Component({
   templateUrl: './roles.component.html',
+  styleUrls: ['./roles.component.scss'],
   standalone: true,
   imports: [
     MaterialModule,
@@ -39,6 +41,7 @@ export interface Role {
     MatNativeDateModule,
     NgScrollbarModule,
     CommonModule,
+    TranslateModule,
   ],
   providers: [DatePipe],
 })
@@ -96,6 +99,8 @@ export class AppRolesComponent implements AfterViewInit {
         this.updateRowData(result.data);
       } else if (result?.event === 'Delete') {
         this.deleteRowData(result.data);
+      } else if (result?.event === 'Reactivate') {
+        this.reactivateRowData(result.data);
       }
     });
   }
@@ -123,13 +128,33 @@ export class AppRolesComponent implements AfterViewInit {
   deleteRowData(row_obj: Role): void {
     this.rolesService.delete(row_obj.id).subscribe({
       next: () => {
-        this.dataSource.data = this.dataSource.data.filter(
-          (role) => role.id !== row_obj.id
+        // Soft delete: actualizar el estado is_active en lugar de eliminar
+        this.dataSource.data = this.dataSource.data.map((role) =>
+          role.id === row_obj.id ? { ...role, is_active: false } : role
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al eliminar rol:', err);
+        console.error('Error al desactivar rol:', err);
+      },
+    });
+  }
+
+  reactivateRowData(row_obj: Role): void {
+    // Reactivar rol cambiando is_active a true
+    const payload = {
+      id: row_obj.id,
+      is_active: true
+    };
+    this.rolesService.update(payload).subscribe({
+      next: (res) => {
+        this.dataSource.data = this.dataSource.data.map((role) =>
+          role.id === res.id ? res : role
+        );
+        this.table.renderRows();
+      },
+      error: (err) => {
+        console.error('Error al reactivar rol:', err);
       },
     });
   }
@@ -144,6 +169,7 @@ export class AppRolesComponent implements AfterViewInit {
     MaterialModule,
     TablerIconsModule,
     CommonModule,
+    TranslateModule,
   ],
   providers: [DatePipe],
   templateUrl: 'roles-dialog-component.html',
@@ -196,6 +222,10 @@ export class AppRolesDialogComponent {
     } else if (this.action === 'Delete') {
       this.dialogRef.close({ event: this.action, data: this.local_data });
     }
+  }
+
+  doActionReactivate(): void {
+    this.dialogRef.close({ event: 'Reactivate', data: this.local_data });
   }
 
   closeDialog(): void {

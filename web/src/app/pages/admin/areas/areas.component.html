@@ -5,7 +5,7 @@
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <input
             matInput
-            placeholder="Search Area"
+            [placeholder]="'AREAS.SEARCH_PLACEHOLDER' | translate"
             (keyup)="applyFilter($any($event.target).value)"
           />
           <mat-icon matSuffix>
@@ -15,7 +15,7 @@
       </div>
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
         <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
-          Add Area
+          {{ 'AREAS.ADD_AREA' | translate }}
         </button>
       </div>
     </div>
@@ -32,7 +32,7 @@
         </ng-container>
 
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Name</th>
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">{{ 'AREAS.NAME' | translate }}</th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.name }}
           </td>
@@ -40,7 +40,7 @@
 
         <ng-container matColumnDef="description">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Description
+            {{ 'AREAS.DESCRIPTION' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.description || 'N/A' }}
@@ -49,21 +49,21 @@
 
         <ng-container matColumnDef="active">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Status
+            {{ 'AREAS.STATUS' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             <span
               class="badge"
-              [ngClass]="element.is_active ? 'bg-success' : 'bg-danger'"
+              [ngClass]="element.is_active ? 'bg-success' : 'bg-error'"
             >
-              {{ element.is_active ? "Active" : "Inactive" }}
+              {{ element.is_active ? ('AREAS.ACTIVE' | translate) : ('AREAS.INACTIVE' | translate) }}
             </span>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="created">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Created Date
+            {{ 'AREAS.CREATED_DATE' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.created_at | date : "short" }}
@@ -72,7 +72,7 @@
 
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Action
+            {{ 'AREAS.ACTION' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="action-link">
             <a
@@ -80,12 +80,23 @@
               class="m-r-10 cursor-pointer"
               ><i-tabler name="edit" class="icon-18"></i-tabler
             ></a>
+            @if (element.is_active) {
             <a
               (click)="openDialog('Delete', element)"
               class="m-r-10 cursor-pointer"
+              [attr.title]="'AREAS.TOOLTIP_DEACTIVATE' | translate"
             >
-              <i-tabler name="trash" class="icon-18"></i-tabler>
+              <i-tabler name="trash" class="icon-18 text-danger"></i-tabler>
             </a>
+            } @else {
+            <a
+              (click)="openDialog('Reactivate', element)"
+              class="m-r-10 cursor-pointer"
+              [attr.title]="'AREAS.TOOLTIP_REACTIVATE' | translate"
+            >
+              <i-tabler name="refresh" class="icon-18 text-success"></i-tabler>
+            </a>
+            }
           </td>
         </ng-container>
 
@@ -93,7 +104,8 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
       <mat-paginator
-        [pageSizeOptions]="[5, 10, 20]"
+        [pageSize]="10"
+        [pageSizeOptions]="[10, 20, 30]"
         showFirstLastButtons
       ></mat-paginator>
     </div>

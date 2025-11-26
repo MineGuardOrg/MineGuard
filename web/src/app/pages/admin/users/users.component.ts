@@ -17,13 +17,13 @@ import {
   MatDialogModule,
 } from '@angular/material/dialog';
 import { CommonModule, DatePipe } from '@angular/common';
-import { AppAddUsersComponent } from './add/add.component';
 import { FormsModule } from '@angular/forms';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
 import { UsersService } from './users.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 export interface User {
   id: number;
@@ -42,6 +42,7 @@ export interface User {
 
 @Component({
   templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss'],
   standalone: true,
   imports: [
     MaterialModule,
@@ -49,6 +50,7 @@ export interface User {
     MatNativeDateModule,
     NgScrollbarModule,
     CommonModule,
+    TranslateModule,
   ],
   providers: [DatePipe],
 })
@@ -113,23 +115,33 @@ export class AppUsersComponent implements AfterViewInit {
         this.updateRowData(result.data);
       } else if (result?.event === 'Delete') {
         this.deleteRowData(result.data);
+      } else if (result?.event === 'Reactivate') {
+        this.reactivateRowData(result.data);
       }
     });
   }
 
   addRowData(row_obj: User): void {
+    const mappedUser = {
+      ...row_obj,
+      fullName: `${row_obj.first_name} ${row_obj.last_name}`
+    };
     const currentData = this.dataSource.data;
-    this.dataSource.data = [row_obj, ...currentData];
-    this.dialog.open(AppAddUsersComponent);
+    this.dataSource.data = [mappedUser, ...currentData];
     this.table.renderRows();
   }
 
   updateRowData(row_obj: User): void {
     this.usersService.update(row_obj).subscribe({
       next: (res) => {
+        // Agregar fullName al usuario actualizado
+        const mappedUser = {
+          ...res,
+          fullName: `${res.first_name} ${res.last_name}`
+        };
         // Actualizar la tabla local con el objeto actualizado
         this.dataSource.data = this.dataSource.data.map((user) =>
-          user.id === res.id ? res : user
+          user.id === res.id ? mappedUser : user
         );
         this.table.renderRows();
       },
@@ -142,13 +154,38 @@ export class AppUsersComponent implements AfterViewInit {
   deleteRowData(row_obj: User): void {
     this.usersService.delete(row_obj.id).subscribe({
       next: () => {
-        this.dataSource.data = this.dataSource.data.filter(
-          (user) => user.id !== row_obj.id
+        // Soft delete: actualizar el estado is_active en lugar de eliminar
+        this.dataSource.data = this.dataSource.data.map((user) =>
+          user.id === row_obj.id ? { ...user, is_active: false } : user
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al eliminar usuario:', err);
+        console.error('Error al desactivar usuario:', err);
+      },
+    });
+  }
+
+  reactivateRowData(row_obj: User): void {
+    // Reactivar usuario cambiando is_active a true
+    const payload = {
+      id: row_obj.id,
+      is_active: true
+    };
+    this.usersService.update(payload).subscribe({
+      next: (res) => {
+        // Agregar fullName al usuario reactivado
+        const mappedUser = {
+          ...res,
+          fullName: `${res.first_name} ${res.last_name}`
+        };
+        this.dataSource.data = this.dataSource.data.map((user) =>
+          user.id === res.id ? mappedUser : user
+        );
+        this.table.renderRows();
+      },
+      error: (err) => {
+        console.error('Error al reactivar usuario:', err);
       },
     });
   }
@@ -158,7 +195,7 @@ export class AppUsersComponent implements AfterViewInit {
   // tslint:disable-next-line: component-selector
   selector: 'app-dialog-component',
   standalone: true,
-  imports: [MatDialogModule, FormsModule, MaterialModule, TablerIconsModule, CommonModule],
+  imports: [MatDialogModule, FormsModule, MaterialModule, TablerIconsModule, CommonModule, TranslateModule],
   providers: [DatePipe],
   templateUrl: 'users-dialog-component.html',
 })
@@ -167,35 +204,34 @@ export class AppKichenSinkDialogComponent {
   public action: string;
   // tslint:disable-next-line - Disables all
   local_data: any;
-  selectedImage: any = '';
 
   constructor(
     public datePipe: DatePipe,
     public dialogRef: MatDialogRef<AppKichenSinkDialogComponent>,
     // @Optional() is used to prevent error if no data is passed
     @Optional() @Inject(MAT_DIALOG_DATA) public data: User,
-    private usersService: UsersService // <-- Esto debe estar
+    private usersService: UsersService,
+    private translate: TranslateService
   ) {
     this.local_data = { ...data };
     this.action = this.local_data.action;
-    // if (this.local_data.RegisterDate !== undefined) {
-    //   this.joiningDate = this.datePipe.transform(
-    //     new Date(this.local_data.RegisterDate),
-    //     'yyyy-MM-dd'
-    //   );
-    // }
-    if (this.local_data.imagePath === undefined) {
-      this.local_data.imagePath = 'assets/images/profile/user-1.jpg';
-    }
   }
 
   doAction(): void {
     if (this.action === 'Add') {
+      // Validar contraseña
+      if (!this.local_data.password || this.local_data.password.length < 8) {
+        alert(this.translate.instant('USERS.PASSWORD_ERROR'));
+        return;
+      }
+
       const payload = {
-        name: this.local_data.name,
+        employee_number: this.local_data.employee_number,
+        first_name: this.local_data.first_name,
+        last_name: this.local_data.last_name,
         email: this.local_data.email,
         password: this.local_data.password,
-        rol: this.local_data.rol,
+        role_id: this.local_data.role_id,
       };
 
       this.usersService.create(payload).subscribe({
@@ -207,40 +243,36 @@ export class AppKichenSinkDialogComponent {
         },
       });
     } else {
-      const payload = {
+      // Validar contraseña si se proporciona
+      if (this.local_data.password && this.local_data.password.length < 8) {
+        alert(this.translate.instant('USERS.PASSWORD_ERROR'));
+        return;
+      }
+
+      const payload: any = {
         id: this.local_data.id,
-        name: this.local_data.name,
+        employee_number: this.local_data.employee_number,
+        first_name: this.local_data.first_name,
+        last_name: this.local_data.last_name,
         email: this.local_data.email,
-        password: this.local_data.password,
-        rol: this.local_data.rol,
-        phone: this.local_data.phone // solo se manda en PUT
+        role_id: this.local_data.role_id,
       };
+
+      // Solo incluir password si se proporcionó
+      if (this.local_data.password) {
+        payload.password = this.local_data.password;
+      }
+
       this.dialogRef.close({ event: this.action, data: payload });
     }
+  }
+
+  doActionReactivate(): void {
+    this.dialogRef.close({ event: 'Reactivate', data: this.local_data });
   }
 
 
   closeDialog(): void {
     this.dialogRef.close({ event: 'Cancel' });
-  }
-
-  selectFile(event: any): void {
-    if (!event.target.files[0] || event.target.files[0].length === 0) {
-      // this.msg = 'You must select an image';
-      return;
-    }
-    const mimeType = event.target.files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
-      // this.msg = "Only images are supported";
-      return;
-    }
-    // tslint:disable-next-line - Disables all
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-    // tslint:disable-next-line - Disables all
-    reader.onload = (_event) => {
-      // tslint:disable-next-line - Disables all
-      this.local_data.imagePath = reader.result;
-    };
   }
 }

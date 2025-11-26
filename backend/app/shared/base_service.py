@@ -55,7 +55,7 @@ class BaseService(Generic[T, CreateSchemaType, UpdateSchemaType, ResponseSchemaT
             entities = self.repository.get_all()
             return [self._to_response_schema(entity) for entity in entities]
         except Exception as e:
-            logger.error(f"❌ Error al obtener {self.model_name}s: {str(e)}")
+            logger.error(f"Error al obtener {self.model_name}s: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Error interno del servidor al obtener {self.model_name}s"
@@ -74,7 +74,7 @@ class BaseService(Generic[T, CreateSchemaType, UpdateSchemaType, ResponseSchemaT
         except HTTPException:
             raise
         except Exception as e:
-            logger.error(f"❌ Error al obtener {self.model_name} con ID {id}: {str(e)}")
+            logger.error(f"Error al obtener {self.model_name} con ID {id}: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Error interno del servidor al obtener {self.model_name}"
@@ -89,14 +89,14 @@ class BaseService(Generic[T, CreateSchemaType, UpdateSchemaType, ResponseSchemaT
             # Crear entidad
             entity = self.repository.create(validated_data)
             
-            logger.info(f"✅ {self.model_name} creado exitosamente - ID: {entity.id}")
+            logger.info(f"{self.model_name} creado exitosamente - ID: {entity.id}")
             return self._to_response_schema(entity)
             
         except HTTPException:
             raise
         except (ValidationError, DuplicateError, AuthenticationError) as e:
             # Manejar excepciones personalizadas con códigos apropiados
-            logger.error(f"❌ Error al crear {self.model_name}: {str(e)}")
+            logger.error(f"Error al crear {self.model_name}: {str(e)}")
             if isinstance(e, DuplicateError):
                 raise HTTPException(
                     status_code=status.HTTP_409_CONFLICT,
@@ -113,7 +113,7 @@ class BaseService(Generic[T, CreateSchemaType, UpdateSchemaType, ResponseSchemaT
                     detail=str(e)
                 )
         except Exception as e:
-            logger.error(f"❌ Error al crear {self.model_name}: {str(e)}")
+            logger.error(f"Error al crear {self.model_name}: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Error interno del servidor al crear {self.model_name}"
@@ -136,13 +136,13 @@ class BaseService(Generic[T, CreateSchemaType, UpdateSchemaType, ResponseSchemaT
             # Actualizar entidad
             entity = self.repository.update(id, validated_data)
             
-            logger.info(f"✅ {self.model_name} actualizado exitosamente - ID: {id}")
+            logger.info(f"{self.model_name} actualizado exitosamente - ID: {id}")
             return self._to_response_schema(entity)
             
         except HTTPException:
             raise
         except Exception as e:
-            logger.error(f"❌ Error al actualizar {self.model_name} con ID {id}: {str(e)}")
+            logger.error(f"Error al actualizar {self.model_name} con ID {id}: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Error interno del servidor al actualizar {self.model_name}"
@@ -162,13 +162,13 @@ class BaseService(Generic[T, CreateSchemaType, UpdateSchemaType, ResponseSchemaT
             # Eliminar (soft delete)
             self.repository.soft_delete(id)
             
-            logger.info(f"✅ {self.model_name} eliminado exitosamente - ID: {id}")
+            logger.info(f"{self.model_name} eliminado exitosamente - ID: {id}")
             return {"message": f"{self.model_name} eliminado exitosamente"}
             
         except HTTPException:
             raise
         except Exception as e:
-            logger.error(f"❌ Error al eliminar {self.model_name} con ID {id}: {str(e)}")
+            logger.error(f"Error al eliminar {self.model_name} con ID {id}: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Error interno del servidor al eliminar {self.model_name}"

@@ -1,0 +1,15 @@
+// Estilos para reducir la altura de las filas de la tabla
+::ng-deep {
+  .mat-mdc-table {
+    .mat-mdc-row,
+    .mat-mdc-header-row {
+      height: 40px !important;
+      min-height: 40px !important;
+    }
+
+    .mat-mdc-cell,
+    .mat-mdc-header-cell {
+      padding: 6px 12px !important;
+    }
+  }
+}

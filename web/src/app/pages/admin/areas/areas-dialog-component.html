@@ -1,13 +1,13 @@
 <h2 class="f-w-500 m-b-24" mat-dialog-title>
-  <strong>{{ action }} Area</strong>
+  <strong>{{ action === 'Add' ? ('AREAS.ADD' | translate) : (action === 'Update' ? ('AREAS.UPDATE' | translate) : (action === 'Delete' ? ('AREAS.DEACTIVATE' | translate) : ('AREAS.REACTIVATE' | translate))) }} {{ 'AREAS.TITLE' | translate }}</strong>
 </h2>
 
-@if (action !== 'Delete') {
+@if (action !== 'Delete' && action !== 'Reactivate') {
 <mat-dialog-content style="max-width: 600px">
   <form #areaForm="ngForm">
     <div class="row">
       <div class="col-lg-12">
-        <mat-label class="f-w-600 m-b-8 d-block">Name</mat-label>
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'AREAS.NAME' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
           <input
             type="text"
@@ -16,7 +16,7 @@
             id="name"
             name="name"
             [(ngModel)]="local_data.name"
-            placeholder="Area Name"
+            [placeholder]="'AREAS.AREA_NAME' | translate"
           />
           <mat-icon matPrefix>
             <i-tabler name="map-pin" class="icon-20 d-flex"></i-tabler>
@@ -25,14 +25,14 @@
       </div>
 
       <div class="col-lg-12">
-        <mat-label class="f-w-600 m-b-8 d-block">Description</mat-label>
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'AREAS.DESCRIPTION' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
           <textarea
             matInput
             id="description"
             name="description"
             [(ngModel)]="local_data.description"
-            placeholder="Area Description"
+            [placeholder]="'AREAS.AREA_DESCRIPTION' | translate"
             rows="4"
           ></textarea>
           <mat-icon matPrefix>
@@ -42,11 +42,11 @@
       </div>
 
       <div class="col-lg-12" *ngIf="action === 'Update'">
-        <mat-label class="f-w-600 m-b-8 d-block">Status</mat-label>
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'AREAS.STATUS' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
           <mat-select [(ngModel)]="local_data.is_active" name="is_active">
-            <mat-option [value]="true">Active</mat-option>
-            <mat-option [value]="false">Inactive</mat-option>
+            <mat-option [value]="true">{{ 'AREAS.ACTIVE' | translate }}</mat-option>
+            <mat-option [value]="false">{{ 'AREAS.INACTIVE' | translate }}</mat-option>
           </mat-select>
           <mat-icon matPrefix>
             <i-tabler name="toggle-left" class="icon-20 d-flex"></i-tabler>
@@ -63,25 +63,40 @@
         [disabled]="!areaForm.valid"
         class="m-r-8"
       >
-        {{ action }}
+        {{ action === 'Add' ? ('AREAS.ADD' | translate) : ('AREAS.UPDATE' | translate) }}
       </button>
       <button mat-stroked-button (click)="closeDialog()" color="warn">
-        Cancel
+        {{ 'AREAS.CANCEL' | translate }}
       </button>
     </div>
   </form>
 </mat-dialog-content>
+} @else if (action === 'Delete') {
+<mat-dialog-content>
+  <p class="m-t-16">
+    {{ 'AREAS.DEACTIVATE_CONFIRM' | translate }}
+    <strong>{{ local_data.name }}</strong>?
+  </p>
+  <p class="text-muted f-s-13">{{ 'AREAS.DEACTIVATE_INFO' | translate }}</p>
+  <div class="d-flex justify-content-end m-t-24">
+    <button mat-flat-button color="warn" (click)="doAction()" class="m-r-8">
+      {{ 'AREAS.DEACTIVATE' | translate }}
+    </button>
+    <button mat-stroked-button (click)="closeDialog()">{{ 'AREAS.CANCEL' | translate }}</button>
+  </div>
+</mat-dialog-content>
 } @else {
 <mat-dialog-content>
   <p class="m-t-16">
-    Are you sure you want to delete the area
+    {{ 'AREAS.REACTIVATE_CONFIRM' | translate }}
     <strong>{{ local_data.name }}</strong>?
   </p>
+  <p class="text-muted f-s-13">{{ 'AREAS.REACTIVATE_INFO' | translate }}</p>
   <div class="d-flex justify-content-end m-t-24">
-    <button mat-flat-button color="warn" (click)="doAction()" class="m-r-8">
-      Delete
+    <button mat-flat-button color="primary" (click)="doActionReactivate()" class="m-r-8">
+      {{ 'AREAS.REACTIVATE' | translate }}
     </button>
-    <button mat-stroked-button (click)="closeDialog()">Cancel</button>
+    <button mat-stroked-button (click)="closeDialog()">{{ 'AREAS.CANCEL' | translate }}</button>
   </div>
 </mat-dialog-content>
 }

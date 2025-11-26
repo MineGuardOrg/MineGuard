@@ -46,25 +46,4 @@ export class IncidentsService {
   getByUser(userId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/by-user/${userId}`, { headers: this.getHeaders() });
   }
-
-  /**
-   * Crea un nuevo reporte de incidente
-   */
-  create(incident: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/`, incident, { headers: this.getHeaders() });
-  }
-
-  /**
-   * Actualiza un reporte de incidente existente
-   */
-  update(incident: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${incident.id}`, incident, { headers: this.getHeaders() });
-  }
-
-  /**
-   * Elimina un reporte de incidente
-   */
-  delete(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
-  }
 }

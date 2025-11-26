@@ -20,6 +20,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
 import { AreasService } from './areas.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface Area {
   id: number;
@@ -32,6 +33,7 @@ export interface Area {
 
 @Component({
   templateUrl: './areas.component.html',
+  styleUrls: ['./areas.component.scss'],
   standalone: true,
   imports: [
     MaterialModule,
@@ -39,6 +41,7 @@ export interface Area {
     MatNativeDateModule,
     NgScrollbarModule,
     CommonModule,
+    TranslateModule,
   ],
   providers: [DatePipe],
 })
@@ -96,6 +99,8 @@ export class AppAreasComponent implements AfterViewInit {
         this.updateRowData(result.data);
       } else if (result?.event === 'Delete') {
         this.deleteRowData(result.data);
+      } else if (result?.event === 'Reactivate') {
+        this.reactivateRowData(result.data);
       }
     });
   }
@@ -121,15 +126,43 @@ export class AppAreasComponent implements AfterViewInit {
   }
 
   deleteRowData(row_obj: Area): void {
-    this.areasService.delete(row_obj.id).subscribe({
-      next: () => {
-        this.dataSource.data = this.dataSource.data.filter(
-          (area) => area.id !== row_obj.id
+    const updatePayload = {
+      id: row_obj.id,
+      name: row_obj.name,
+      description: row_obj.description,
+      is_active: false
+    };
+
+    this.areasService.update(updatePayload).subscribe({
+      next: (res) => {
+        this.dataSource.data = this.dataSource.data.map((area) =>
+          area.id === res.id ? res : area
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al eliminar área:', err);
+        console.error('Error al desactivar área:', err);
+      },
+    });
+  }
+
+  reactivateRowData(row_obj: Area): void {
+    const updatePayload = {
+      id: row_obj.id,
+      name: row_obj.name,
+      description: row_obj.description,
+      is_active: true
+    };
+
+    this.areasService.update(updatePayload).subscribe({
+      next: (res) => {
+        this.dataSource.data = this.dataSource.data.map((area) =>
+          area.id === res.id ? res : area
+        );
+        this.table.renderRows();
+      },
+      error: (err) => {
+        console.error('Error al reactivar área:', err);
       },
     });
   }
@@ -144,6 +177,7 @@ export class AppAreasComponent implements AfterViewInit {
     MaterialModule,
     TablerIconsModule,
     CommonModule,
+    TranslateModule,
   ],
   providers: [DatePipe],
   templateUrl: 'areas-dialog-component.html',
@@ -196,6 +230,10 @@ export class AppAreasDialogComponent {
     } else if (this.action === 'Delete') {
       this.dialogRef.close({ event: this.action, data: this.local_data });
     }
+  }
+
+  doActionReactivate(): void {
+    this.dialogRef.close({ event: 'Reactivate', data: this.local_data });
   }
 
   closeDialog(): void {

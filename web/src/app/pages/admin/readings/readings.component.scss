@@ -1,0 +1,9 @@
+::ng-deep .mat-mdc-row {
+  height: 40px !important;
+  min-height: 40px !important;
+}
+
+::ng-deep .mat-mdc-cell,
+::ng-deep .mat-mdc-header-cell {
+  padding: 6px 12px !important;
+}

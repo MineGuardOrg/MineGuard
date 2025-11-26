@@ -20,6 +20,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
 import { PositionsService } from './positions.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface Position {
   id: number;
@@ -32,6 +33,7 @@ export interface Position {
 
 @Component({
   templateUrl: './positions.component.html',
+  styleUrls: ['./positions.component.scss'],
   standalone: true,
   imports: [
     MaterialModule,
@@ -39,6 +41,7 @@ export interface Position {
     MatNativeDateModule,
     NgScrollbarModule,
     CommonModule,
+    TranslateModule,
   ],
   providers: [DatePipe],
 })
@@ -95,6 +98,8 @@ export class AppPositionsComponent implements AfterViewInit {
         this.updateRowData(result.data);
       } else if (result?.event === 'Delete') {
         this.deleteRowData(result.data);
+      } else if (result?.event === 'Reactivate') {
+        this.reactivateRowData(result.data);
       }
     });
   }
@@ -120,15 +125,43 @@ export class AppPositionsComponent implements AfterViewInit {
   }
 
   deleteRowData(row_obj: Position): void {
-    this.positionsService.delete(row_obj.id).subscribe({
-      next: () => {
-        this.dataSource.data = this.dataSource.data.filter(
-          (position) => position.id !== row_obj.id
+    const updatePayload = {
+      id: row_obj.id,
+      name: row_obj.name,
+      description: row_obj.description,
+      is_active: false
+    };
+
+    this.positionsService.update(updatePayload).subscribe({
+      next: (res) => {
+        this.dataSource.data = this.dataSource.data.map((position) =>
+          position.id === res.id ? res : position
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al eliminar posición:', err);
+        console.error('Error al desactivar posición:', err);
+      },
+    });
+  }
+
+  reactivateRowData(row_obj: Position): void {
+    const updatePayload = {
+      id: row_obj.id,
+      name: row_obj.name,
+      description: row_obj.description,
+      is_active: true
+    };
+
+    this.positionsService.update(updatePayload).subscribe({
+      next: (res) => {
+        this.dataSource.data = this.dataSource.data.map((position) =>
+          position.id === res.id ? res : position
+        );
+        this.table.renderRows();
+      },
+      error: (err) => {
+        console.error('Error al reactivar posición:', err);
       },
     });
   }
@@ -143,6 +176,7 @@ export class AppPositionsComponent implements AfterViewInit {
     MaterialModule,
     TablerIconsModule,
     CommonModule,
+    TranslateModule,
   ],
   providers: [DatePipe],
   templateUrl: 'positions-dialog-component.html',
@@ -195,6 +229,10 @@ export class AppPositionsDialogComponent {
     } else if (this.action === 'Delete') {
       this.dialogRef.close({ event: this.action, data: this.local_data });
     }
+  }
+
+  doActionReactivate(): void {
+    this.dialogRef.close({ event: 'Reactivate', data: this.local_data });
   }
 
   closeDialog(): void {

@@ -5,7 +5,7 @@
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <input
             matInput
-            placeholder="Search User"
+            [placeholder]="'USERS.SEARCH_PLACEHOLDER' | translate"
             (keyup)="applyFilter($any($event.target).value)"
           />
           <mat-icon matSuffix>
@@ -15,7 +15,7 @@
       </div>
       <div class="col-lg-4 d-flex align-items-center justify-content-end">
         <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
-          Add User
+          {{ 'USERS.ADD_USER' | translate }}
         </button>
       </div>
     </div>
@@ -32,7 +32,7 @@
 
         <ng-container matColumnDef="employee_number">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Employee ID
+            {{ 'USERS.EMPLOYEE_NUMBER' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.employee_number }}
@@ -48,7 +48,7 @@
 
         <ng-container matColumnDef="email">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Email
+            {{ 'USERS.EMAIL' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.email }}
@@ -56,7 +56,7 @@
         </ng-container>
 
         <ng-container matColumnDef="role">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Role</th>
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">{{ 'USERS.ROLE' | translate }}</th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.role_id }}
           </td>
@@ -64,21 +64,21 @@
 
         <ng-container matColumnDef="active">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Status
+            {{ 'USERS.STATUS' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             <span
               class="badge"
-              [ngClass]="element.is_active ? 'bg-success' : 'bg-danger'"
+              [ngClass]="element.is_active ? 'bg-success' : 'bg-error'"
             >
-              {{ element.is_active ? "Active" : "Inactive" }}
+              {{ element.is_active ? ('USERS.ACTIVE' | translate) : ('USERS.INACTIVE' | translate) }}
             </span>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="created">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Register Date
+            {{ 'USERS.REGISTER_DATE' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.created_at | date : "short" }}
@@ -87,7 +87,7 @@
 
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Action
+            {{ 'USERS.ACTION' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="action-link">
             <a
@@ -95,12 +95,23 @@
               class="m-r-10 cursor-pointer"
               ><i-tabler name="edit" class="icon-18"></i-tabler
             ></a>
-            <a
-              (click)="openDialog('Delete', element)"
-              class="m-r-10 cursor-pointer"
-            >
-              <i-tabler name="trash" class="icon-18"></i-tabler>
-            </a>
+            @if (element.is_active) {
+              <a
+                (click)="openDialog('Delete', element)"
+                class="m-r-10 cursor-pointer"
+                [matTooltip]="'USERS.TOOLTIP_DEACTIVATE' | translate"
+              >
+                <i-tabler name="trash" class="icon-18 text-danger"></i-tabler>
+              </a>
+            } @else {
+              <a
+                (click)="openDialog('Delete', element)"
+                class="m-r-10 cursor-pointer"
+                [matTooltip]="'USERS.TOOLTIP_REACTIVATE' | translate"
+              >
+                <i-tabler name="refresh" class="icon-18 text-success"></i-tabler>
+              </a>
+            }
           </td>
         </ng-container>
 
@@ -108,7 +119,8 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
       <mat-paginator
-        [pageSizeOptions]="[5, 10, 20]"
+        [pageSize]="10"
+        [pageSizeOptions]="[10, 20, 30]"
         showFirstLastButtons
       ></mat-paginator>
     </div>

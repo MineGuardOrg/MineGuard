@@ -4,6 +4,7 @@ from typing import List
 from app.modules.users.models import (
     UserSchema,
     UserUpdateSchema,
+    UserCreateSchema,
     User
 )
 from app.modules.users.service import UserService
@@ -19,7 +20,7 @@ user_service = UserService()
 def get_all_users(
     current_user: User = Depends(get_current_user)
 ):
-    """Obtiene todos los usuarios activos"""
+    """Obtiene todos los usuarios incluyendo inactivos"""
     return user_service.get_all()
 
 @user_router.get("/getbyid/{user_id}", response_model=UserSchema)
@@ -29,6 +30,14 @@ def get_user_by_id(
 ):
     """Obtiene un usuario por ID"""
     return user_service.get_by_id(user_id)
+
+@user_router.post("/create", response_model=UserSchema, status_code=status.HTTP_201_CREATED)
+def create_user(
+    user_data: UserCreateSchema,
+    current_user: User = Depends(get_current_user)
+):
+    """Crea un nuevo usuario"""
+    return user_service.create(user_data)
 
 @user_router.put("/update/{user_id}", response_model=UserSchema)
 def update_user(

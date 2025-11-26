@@ -16,6 +16,7 @@ venv/
 *.sqlite3
 alembic/versions/
 .env
+sql/
 certs/
 
 # Node / Angular Web 

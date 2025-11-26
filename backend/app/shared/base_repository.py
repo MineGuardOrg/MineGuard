@@ -14,13 +14,9 @@ class BaseRepository(Generic[T]):
         self.model = model
     
     def get_all(self, db: Optional[Session] = None) -> List[T]:
-        """Obtiene todos los registros (solo activos si el modelo tiene is_active)"""
+        """Obtiene todos los registros incluyendo inactivos"""
         def _query(session: Session):
-            q = session.query(self.model)
-            # Aplicar filtro is_active solo si existe el atributo
-            if hasattr(self.model, "is_active"):
-                q = q.filter(self.model.is_active == True)
-            return q.all()
+            return session.query(self.model).all()
 
         if db is None:
             with SessionLocal() as db:
@@ -28,12 +24,9 @@ class BaseRepository(Generic[T]):
         return _query(db)
     
     def get_by_id(self, id: int, db: Optional[Session] = None) -> Optional[T]:
-        """Obtiene un registro por ID (solo activos si el modelo tiene is_active)"""
+        """Obtiene un registro por ID incluyendo inactivos"""
         def _query(session: Session):
-            q = session.query(self.model).filter(self.model.id == id)
-            if hasattr(self.model, "is_active"):
-                q = q.filter(self.model.is_active == True)
-            return q.first()
+            return session.query(self.model).filter(self.model.id == id).first()
 
         if db is None:
             with SessionLocal() as db:

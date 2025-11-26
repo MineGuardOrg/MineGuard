@@ -38,13 +38,3 @@ def by_user(user_id: int, limit: int = 100, current_user=Depends(get_current_use
 @reading_router.post("/", response_model=ReadingSchema, status_code=status.HTTP_201_CREATED)
 def create(payload: ReadingCreateSchema, current_user=Depends(get_current_user)):
     return service.create(payload)
-
-
-@reading_router.put("/{reading_id}", response_model=ReadingSchema)
-def update(reading_id: int, payload: ReadingUpdateSchema, current_user=Depends(get_current_user)):
-    return service.update(reading_id, payload)
-
-
-@reading_router.delete("/{reading_id}")
-def delete(reading_id: int, current_user=Depends(get_current_user)):
-    return service.delete(reading_id)

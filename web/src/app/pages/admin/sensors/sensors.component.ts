@@ -20,6 +20,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
 import { SensorsService } from './sensors.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface Sensor {
   id: number;
@@ -35,6 +36,7 @@ export interface Sensor {
 
 @Component({
   templateUrl: './sensors.component.html',
+  styleUrls: ['./sensors.component.scss'],
   standalone: true,
   imports: [
     MaterialModule,
@@ -42,6 +44,7 @@ export interface Sensor {
     MatNativeDateModule,
     NgScrollbarModule,
     CommonModule,
+    TranslateModule,
   ],
   providers: [DatePipe],
 })
@@ -100,6 +103,8 @@ export class AppSensorsComponent implements AfterViewInit {
         this.updateRowData(result.data);
       } else if (result?.event === 'Delete') {
         this.deleteRowData(result.data);
+      } else if (result?.event === 'Reactivate') {
+        this.reactivateRowData(result.data);
       }
     });
   }
@@ -125,15 +130,49 @@ export class AppSensorsComponent implements AfterViewInit {
   }
 
   deleteRowData(row_obj: Sensor): void {
-    this.sensorsService.delete(row_obj.id).subscribe({
-      next: () => {
-        this.dataSource.data = this.dataSource.data.filter(
-          (sensor) => sensor.id !== row_obj.id
+    const updatePayload = {
+      id: row_obj.id,
+      name: row_obj.name,
+      description: row_obj.description,
+      unit: row_obj.unit,
+      type: row_obj.type,
+      device_id: row_obj.device_id,
+      is_active: false
+    };
+
+    this.sensorsService.update(updatePayload).subscribe({
+      next: (res) => {
+        this.dataSource.data = this.dataSource.data.map((sensor) =>
+          sensor.id === res.id ? res : sensor
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al eliminar sensor:', err);
+        console.error('Error al desactivar sensor:', err);
+      },
+    });
+  }
+
+  reactivateRowData(row_obj: Sensor): void {
+    const updatePayload = {
+      id: row_obj.id,
+      name: row_obj.name,
+      description: row_obj.description,
+      unit: row_obj.unit,
+      type: row_obj.type,
+      device_id: row_obj.device_id,
+      is_active: true
+    };
+
+    this.sensorsService.update(updatePayload).subscribe({
+      next: (res) => {
+        this.dataSource.data = this.dataSource.data.map((sensor) =>
+          sensor.id === res.id ? res : sensor
+        );
+        this.table.renderRows();
+      },
+      error: (err) => {
+        console.error('Error al reactivar sensor:', err);
       },
     });
   }
@@ -148,6 +187,7 @@ export class AppSensorsComponent implements AfterViewInit {
     MaterialModule,
     TablerIconsModule,
     CommonModule,
+    TranslateModule,
   ],
   providers: [DatePipe],
   templateUrl: 'sensors-dialog-component.html',
@@ -206,6 +246,10 @@ export class AppSensorsDialogComponent {
     } else if (this.action === 'Delete') {
       this.dialogRef.close({ event: this.action, data: this.local_data });
     }
+  }
+
+  doActionReactivate(): void {
+    this.dialogRef.close({ event: 'Reactivate', data: this.local_data });
   }
 
   closeDialog(): void {

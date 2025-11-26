@@ -21,31 +21,43 @@ class DatabaseMaintenanceService:
         self.db_host = os.getenv("DB_HOST")
         self.db_port = int(os.getenv("DB_PORT", "3306"))
         self.db_name = os.getenv("DB_NAME")
-        self.db_ssl_cert = os.getenv("DB_SSL_CERT")
+        
+        # Convertir la ruta del certificado SSL a ruta absoluta
+        ssl_cert_relative = os.getenv("DB_SSL_CERT")
+        if ssl_cert_relative:
+            # Obtener la ruta base del proyecto (backend/)
+            base_dir = Path(__file__).resolve().parents[3]
+            self.db_ssl_cert = str(base_dir / ssl_cert_relative)
+        else:
+            self.db_ssl_cert = None
         
         # Ruta donde se guardarán los backups
         self.backup_dir = Path(__file__).resolve().parents[3] / "sql"
         self.backup_dir.mkdir(exist_ok=True)
     
     def _get_connection(self):
-        """Crear conexión a MySQL con soporte SSL para Azure"""
-        ssl_config = None
-        if self.db_ssl_cert and os.path.exists(self.db_ssl_cert):
-            ssl_config = {"ca": self.db_ssl_cert}
-        elif self.db_host and "mysql.database.azure.com" in self.db_host:
-            # Para Azure, habilitar SSL sin certificado específico
-            ssl_config = {"check_hostname": False}
+        """Crear conexión a MySQL (sin verificación SSL para compatibilidad)"""
+        import ssl as ssl_module
         
-        return pymysql.connect(
-            host=self.db_host,
-            port=self.db_port,
-            user=self.db_user,
-            password=self.db_password,
-            database=self.db_name,
-            charset='utf8mb4',
-            ssl=ssl_config,
-            cursorclass=pymysql.cursors.Cursor
-        )
+        # Configuración de conexión base
+        connect_args = {
+            "host": self.db_host,
+            "port": self.db_port,
+            "user": self.db_user,
+            "password": self.db_password,
+            "database": self.db_name,
+            "charset": 'utf8mb4',
+            "cursorclass": pymysql.cursors.Cursor
+        }
+        
+        # Para Azure MySQL, crear contexto SSL sin verificación
+        if "mysql.database.azure.com" in str(self.db_host):
+            ssl_context = ssl_module.create_default_context()
+            ssl_context.check_hostname = False
+            ssl_context.verify_mode = ssl_module.CERT_NONE
+            connect_args["ssl"] = ssl_context
+        
+        return pymysql.connect(**connect_args)
     
     def _escape_string(self, value):
         """Escapar valores para SQL de forma segura"""
@@ -319,3 +331,55 @@ class DatabaseMaintenanceService:
             # Limpiar directorio temporal si existe
             if temp_dir and temp_dir.exists():
                 shutil.rmtree(temp_dir)
+    
+    def get_tables_metadata(self) -> list:
+        """
+        Obtiene metadatos de todas las tablas de la base de datos
+        Retorna una lista con información de cada tabla
+        """
+        connection = None
+        try:
+            connection = self._get_connection()
+            cursor = connection.cursor()
+            
+            # Obtener información de todas las tablas
+            query = """
+                SELECT 
+                    TABLE_NAME as name,
+                    TABLE_ROWS as rowsCount,
+                    (SELECT COUNT(*) FROM information_schema.COLUMNS 
+                     WHERE TABLE_SCHEMA = %s AND TABLE_NAME = t.TABLE_NAME) as columnCount,
+                    ROUND((DATA_LENGTH + INDEX_LENGTH) / 1024, 2) as sizeKb,
+                    TABLE_TYPE as engine,
+                    UPDATE_TIME as updateTime
+                FROM information_schema.TABLES t
+                WHERE TABLE_SCHEMA = %s
+                ORDER BY TABLE_NAME
+            """
+            
+            cursor.execute(query, (self.db_name, self.db_name))
+            tables_info = cursor.fetchall()
+            
+            cursor.close()
+            
+            # Formatear resultados
+            result = []
+            for table in tables_info:
+                result.append({
+                    "name": table[0],
+                    "rowsCount": int(table[1]) if table[1] else 0,
+                    "columnCount": int(table[2]) if table[2] else 0,
+                    "sizeKb": float(table[3]) if table[3] else 0.0,
+                    "engine": table[4] or "N/A",
+                    "updateTime": table[5].strftime('%Y-%m-%d %H:%M:%S') if table[5] else None
+                })
+            
+            return result
+            
+        except pymysql.Error as e:
+            raise DatabaseError(f"Error de base de datos al obtener metadatos: {str(e)}")
+        except Exception as e:
+            raise DatabaseError(f"Error inesperado al obtener metadatos: {str(e)}")
+        finally:
+            if connection:
+                connection.close()

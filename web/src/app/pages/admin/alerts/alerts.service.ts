@@ -46,25 +46,4 @@ export class AlertsService {
   getByReading(readingId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/by-reading/${readingId}`, { headers: this.getHeaders() });
   }
-
-  /**
-   * Crea una nueva alerta
-   */
-  create(alert: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/`, alert, { headers: this.getHeaders() });
-  }
-
-  /**
-   * Actualiza una alerta existente
-   */
-  update(alert: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${alert.id}`, alert, { headers: this.getHeaders() });
-  }
-
-  /**
-   * Elimina una alerta
-   */
-  delete(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
-  }
 }

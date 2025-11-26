@@ -46,25 +46,4 @@ export class MaintenanceService {
   getByDevice(deviceId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/by-device/${deviceId}`, { headers: this.getHeaders() });
   }
-
-  /**
-   * Crea un nuevo registro de mantenimiento
-   */
-  create(maintenanceLog: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/`, maintenanceLog, { headers: this.getHeaders() });
-  }
-
-  /**
-   * Actualiza un registro de mantenimiento existente
-   */
-  update(maintenanceLog: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${maintenanceLog.id}`, maintenanceLog, { headers: this.getHeaders() });
-  }
-
-  /**
-   * Elimina un registro de mantenimiento
-   */
-  delete(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
-  }
 }

@@ -20,6 +20,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
 import { DevicesService } from './devices.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface Device {
   id: number;
@@ -33,6 +34,7 @@ export interface Device {
 
 @Component({
   templateUrl: './devices.component.html',
+  styleUrls: ['./devices.component.scss'],
   standalone: true,
   imports: [
     MaterialModule,
@@ -40,6 +42,7 @@ export interface Device {
     MatNativeDateModule,
     NgScrollbarModule,
     CommonModule,
+    TranslateModule,
   ],
   providers: [DatePipe],
 })
@@ -97,6 +100,8 @@ export class AppDevicesComponent implements AfterViewInit {
         this.updateRowData(result.data);
       } else if (result?.event === 'Delete') {
         this.deleteRowData(result.data);
+      } else if (result?.event === 'Reactivate') {
+        this.reactivateRowData(result.data);
       }
     });
   }
@@ -122,15 +127,43 @@ export class AppDevicesComponent implements AfterViewInit {
   }
 
   deleteRowData(row_obj: Device): void {
-    this.devicesService.delete(row_obj.id).subscribe({
-      next: () => {
-        this.dataSource.data = this.dataSource.data.filter(
-          (device) => device.id !== row_obj.id
+    const updatePayload = {
+      id: row_obj.id,
+      model: row_obj.model,
+      user_id: row_obj.user_id,
+      is_active: false
+    };
+
+    this.devicesService.update(updatePayload).subscribe({
+      next: (res) => {
+        this.dataSource.data = this.dataSource.data.map((device) =>
+          device.id === res.id ? res : device
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al eliminar dispositivo:', err);
+        console.error('Error al desactivar dispositivo:', err);
+      },
+    });
+  }
+
+  reactivateRowData(row_obj: Device): void {
+    const updatePayload = {
+      id: row_obj.id,
+      model: row_obj.model,
+      user_id: row_obj.user_id,
+      is_active: true
+    };
+
+    this.devicesService.update(updatePayload).subscribe({
+      next: (res) => {
+        this.dataSource.data = this.dataSource.data.map((device) =>
+          device.id === res.id ? res : device
+        );
+        this.table.renderRows();
+      },
+      error: (err) => {
+        console.error('Error al reactivar dispositivo:', err);
       },
     });
   }
@@ -145,6 +178,7 @@ export class AppDevicesComponent implements AfterViewInit {
     MaterialModule,
     TablerIconsModule,
     CommonModule,
+    TranslateModule,
   ],
   providers: [DatePipe],
   templateUrl: 'devices-dialog-component.html',
@@ -197,6 +231,10 @@ export class AppDevicesDialogComponent {
     } else if (this.action === 'Delete') {
       this.dialogRef.close({ event: this.action, data: this.local_data });
     }
+  }
+
+  doActionReactivate(): void {
+    this.dialogRef.close({ event: 'Reactivate', data: this.local_data });
   }
 
   closeDialog(): void {

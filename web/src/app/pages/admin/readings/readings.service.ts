@@ -65,23 +65,9 @@ export class ReadingsService {
   }
 
   /**
-   * Crea una nueva lectura
+   * Crea una nueva lectura (solo para propósitos de testing/admin)
    */
   create(reading: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/`, reading, { headers: this.getHeaders() });
-  }
-
-  /**
-   * Actualiza una lectura existente
-   */
-  update(reading: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${reading.id}`, reading, { headers: this.getHeaders() });
-  }
-
-  /**
-   * Elimina una lectura
-   */
-  delete(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 }

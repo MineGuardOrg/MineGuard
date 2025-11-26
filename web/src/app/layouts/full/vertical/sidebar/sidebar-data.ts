@@ -38,7 +38,7 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Maintenance',
-    iconName: 'solar:wrench-line-duotone',
+    iconName: 'solar:settings-line-duotone',
     route: '/admin/maintenance-logs',
     roles: ['Admin'],
   },

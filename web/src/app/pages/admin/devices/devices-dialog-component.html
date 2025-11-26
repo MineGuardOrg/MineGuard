@@ -1,13 +1,13 @@
 <h2 class="f-w-500 m-b-24" mat-dialog-title>
-  <strong>{{ action }} Device</strong>
+  <strong>{{ action === 'Add' ? ('DEVICES.ADD' | translate) : (action === 'Update' ? ('DEVICES.UPDATE' | translate) : (action === 'Delete' ? ('DEVICES.DEACTIVATE' | translate) : ('DEVICES.REACTIVATE' | translate))) }} {{ 'DEVICES.TITLE' | translate }}</strong>
 </h2>
 
-@if (action !== 'Delete') {
+@if (action !== 'Delete' && action !== 'Reactivate') {
 <mat-dialog-content style="max-width: 600px">
   <form #deviceForm="ngForm">
     <div class="row">
       <div class="col-lg-12">
-        <mat-label class="f-w-600 m-b-8 d-block">Model</mat-label>
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'DEVICES.MODEL' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
           <input
             type="text"
@@ -16,7 +16,7 @@
             id="model"
             name="model"
             [(ngModel)]="local_data.model"
-            placeholder="Device Model"
+            [placeholder]="'DEVICES.DEVICE_MODEL' | translate"
           />
           <mat-icon matPrefix>
             <i-tabler name="device-mobile" class="icon-20 d-flex"></i-tabler>
@@ -25,7 +25,7 @@
       </div>
 
       <div class="col-lg-12">
-        <mat-label class="f-w-600 m-b-8 d-block">User ID</mat-label>
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'DEVICES.USER_ID' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
           <input
             type="number"
@@ -34,7 +34,7 @@
             id="user_id"
             name="user_id"
             [(ngModel)]="local_data.user_id"
-            placeholder="User ID"
+            [placeholder]="'DEVICES.USER_ID' | translate"
           />
           <mat-icon matPrefix>
             <i-tabler name="user" class="icon-20 d-flex"></i-tabler>
@@ -43,11 +43,11 @@
       </div>
 
       <div class="col-lg-12" *ngIf="action === 'Update'">
-        <mat-label class="f-w-600 m-b-8 d-block">Status</mat-label>
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'DEVICES.STATUS' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
           <mat-select [(ngModel)]="local_data.is_active" name="is_active">
-            <mat-option [value]="true">Active</mat-option>
-            <mat-option [value]="false">Inactive</mat-option>
+            <mat-option [value]="true">{{ 'DEVICES.ACTIVE' | translate }}</mat-option>
+            <mat-option [value]="false">{{ 'DEVICES.INACTIVE' | translate }}</mat-option>
           </mat-select>
           <mat-icon matPrefix>
             <i-tabler name="toggle-left" class="icon-20 d-flex"></i-tabler>
@@ -64,25 +64,40 @@
         [disabled]="!deviceForm.valid"
         class="m-r-8"
       >
-        {{ action }}
+        {{ action === 'Add' ? ('DEVICES.ADD' | translate) : ('DEVICES.UPDATE' | translate) }}
       </button>
       <button mat-stroked-button (click)="closeDialog()" color="warn">
-        Cancel
+        {{ 'DEVICES.CANCEL' | translate }}
       </button>
     </div>
   </form>
 </mat-dialog-content>
+} @else if (action === 'Delete') {
+<mat-dialog-content>
+  <p class="m-t-16">
+    {{ 'DEVICES.DEACTIVATE_CONFIRM' | translate }}
+    <strong>{{ local_data.model }}</strong> (ID: {{ local_data.id }})?
+  </p>
+  <p class="text-muted f-s-13">{{ 'DEVICES.DEACTIVATE_INFO' | translate }}</p>
+  <div class="d-flex justify-content-end m-t-24">
+    <button mat-flat-button color="warn" (click)="doAction()" class="m-r-8">
+      {{ 'DEVICES.DEACTIVATE' | translate }}
+    </button>
+    <button mat-stroked-button (click)="closeDialog()">{{ 'DEVICES.CANCEL' | translate }}</button>
+  </div>
+</mat-dialog-content>
 } @else {
 <mat-dialog-content>
   <p class="m-t-16">
-    Are you sure you want to delete the device
+    {{ 'DEVICES.REACTIVATE_CONFIRM' | translate }}
     <strong>{{ local_data.model }}</strong> (ID: {{ local_data.id }})?
   </p>
+  <p class="text-muted f-s-13">{{ 'DEVICES.REACTIVATE_INFO' | translate }}</p>
   <div class="d-flex justify-content-end m-t-24">
-    <button mat-flat-button color="warn" (click)="doAction()" class="m-r-8">
-      Delete
+    <button mat-flat-button color="primary" (click)="doActionReactivate()" class="m-r-8">
+      {{ 'DEVICES.REACTIVATE' | translate }}
     </button>
-    <button mat-stroked-button (click)="closeDialog()">Cancel</button>
+    <button mat-stroked-button (click)="closeDialog()">{{ 'DEVICES.CANCEL' | translate }}</button>
   </div>
 </mat-dialog-content>
 }

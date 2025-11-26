@@ -20,6 +20,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
 import { ShiftsService } from './shifts.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface Shift {
   id: number;
@@ -32,6 +33,7 @@ export interface Shift {
 
 @Component({
   templateUrl: './shifts.component.html',
+  styleUrls: ['./shifts.component.scss'],
   standalone: true,
   imports: [
     MaterialModule,
@@ -39,6 +41,7 @@ export interface Shift {
     MatNativeDateModule,
     NgScrollbarModule,
     CommonModule,
+    TranslateModule,
   ],
   providers: [DatePipe],
 })
@@ -95,6 +98,8 @@ export class AppShiftsComponent implements AfterViewInit {
         this.updateRowData(result.data);
       } else if (result?.event === 'Delete') {
         this.deleteRowData(result.data);
+      } else if (result?.event === 'Reactivate') {
+        this.reactivateRowData(result.data);
       }
     });
   }
@@ -120,15 +125,43 @@ export class AppShiftsComponent implements AfterViewInit {
   }
 
   deleteRowData(row_obj: Shift): void {
-    this.shiftsService.delete(row_obj.id).subscribe({
-      next: () => {
-        this.dataSource.data = this.dataSource.data.filter(
-          (shift) => shift.id !== row_obj.id
+    const updatePayload = {
+      id: row_obj.id,
+      start_time: row_obj.start_time,
+      end_time: row_obj.end_time,
+      is_active: false
+    };
+
+    this.shiftsService.update(updatePayload).subscribe({
+      next: (res) => {
+        this.dataSource.data = this.dataSource.data.map((shift) =>
+          shift.id === res.id ? res : shift
         );
         this.table.renderRows();
       },
       error: (err) => {
-        console.error('Error al eliminar turno:', err);
+        console.error('Error al desactivar turno:', err);
+      },
+    });
+  }
+
+  reactivateRowData(row_obj: Shift): void {
+    const updatePayload = {
+      id: row_obj.id,
+      start_time: row_obj.start_time,
+      end_time: row_obj.end_time,
+      is_active: true
+    };
+
+    this.shiftsService.update(updatePayload).subscribe({
+      next: (res) => {
+        this.dataSource.data = this.dataSource.data.map((shift) =>
+          shift.id === res.id ? res : shift
+        );
+        this.table.renderRows();
+      },
+      error: (err) => {
+        console.error('Error al reactivar turno:', err);
       },
     });
   }
@@ -143,6 +176,7 @@ export class AppShiftsComponent implements AfterViewInit {
     MaterialModule,
     TablerIconsModule,
     CommonModule,
+    TranslateModule,
   ],
   providers: [DatePipe],
   templateUrl: 'shifts-dialog-component.html',
@@ -195,6 +229,10 @@ export class AppShiftsDialogComponent {
     } else if (this.action === 'Delete') {
       this.dialogRef.close({ event: this.action, data: this.local_data });
     }
+  }
+
+  doActionReactivate(): void {
+    this.dialogRef.close({ event: 'Reactivate', data: this.local_data });
   }
 
   closeDialog(): void {

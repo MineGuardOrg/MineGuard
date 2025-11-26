@@ -1,13 +1,13 @@
 <h2 class="f-w-500 m-b-24" mat-dialog-title>
-  <strong>{{ action }} Position</strong>
+  <strong>{{ action }} {{ 'POSITIONS.TITLE' | translate }}</strong>
 </h2>
 
-@if (action !== 'Delete') {
+@if (action === 'Add' || action === 'Update') {
 <mat-dialog-content style="max-width: 600px">
   <form #positionForm="ngForm">
     <div class="row">
       <div class="col-lg-12">
-        <mat-label class="f-w-600 m-b-8 d-block">Name</mat-label>
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'POSITIONS.NAME' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
           <input
             matInput
@@ -15,7 +15,7 @@
             id="name"
             name="name"
             [(ngModel)]="local_data.name"
-            placeholder="Position Name"
+            [placeholder]="'POSITIONS.NAME' | translate"
           />
           <mat-icon matPrefix>
             <i-tabler name="briefcase" class="icon-20 d-flex"></i-tabler>
@@ -24,14 +24,14 @@
       </div>
 
       <div class="col-lg-12">
-        <mat-label class="f-w-600 m-b-8 d-block">Description</mat-label>
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'POSITIONS.DESCRIPTION' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
           <textarea
             matInput
             id="description"
             name="description"
             [(ngModel)]="local_data.description"
-            placeholder="Position Description"
+            [placeholder]="'POSITIONS.DESCRIPTION' | translate"
             rows="3"
           ></textarea>
           <mat-icon matPrefix>
@@ -41,11 +41,11 @@
       </div>
 
       <div class="col-lg-12" *ngIf="action === 'Update'">
-        <mat-label class="f-w-600 m-b-8 d-block">Status</mat-label>
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'POSITIONS.STATUS' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
           <mat-select [(ngModel)]="local_data.is_active" name="is_active">
-            <mat-option [value]="true">Active</mat-option>
-            <mat-option [value]="false">Inactive</mat-option>
+            <mat-option [value]="true">{{ 'POSITIONS.ACTIVE' | translate }}</mat-option>
+            <mat-option [value]="false">{{ 'POSITIONS.INACTIVE' | translate }}</mat-option>
           </mat-select>
           <mat-icon matPrefix>
             <i-tabler name="toggle-left" class="icon-20 d-flex"></i-tabler>
@@ -62,25 +62,50 @@
         [disabled]="!positionForm.valid"
         class="m-r-8"
       >
-        {{ action }}
+        {{ (action === 'Add' ? 'POSITIONS.ADD' : 'POSITIONS.UPDATE') | translate }}
       </button>
       <button mat-stroked-button (click)="closeDialog()" color="warn">
-        Cancel
+        {{ 'POSITIONS.CANCEL' | translate }}
       </button>
     </div>
   </form>
 </mat-dialog-content>
-} @else {
+} @else if (action === 'Delete') {
 <mat-dialog-content>
   <p class="m-t-16">
-    Are you sure you want to delete the position
-    <strong>{{ local_data.name }}</strong> (ID: {{ local_data.id }})?
+    {{ 'POSITIONS.DEACTIVATE_CONFIRM' | translate }}
+  </p>
+  <p class="m-t-8 text-muted">
+    <strong>{{ local_data.name }}</strong> (ID: {{ local_data.id }})
+  </p>
+  <p class="m-t-16 text-info">
+    <mat-icon class="icon-20 d-inline-flex align-middle m-r-4">info</mat-icon>
+    {{ 'POSITIONS.DEACTIVATE_INFO' | translate }}
   </p>
   <div class="d-flex justify-content-end m-t-24">
     <button mat-flat-button color="warn" (click)="doAction()" class="m-r-8">
-      Delete
+      {{ 'POSITIONS.DEACTIVATE' | translate }}
     </button>
-    <button mat-stroked-button (click)="closeDialog()">Cancel</button>
+    <button mat-stroked-button (click)="closeDialog()">{{ 'POSITIONS.CANCEL' | translate }}</button>
+  </div>
+</mat-dialog-content>
+} @else if (action === 'Reactivate') {
+<mat-dialog-content>
+  <p class="m-t-16">
+    {{ 'POSITIONS.REACTIVATE_CONFIRM' | translate }}
+  </p>
+  <p class="m-t-8 text-muted">
+    <strong>{{ local_data.name }}</strong> (ID: {{ local_data.id }})
+  </p>
+  <p class="m-t-16 text-success">
+    <mat-icon class="icon-20 d-inline-flex align-middle m-r-4">check_circle</mat-icon>
+    {{ 'POSITIONS.REACTIVATE_INFO' | translate }}
+  </p>
+  <div class="d-flex justify-content-end m-t-24">
+    <button mat-flat-button color="primary" (click)="doActionReactivate()" class="m-r-8">
+      {{ 'POSITIONS.REACTIVATE' | translate }}
+    </button>
+    <button mat-stroked-button (click)="closeDialog()">{{ 'POSITIONS.CANCEL' | translate }}</button>
   </div>
 </mat-dialog-content>
 }

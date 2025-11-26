@@ -5,25 +5,25 @@
   <form #userForm="ngForm">
     <div class="row">
       <div class="col-lg-6">
-        <mat-label class="f-w-600 m-b-8 d-block">Name</mat-label>
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'USERS.EMPLOYEE_NUMBER' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
           <input
             type="text"
             matInput
             required
-            id="name"
-            name="name"
-            [(ngModel)]="local_data.name"
-            placeholder="Name"
+            id="employee_number"
+            name="employee_number"
+            [(ngModel)]="local_data.employee_number"
+            [placeholder]="'USERS.EMPLOYEE_NUMBER' | translate"
           />
           <mat-icon matPrefix>
-            <i-tabler name="user" class="icon-20 d-flex"></i-tabler>
+            <i-tabler name="id-badge" class="icon-20 d-flex"></i-tabler>
           </mat-icon>
         </mat-form-field>
       </div>
 
       <div class="col-lg-6">
-        <mat-label class="f-w-600 m-b-8 d-block">Email</mat-label>
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'USERS.EMAIL' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
           <input
             type="email"
@@ -32,7 +32,7 @@
             id="email"
             name="email"
             [(ngModel)]="local_data.email"
-            placeholder="Email"
+            [placeholder]="'USERS.EMAIL' | translate"
           />
           <mat-icon matPrefix>
             <i-tabler name="mail" class="icon-20 d-flex"></i-tabler>
@@ -41,52 +41,70 @@
       </div>
 
       <div class="col-lg-6">
-        <mat-label class="f-w-600 m-b-8 d-block">Password</mat-label>
-        <mat-form-field appearance="outline" class="w-100">
-          <input
-            type="password"
-            matInput
-            required
-            id="password"
-            name="password"
-            [(ngModel)]="local_data.password"
-            placeholder="Password"
-          />
-          <mat-icon matPrefix>
-            <i-tabler name="lock" class="icon-20 d-flex"></i-tabler>
-          </mat-icon>
-        </mat-form-field>
-      </div>
-
-      <div class="col-lg-6" *ngIf="action === 'Update'">
-        <mat-label class="f-w-600 m-b-8 d-block">Phone</mat-label>
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'USERS.FIRST_NAME' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
           <input
             type="text"
             matInput
             required
-            id="phone"
-            name="phone"
-            [(ngModel)]="local_data.phone"
-            placeholder="Phone"
+            id="first_name"
+            name="first_name"
+            [(ngModel)]="local_data.first_name"
+            [placeholder]="'USERS.FIRST_NAME' | translate"
           />
           <mat-icon matPrefix>
-            <i-tabler name="phone" class="icon-20 d-flex"></i-tabler>
+            <i-tabler name="user" class="icon-20 d-flex"></i-tabler>
           </mat-icon>
         </mat-form-field>
-</div>
+      </div>
 
-
-      <div class="col-lg-4">
-        <mat-label class="f-w-600 m-b-8 d-block">Rol</mat-label>
+      <div class="col-lg-6">
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'USERS.LAST_NAME' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
-          <mat-select [(ngModel)]="local_data.rol" name="rol">
-            <mat-option value="User">User</mat-option>
-            <mat-option value="Admin">Admin</mat-option>
-            <mat-option value="Instructor">Instructor</mat-option>
+          <input
+            type="text"
+            matInput
+            required
+            id="last_name"
+            name="last_name"
+            [(ngModel)]="local_data.last_name"
+            [placeholder]="'USERS.LAST_NAME' | translate"
+          />
+          <mat-icon matPrefix>
+            <i-tabler name="user" class="icon-20 d-flex"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-6">
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'USERS.PASSWORD' | translate }}</mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="password"
+            matInput
+            required
+            minlength="8"
+            id="password"
+            name="password"
+            [(ngModel)]="local_data.password"
+            [placeholder]="'USERS.PASSWORD_PLACEHOLDER' | translate"
+          />
+          <mat-icon matPrefix>
+            <i-tabler name="lock" class="icon-20 d-flex"></i-tabler>
+          </mat-icon>
+          <mat-hint>{{ 'USERS.PASSWORD_HINT' | translate }}</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-6">
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'USERS.ROLE' | translate }}</mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select [(ngModel)]="local_data.role_id" name="role_id" required>
+            <mat-option [value]="1">{{ 'USERS.ROLE_ADMIN' | translate }}</mat-option>
+            <mat-option [value]="2">{{ 'USERS.ROLE_USER' | translate }}</mat-option>
           </mat-select>
           <mat-icon matPrefix>
-            <i-tabler name="settings" class="icon-20 d-flex"></i-tabler>
+            <i-tabler name="user-shield" class="icon-20 d-flex"></i-tabler>
           </mat-icon>
         </mat-form-field>
       </div>
@@ -109,21 +127,33 @@
         (click)="closeDialog()"
         type="button"
       >
-        Cancel
+        {{ 'USERS.CANCEL' | translate }}
       </button>
     </div>
   </form>
 </mat-dialog-content>
 } @else {
 <div class="p-x-24">
-  <p>Are you sure you want to delete <strong>{{ local_data.name }}</strong>?</p>
+  @if (local_data.is_active) {
+    <p [innerHTML]="'USERS.DEACTIVATE_CONFIRM' | translate:{ name: local_data.first_name + ' ' + local_data.last_name }"></p>
+    <p class="m-t-8 text-muted f-s-14">{{ 'USERS.DEACTIVATE_INFO' | translate }}</p>
+  } @else {
+    <p [innerHTML]="'USERS.REACTIVATE_CONFIRM' | translate:{ name: local_data.first_name + ' ' + local_data.last_name }"></p>
+    <p class="m-t-8 text-muted f-s-14">{{ 'USERS.REACTIVATE_INFO' | translate }}</p>
+  }
 </div>
 <div mat-dialog-actions class="p-x-24 p-b-24">
-  <button mat-flat-button color="warn" (click)="doAction()">
-    {{ action }}
-  </button>
+  @if (local_data.is_active) {
+    <button mat-flat-button color="warn" (click)="doAction()">
+      {{ 'USERS.DEACTIVATE' | translate }}
+    </button>
+  } @else {
+    <button mat-flat-button color="primary" (click)="doActionReactivate()">
+      {{ 'USERS.REACTIVATE' | translate }}
+    </button>
+  }
   <button mat-stroked-button (click)="closeDialog()" class="m-l-8">
-    Cancel
+    {{ 'USERS.CANCEL' | translate }}
   </button>
 </div>
 }

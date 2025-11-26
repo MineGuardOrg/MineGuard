@@ -5,18 +5,13 @@
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <input
             matInput
-            placeholder="Search Incident"
+            [placeholder]="'INCIDENTS.SEARCH_PLACEHOLDER' | translate"
             (keyup)="applyFilter($any($event.target).value)"
           />
           <mat-icon matSuffix>
             <i-tabler name="search" class="icon-20"></i-tabler>
           </mat-icon>
         </mat-form-field>
-      </div>
-      <div class="col-lg-4 d-flex align-items-center justify-content-end">
-        <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
-          Add Incident Report
-        </button>
       </div>
     </div>
   </mat-card-content>
@@ -33,7 +28,7 @@
 
         <ng-container matColumnDef="description">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Description
+            {{ 'INCIDENTS.DESCRIPTION' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.description }}
@@ -42,18 +37,18 @@
 
         <ng-container matColumnDef="severity">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Severity
+            {{ 'INCIDENTS.SEVERITY' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             <span class="badge" [ngClass]="getSeverityClass(element.severity)">
-              {{ element.severity | uppercase }}
+              {{ 'INCIDENTS.SEVERITY_' + element.severity.toUpperCase() | translate }}
             </span>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="user_id">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            User ID
+            {{ 'INCIDENTS.USER_ID' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.user_id }}
@@ -62,7 +57,7 @@
 
         <ng-container matColumnDef="device_id">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Device ID
+            {{ 'INCIDENTS.DEVICE_ID' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.device_id }}
@@ -71,7 +66,7 @@
 
         <ng-container matColumnDef="reading_id">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Reading ID
+            {{ 'INCIDENTS.READING_ID' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.reading_id }}
@@ -80,29 +75,10 @@
 
         <ng-container matColumnDef="created">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Created At
+            {{ 'INCIDENTS.CREATED_AT' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.created_at | date : "short" }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Action
-          </th>
-          <td mat-cell *matCellDef="let element" class="action-link">
-            <a
-              (click)="openDialog('Update', element)"
-              class="m-r-10 cursor-pointer"
-              ><i-tabler name="edit" class="icon-18"></i-tabler
-            ></a>
-            <a
-              (click)="openDialog('Delete', element)"
-              class="m-r-10 cursor-pointer"
-            >
-              <i-tabler name="trash" class="icon-18"></i-tabler>
-            </a>
           </td>
         </ng-container>
 
@@ -110,7 +86,8 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
       <mat-paginator
-        [pageSizeOptions]="[5, 10, 20]"
+        [pageSize]="10"
+        [pageSizeOptions]="[10, 20, 30]"
         showFirstLastButtons
       ></mat-paginator>
     </div>

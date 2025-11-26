@@ -111,3 +111,30 @@ async def health_check():
         "status": "healthy",
         "module": "database_maintenance"
     }
+
+
+@database_maintenance_router.get("/tables/metadata")
+async def get_tables_metadata(
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Obtiene los metadatos de todas las tablas de la base de datos.
+    
+    Retorna información sobre:
+    - Nombre de la tabla
+    - Número de columnas
+    - Número de filas
+    - Tamaño en KB
+    - Fecha de última actualización
+    
+    **Requiere autenticación**
+    """
+    try:
+        service = DatabaseMaintenanceService()
+        metadata = service.get_tables_metadata()
+        return metadata
+        
+    except DatabaseError as e:
+        raise HTTPException(status_code=500, detail=e.message)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")

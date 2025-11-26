@@ -33,6 +33,7 @@ export interface TableMetadata {
     MaterialModule,
   ],
   templateUrl: './database-maintenance.component.html',
+  styleUrls: ['./database-maintenance.component.scss'],
 })
 export class AppDatabaseMaintenanceComponent implements OnInit {
   loading = false;
@@ -92,49 +93,54 @@ export class AppDatabaseMaintenanceComponent implements OnInit {
   }
 
   exportSelected(type: 'sql' | 'csv') {
-    const selectedTables = this.selection.selected.map((t) => t.name);
-    if (!selectedTables.length) {
-      alert('Please select at least one table.');
-      return;
-    }
+    this.loading = true;
 
     if (type === 'sql') {
-      this.dbService.backupTables(selectedTables).subscribe((response) => {
-        const blob = new Blob([response], { type: 'application/sql' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'backup_partial.sql';
-        link.click();
-        window.URL.revokeObjectURL(url);
-      });
-    } else if (type === 'csv') {
-      if (selectedTables.length === 1) {
-        // Exportar CSV directamente
-        const table = selectedTables[0];
-        this.dbService.exportTableToCSV(table).subscribe((response) => {
-          const blob = new Blob([response], { type: 'text/csv' });
+      this.dbService.exportBackupSQL().subscribe({
+        next: (response) => {
+          const blob = new Blob([response], { type: 'application/sql' });
           const url = window.URL.createObjectURL(blob);
           const link = document.createElement('a');
           link.href = url;
-          link.download = `${table}.csv`;
+          
+          // Generar nombre con fecha actual
+          const today = new Date();
+          const dateStr = today.toISOString().split('T')[0].replace(/-/g, '');
+          link.download = `backup_${dateStr}.sql`;
+          
           link.click();
           window.URL.revokeObjectURL(url);
-        });
-      } else {
-        // Exportar ZIP con múltiples CSV
-        this.dbService
-          .exportTablesToZip(selectedTables)
-          .subscribe((response) => {
-            const blob = new Blob([response], { type: 'application/zip' });
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `tables_export.zip`;
-            link.click();
-            window.URL.revokeObjectURL(url);
-          });
-      }
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error al exportar SQL:', err);
+          alert('Error al generar el backup SQL. Por favor, intente nuevamente.');
+          this.loading = false;
+        },
+      });
+    } else if (type === 'csv') {
+      this.dbService.exportBackupCSV().subscribe({
+        next: (response) => {
+          const blob = new Blob([response], { type: 'application/zip' });
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          
+          // Generar nombre con fecha actual
+          const today = new Date();
+          const dateStr = today.toISOString().split('T')[0].replace(/-/g, '');
+          link.download = `backup_csv_${dateStr}.zip`;
+          
+          link.click();
+          window.URL.revokeObjectURL(url);
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error al exportar CSV:', err);
+          alert('Error al generar el backup CSV. Por favor, intente nuevamente.');
+          this.loading = false;
+        },
+      });
     }
   }
 }

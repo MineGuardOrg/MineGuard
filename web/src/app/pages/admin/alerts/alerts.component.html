@@ -5,18 +5,13 @@
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <input
             matInput
-            placeholder="Search Alert"
+            [placeholder]="'ALERTS.SEARCH_PLACEHOLDER' | translate"
             (keyup)="applyFilter($any($event.target).value)"
           />
           <mat-icon matSuffix>
             <i-tabler name="search" class="icon-20"></i-tabler>
           </mat-icon>
         </mat-form-field>
-      </div>
-      <div class="col-lg-4 d-flex align-items-center justify-content-end">
-        <button mat-flat-button (click)="openDialog('Add', {})" color="primary">
-          Add Alert
-        </button>
       </div>
     </div>
   </mat-card-content>
@@ -33,7 +28,7 @@
 
         <ng-container matColumnDef="alert_type">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Alert Type
+            {{ 'ALERTS.ALERT_TYPE' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.alert_type }}
@@ -42,7 +37,7 @@
 
         <ng-container matColumnDef="severity">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Severity
+            {{ 'ALERTS.SEVERITY' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             <span
@@ -53,14 +48,14 @@
                 'bg-error': element.severity === 'high'
               }"
             >
-              {{ element.severity | uppercase }}
+              {{ 'ALERTS.SEVERITY_' + element.severity.toUpperCase() | translate }}
             </span>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="reading_id">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Reading ID
+            {{ 'ALERTS.READING_ID' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.reading_id }}
@@ -69,29 +64,10 @@
 
         <ng-container matColumnDef="timestamp">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Timestamp
+            {{ 'ALERTS.TIMESTAMP' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.timestamp | date : "short" }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Action
-          </th>
-          <td mat-cell *matCellDef="let element" class="action-link">
-            <a
-              (click)="openDialog('Update', element)"
-              class="m-r-10 cursor-pointer"
-              ><i-tabler name="edit" class="icon-18"></i-tabler
-            ></a>
-            <a
-              (click)="openDialog('Delete', element)"
-              class="m-r-10 cursor-pointer"
-            >
-              <i-tabler name="trash" class="icon-18"></i-tabler>
-            </a>
           </td>
         </ng-container>
 
@@ -99,7 +75,8 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
       <mat-paginator
-        [pageSizeOptions]="[5, 10, 20]"
+        [pageSize]="10"
+        [pageSizeOptions]="[10, 20, 30]"
         showFirstLastButtons
       ></mat-paginator>
     </div>
