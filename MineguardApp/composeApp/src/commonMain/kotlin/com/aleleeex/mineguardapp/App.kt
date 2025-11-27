@@ -5,13 +5,8 @@ import androidx.compose.runtime.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.aleleeex.mineguard.core.di.coreModule
-import com.aleleeex.mineguard.core.di.platformModule
-import com.aleleeex.mineguard.feature.auth.di.authModule
 import com.aleleeex.mineguard.feature.auth.presentation.login.LoginScreen
-import com.aleleeex.mineguard.feature.dashboard.di.dashboardModule
 import com.aleleeex.mineguard.feature.dashboard.presentation.DashboardScreen
-import org.koin.compose.KoinApplication
 
 /**
  * Rutas de navegación
@@ -23,20 +18,8 @@ object Routes {
 
 @Composable
 fun App() {
-    // Inicializar Koin con todos los módulos
-    KoinApplication(
-        application = {
-            modules(
-                coreModule,
-                platformModule(),
-                authModule,
-                dashboardModule
-            )
-        }
-    ) {
-        MaterialTheme {
-            MineGuardNavigation()
-        }
+    MaterialTheme {
+        MineGuardNavigation()
     }
 }
 
