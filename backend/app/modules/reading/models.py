@@ -1,5 +1,5 @@
 # Modelos del módulo Reading
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional
 from sqlalchemy import Column, Integer, BigInteger, Float, TIMESTAMP, ForeignKey
@@ -11,29 +11,62 @@ class Reading(Base):
     __tablename__ = "reading"
 
     id = Column(BigInteger, primary_key=True, autoincrement=True, unique=True)
-    value = Column(Float, nullable=False)
-    sensor_id = Column(Integer, ForeignKey("sensor.id"), nullable=False)
     user_id = Column(Integer, ForeignKey("user.id"), nullable=False)
+    device_id = Column(Integer, ForeignKey("device.id"), nullable=False)
+    
+    # Sensores del casco
+    mq7 = Column(Float, nullable=True, comment="Nivel de CO en ppm")
+    pulse = Column(Integer, nullable=True, comment="Ritmo cardíaco en bpm")
+    
+    # Acelerómetro
+    ax = Column(Float, nullable=True, comment="Acelerómetro eje X")
+    ay = Column(Float, nullable=True, comment="Acelerómetro eje Y")
+    az = Column(Float, nullable=True, comment="Acelerómetro eje Z")
+    
+    # Giroscopio
+    gx = Column(Float, nullable=True, comment="Giroscopio eje X")
+    gy = Column(Float, nullable=True, comment="Giroscopio eje Y")
+    gz = Column(Float, nullable=True, comment="Giroscopio eje Z")
+    
     timestamp = Column(TIMESTAMP, nullable=False, server_default=func.now())
 
 
 class ReadingCreateSchema(BaseModel):
-    value: float
-    sensor_id: int
-    user_id: int
+    user_id: int = Field(..., description="ID del usuario/minero")
+    device_id: int = Field(..., description="ID del dispositivo/casco")
+    mq7: Optional[float] = Field(None, description="Nivel de CO en ppm")
+    pulse: Optional[int] = Field(None, description="Ritmo cardíaco en bpm")
+    ax: Optional[float] = Field(None, description="Acelerómetro eje X")
+    ay: Optional[float] = Field(None, description="Acelerómetro eje Y")
+    az: Optional[float] = Field(None, description="Acelerómetro eje Z")
+    gx: Optional[float] = Field(None, description="Giroscopio eje X")
+    gy: Optional[float] = Field(None, description="Giroscopio eje Y")
+    gz: Optional[float] = Field(None, description="Giroscopio eje Z")
 
 
 class ReadingUpdateSchema(BaseModel):
-    value: Optional[float] = None
-    sensor_id: Optional[int] = None
-    user_id: Optional[int] = None
+    mq7: Optional[float] = None
+    pulse: Optional[int] = None
+    ax: Optional[float] = None
+    ay: Optional[float] = None
+    az: Optional[float] = None
+    gx: Optional[float] = None
+    gy: Optional[float] = None
+    gz: Optional[float] = None
 
 
 class ReadingSchema(BaseModel):
     id: int
-    value: float
-    sensor_id: int
     user_id: int
+    device_id: int
+    mq7: Optional[float] = None
+    pulse: Optional[int] = None
+    ax: Optional[float] = None
+    ay: Optional[float] = None
+    az: Optional[float] = None
+    gx: Optional[float] = None
+    gy: Optional[float] = None
+    gz: Optional[float] = None
     timestamp: datetime
 
     class Config:

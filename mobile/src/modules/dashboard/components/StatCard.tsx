@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
     minWidth: 150,
+    margin: 6,
   },
   title: {
     fontSize: 14,

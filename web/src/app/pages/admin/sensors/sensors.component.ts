@@ -24,11 +24,12 @@ import { TranslateModule } from '@ngx-translate/core';
 
 export interface Sensor {
   id: number;
-  name: string;
-  description: string;
-  unit: string;
-  type: string;
   device_id: number;
+  sensor_type: 'mq7' | 'pulse' | 'accelerometer' | 'gyroscope';
+  name: string;
+  unit: string;
+  min_threshold?: number;
+  max_threshold?: number;
   is_active: boolean;
   created_at: string;
   updated_at: string | null;
@@ -55,10 +56,11 @@ export class AppSensorsComponent implements AfterViewInit {
   searchText: any;
   displayedColumns: string[] = [
     'id',
-    'name',
-    'type',
-    'unit',
     'device_id',
+    'sensor_type',
+    'name',
+    'unit',
+    'thresholds',
     'active',
     'action',
   ];
@@ -132,11 +134,6 @@ export class AppSensorsComponent implements AfterViewInit {
   deleteRowData(row_obj: Sensor): void {
     const updatePayload = {
       id: row_obj.id,
-      name: row_obj.name,
-      description: row_obj.description,
-      unit: row_obj.unit,
-      type: row_obj.type,
-      device_id: row_obj.device_id,
       is_active: false
     };
 
@@ -156,11 +153,6 @@ export class AppSensorsComponent implements AfterViewInit {
   reactivateRowData(row_obj: Sensor): void {
     const updatePayload = {
       id: row_obj.id,
-      name: row_obj.name,
-      description: row_obj.description,
-      unit: row_obj.unit,
-      type: row_obj.type,
-      device_id: row_obj.device_id,
       is_active: true
     };
 
@@ -209,11 +201,12 @@ export class AppSensorsDialogComponent {
   doAction(): void {
     if (this.action === 'Add') {
       const payload = {
-        name: this.local_data.name,
-        description: this.local_data.description,
-        unit: this.local_data.unit,
-        type: this.local_data.type,
         device_id: this.local_data.device_id,
+        sensor_type: this.local_data.sensor_type,
+        name: this.local_data.name,
+        unit: this.local_data.unit,
+        min_threshold: this.local_data.min_threshold,
+        max_threshold: this.local_data.max_threshold,
       };
 
       this.sensorsService.create(payload).subscribe({
@@ -227,11 +220,12 @@ export class AppSensorsDialogComponent {
     } else if (this.action === 'Update') {
       const payload = {
         id: this.local_data.id,
-        name: this.local_data.name,
-        description: this.local_data.description,
-        unit: this.local_data.unit,
-        type: this.local_data.type,
         device_id: this.local_data.device_id,
+        sensor_type: this.local_data.sensor_type,
+        name: this.local_data.name,
+        unit: this.local_data.unit,
+        min_threshold: this.local_data.min_threshold,
+        max_threshold: this.local_data.max_threshold,
         is_active: this.local_data.is_active,
       };
 

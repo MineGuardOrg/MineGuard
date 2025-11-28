@@ -15,9 +15,16 @@ import { TranslateModule } from '@ngx-translate/core';
 
 export interface Reading {
   id: number;
-  value: number;
-  sensor_id: number;
   user_id: number;
+  device_id: number;
+  mq7?: number;       // CO en ppm
+  pulse?: number;     // Frecuencia cardíaca en bpm
+  ax?: number;        // Acelerómetro eje X (m/s²)
+  ay?: number;        // Acelerómetro eje Y (m/s²)
+  az?: number;        // Acelerómetro eje Z (m/s²)
+  gx?: number;        // Giroscopio eje X (rad/s)
+  gy?: number;        // Giroscopio eje Y (rad/s)
+  gz?: number;        // Giroscopio eje Z (rad/s)
   timestamp: string;
 }
 
@@ -42,9 +49,12 @@ export class AppReadingsComponent implements AfterViewInit {
   searchText: any;
   displayedColumns: string[] = [
     'id',
-    'value',
-    'sensor_id',
     'user_id',
+    'device_id',
+    'mq7',
+    'pulse',
+    'accelerometer',
+    'gyroscope',
     'timestamp',
   ];
   dataSource = new MatTableDataSource<Reading>([]);

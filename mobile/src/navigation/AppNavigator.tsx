@@ -14,15 +14,23 @@ type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const AppNavigator: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     checkAuth();
   }, []);
 
   const checkAuth = async () => {
-    const authenticated = await AuthService.isAuthenticated();
-    setIsAuthenticated(authenticated);
+    try {
+      const authenticated = await AuthService.isAuthenticated();
+      setIsAuthenticated(authenticated);
+    } catch (error) {
+      console.error('Auth check error:', error);
+      setIsAuthenticated(false);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleLoginSuccess = () => {
@@ -34,7 +42,7 @@ export const AppNavigator: React.FC = () => {
   };
 
   // Mostrar loading mientras verifica autenticación
-  if (isAuthenticated === null) {
+  if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#007AFF" />
@@ -47,15 +55,16 @@ export const AppNavigator: React.FC = () => {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
+          animation: 'fade',
         }}
       >
-        {!isAuthenticated ? (
-          <Stack.Screen name="Login">
-            {() => <LoginScreen onLoginSuccess={handleLoginSuccess} />}
+        {isAuthenticated === false ? (
+          <Stack.Screen name="Login" options={{ headerShown: false }}>
+            {(props) => <LoginScreen {...props} onLoginSuccess={handleLoginSuccess} />}
           </Stack.Screen>
         ) : (
-          <Stack.Screen name="Dashboard">
-            {() => <DashboardScreen onLogout={handleLogout} />}
+          <Stack.Screen name="Dashboard" options={{ headerShown: false }}>
+            {(props) => <DashboardScreen {...props} onLogout={handleLogout} />}
           </Stack.Screen>
         )}
       </Stack.Navigator>

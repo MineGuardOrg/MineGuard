@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: 'row',
-    gap: 16,
     paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: '#f0f0f0',
@@ -117,5 +116,6 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: 12,
     color: '#666',
+    marginRight: 16,
   },
 });

@@ -21,16 +21,32 @@ def get_by_id(sensor_id: int, current_user=Depends(get_current_user)):
 
 @sensor_router.get("/by-device/{device_id}", response_model=List[SensorSchema])
 def get_by_device(device_id: int, current_user=Depends(get_current_user)):
+    """
+    Obtiene la configuración de todos los sensores de un dispositivo.
+    Incluye umbrales mínimos y máximos para cada tipo de sensor.
+    """
     return service.get_by_device(device_id)
 
 
 @sensor_router.post("/", response_model=SensorSchema, status_code=status.HTTP_201_CREATED)
 def create(payload: SensorCreateSchema, current_user=Depends(get_current_user)):
+    """
+    Crea la configuración de un nuevo sensor para un dispositivo.
+    
+    Tipos de sensores disponibles:
+    - mq7: Sensor de CO (unidad: ppm)
+    - pulse: Sensor de pulso (unidad: bpm)
+    - accelerometer: Acelerómetro (unidad: m/s²)
+    - gyroscope: Giroscopio (unidad: rad/s)
+    """
     return service.create(payload)
 
 
 @sensor_router.put("/{sensor_id}", response_model=SensorSchema)
 def update(sensor_id: int, payload: SensorUpdateSchema, current_user=Depends(get_current_user)):
+    """
+    Actualiza la configuración de un sensor (umbrales, nombre, etc.).
+    """
     return service.update(sensor_id, payload)
 
 

@@ -105,22 +105,22 @@ const styles = StyleSheet.create({
   },
   info: {
     flexDirection: 'row',
-    gap: 16,
     marginBottom: 12,
   },
   infoText: {
     fontSize: 14,
     color: '#666',
+    marginRight: 16,
   },
   metrics: {
     flexDirection: 'row',
-    gap: 16,
     paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: '#f0f0f0',
   },
   metric: {
     flex: 1,
+    marginRight: 16,
   },
   metricLabel: {
     fontSize: 12,

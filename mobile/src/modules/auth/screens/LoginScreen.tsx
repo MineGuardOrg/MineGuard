@@ -7,9 +7,6 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
 } from 'react-native';
 import { AuthService } from '../services/authService';
 
@@ -47,72 +44,62 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={styles.content}>
-          {/* Logo/Header */}
-          <View style={styles.header}>
-            <Text style={styles.title}>MineGuard</Text>
-            <Text style={styles.subtitle}>Sistema de Monitoreo Minero</Text>
-          </View>
-
-          {/* Login Form */}
-          <View style={styles.form}>
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Número de Empleado</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Ej: EMP001"
-                value={employeeNumber}
-                onChangeText={setEmployeeNumber}
-                autoCapitalize="characters"
-                autoCorrect={false}
-                editable={!loading}
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Contraseña</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Ingresa tu contraseña"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                autoCapitalize="none"
-                autoCorrect={false}
-                editable={!loading}
-              />
-            </View>
-
-            <TouchableOpacity
-              style={[styles.button, loading && styles.buttonDisabled]}
-              onPress={handleLogin}
-              disabled={loading}
-            >
-              {loading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={styles.buttonText}>Iniciar Sesión</Text>
-              )}
-            </TouchableOpacity>
-          </View>
-
-          {/* Footer */}
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>
-              Optimizado para iPad y dispositivos móviles
-            </Text>
-          </View>
+    <View style={styles.container}>
+      <View style={styles.content}>
+        {/* Logo/Header */}
+        <View style={styles.header}>
+          <Text style={styles.title}>MineGuard</Text>
+          <Text style={styles.subtitle}>Sistema de Monitoreo Minero</Text>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+
+        {/* Login Form */}
+        <View style={styles.form}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Número de Empleado</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Ej: EMP001"
+              value={employeeNumber}
+              onChangeText={setEmployeeNumber}
+              autoCapitalize="characters"
+              editable={!loading}
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Contraseña</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Ingresa tu contraseña"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={true}
+              autoCapitalize="none"
+              editable={!loading}
+            />
+          </View>
+
+          <TouchableOpacity
+            style={[styles.button, loading && styles.buttonDisabled]}
+            onPress={handleLogin}
+            disabled={loading === true}
+          >
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.buttonText}>Iniciar Sesión</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+
+        {/* Footer */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            Optimizado para iPad y dispositivos móviles
+          </Text>
+        </View>
+      </View>
+    </View>
   );
 };
 
@@ -120,9 +107,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-  },
-  scrollContent: {
-    flexGrow: 1,
   },
   content: {
     flex: 1,

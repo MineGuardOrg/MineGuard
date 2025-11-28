@@ -13,14 +13,14 @@ export class AuthService {
    */
   static async login(credentials: LoginRequest): Promise<LoginResponse> {
     try {
-      // Crear FormData para enviar credenciales
-      const formData = new FormData();
-      formData.append('username', credentials.employee_number);
-      formData.append('password', credentials.password);
+      // Crear body en formato x-www-form-urlencoded
+      const body = new URLSearchParams();
+      body.append('username', credentials.employee_number);
+      body.append('password', credentials.password);
 
       const response = await apiClient.post<LoginResponse>(
         API_ENDPOINTS.LOGIN,
-        formData,
+        body.toString(),
         {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -69,7 +69,12 @@ export class AuthService {
    * Verifica si hay una sesión activa
    */
   static async isAuthenticated(): Promise<boolean> {
-    const token = await StorageService.getToken();
-    return !!token;
+    try {
+      const token = await StorageService.getToken();
+      return token !== null && token !== undefined && token !== '';
+    } catch (error) {
+      console.error('Error checking authentication:', error);
+      return false;
+    }
   }
 }

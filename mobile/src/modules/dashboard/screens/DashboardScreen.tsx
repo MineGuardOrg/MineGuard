@@ -298,8 +298,8 @@ const styles = StyleSheet.create({
   },
   statsRow: {
     flexDirection: 'row',
-    gap: 12,
     flexWrap: 'wrap',
+    marginHorizontal: -6,
   },
   emptyText: {
     fontSize: 14,
@@ -326,10 +326,10 @@ const styles = StyleSheet.create({
   },
   areaStats: {
     flexDirection: 'row',
-    gap: 16,
   },
   areaStat: {
     flex: 1,
+    marginRight: 16,
   },
   areaStatLabel: {
     fontSize: 12,

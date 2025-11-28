@@ -7,6 +7,45 @@
   <form #sensorForm="ngForm">
     <div class="row">
       <div class="col-lg-12">
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'SENSORS.DEVICE_ID' | translate }}</mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="number"
+            matInput
+            required
+            id="device_id"
+            name="device_id"
+            [(ngModel)]="local_data.device_id"
+            [placeholder]="'SENSORS.DEVICE_ID' | translate"
+          />
+          <mat-icon matPrefix>
+            <i-tabler name="device-mobile" class="icon-20 d-flex"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-12">
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'SENSORS.TYPE' | translate }}</mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select
+            required
+            id="sensor_type"
+            name="sensor_type"
+            [(ngModel)]="local_data.sensor_type"
+            [placeholder]="'SENSORS.SENSOR_TYPE' | translate"
+          >
+            <mat-option value="mq7">MQ7 (CO Sensor)</mat-option>
+            <mat-option value="pulse">Pulse (Heart Rate)</mat-option>
+            <mat-option value="accelerometer">Accelerometer</mat-option>
+            <mat-option value="gyroscope">Gyroscope</mat-option>
+          </mat-select>
+          <mat-icon matPrefix>
+            <i-tabler name="category" class="icon-20 d-flex"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-12">
         <mat-label class="f-w-600 m-b-8 d-block">{{ 'SENSORS.NAME' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
           <input
@@ -25,42 +64,6 @@
       </div>
 
       <div class="col-lg-12">
-        <mat-label class="f-w-600 m-b-8 d-block">{{ 'SENSORS.DESCRIPTION' | translate }}</mat-label>
-        <mat-form-field appearance="outline" class="w-100">
-          <textarea
-            matInput
-            required
-            id="description"
-            name="description"
-            [(ngModel)]="local_data.description"
-            [placeholder]="'SENSORS.SENSOR_DESCRIPTION' | translate"
-            rows="2"
-          ></textarea>
-          <mat-icon matPrefix>
-            <i-tabler name="file-text" class="icon-20 d-flex"></i-tabler>
-          </mat-icon>
-        </mat-form-field>
-      </div>
-
-      <div class="col-lg-6">
-        <mat-label class="f-w-600 m-b-8 d-block">{{ 'SENSORS.TYPE' | translate }}</mat-label>
-        <mat-form-field appearance="outline" class="w-100">
-          <input
-            type="text"
-            matInput
-            required
-            id="type"
-            name="type"
-            [(ngModel)]="local_data.type"
-            [placeholder]="'SENSORS.SENSOR_TYPE' | translate"
-          />
-          <mat-icon matPrefix>
-            <i-tabler name="category" class="icon-20 d-flex"></i-tabler>
-          </mat-icon>
-        </mat-form-field>
-      </div>
-
-      <div class="col-lg-6">
         <mat-label class="f-w-600 m-b-8 d-block">{{ 'SENSORS.UNIT' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
           <input
@@ -78,20 +81,36 @@
         </mat-form-field>
       </div>
 
-      <div class="col-lg-12">
-        <mat-label class="f-w-600 m-b-8 d-block">{{ 'SENSORS.DEVICE_ID' | translate }}</mat-label>
+      <div class="col-lg-6">
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'SENSORS.MIN_THRESHOLD' | translate }}</mat-label>
         <mat-form-field appearance="outline" class="w-100">
           <input
             type="number"
             matInput
-            required
-            id="device_id"
-            name="device_id"
-            [(ngModel)]="local_data.device_id"
-            [placeholder]="'SENSORS.DEVICE_ID' | translate"
+            id="min_threshold"
+            name="min_threshold"
+            [(ngModel)]="local_data.min_threshold"
+            [placeholder]="'SENSORS.MIN_THRESHOLD' | translate"
           />
           <mat-icon matPrefix>
-            <i-tabler name="device-mobile" class="icon-20 d-flex"></i-tabler>
+            <i-tabler name="arrow-down" class="icon-20 d-flex"></i-tabler>
+          </mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-6">
+        <mat-label class="f-w-600 m-b-8 d-block">{{ 'SENSORS.MAX_THRESHOLD' | translate }}</mat-label>
+        <mat-form-field appearance="outline" class="w-100">
+          <input
+            type="number"
+            matInput
+            id="max_threshold"
+            name="max_threshold"
+            [(ngModel)]="local_data.max_threshold"
+            [placeholder]="'SENSORS.MAX_THRESHOLD' | translate"
+          />
+          <mat-icon matPrefix>
+            <i-tabler name="arrow-up" class="icon-20 d-flex"></i-tabler>
           </mat-icon>
         </mat-form-field>
       </div>

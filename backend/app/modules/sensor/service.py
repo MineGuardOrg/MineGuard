@@ -18,14 +18,30 @@ class SensorService(BaseService[Sensor, SensorCreateSchema, SensorUpdateSchema, 
 
     def _validate_create_data(self, data: SensorCreateSchema) -> Dict[str, Any]:
         payload = data.dict()
+        
+        # Validar device_id
         if payload["device_id"] <= 0:
             raise ValidationError("device_id inválido")
+        
+        # Validar umbrales si existen
+        if payload.get("min_threshold") is not None and payload.get("max_threshold") is not None:
+            if payload["min_threshold"] >= payload["max_threshold"]:
+                raise ValidationError("min_threshold debe ser menor que max_threshold")
+        
         return payload
 
     def _validate_update_data(self, id: int, data: SensorUpdateSchema) -> Dict[str, Any]:
         payload = {k: v for k, v in data.dict().items() if v is not None}
+        
+        # Validar device_id
         if "device_id" in payload and payload["device_id"] <= 0:
             raise ValidationError("device_id inválido")
+        
+        # Validar umbrales si se actualizan ambos
+        if "min_threshold" in payload and "max_threshold" in payload:
+            if payload["min_threshold"] >= payload["max_threshold"]:
+                raise ValidationError("min_threshold debe ser menor que max_threshold")
+        
         return payload
 
     def _to_response_schema(self, entity: Sensor) -> SensorSchema:

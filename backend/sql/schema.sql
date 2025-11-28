@@ -85,37 +85,53 @@ CREATE TABLE `device` (
 
 CREATE TABLE `sensor` (
     `id` INT NOT NULL AUTO_INCREMENT UNIQUE,
-    `name` VARCHAR(100) NOT NULL,
-    `description` VARCHAR(255) NOT NULL,
-    `unit` VARCHAR(20) NOT NULL,
-    `type` VARCHAR(50) NOT NULL,
     `device_id` INT NOT NULL,
+    `sensor_type` ENUM('mq7','pulse','accelerometer','gyroscope') NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
+    `unit` VARCHAR(20) NOT NULL,
+    `min_threshold` DOUBLE NULL COMMENT 'Valor mínimo aceptable',
+    `max_threshold` DOUBLE NULL COMMENT 'Valor máximo aceptable',
     `is_active` BOOLEAN NOT NULL DEFAULT true,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY(`id`),
-    FOREIGN KEY (`device_id`) REFERENCES device(`id`)
-) COMMENT='Sensores de cada dispositivo';
+    FOREIGN KEY (`device_id`) REFERENCES device(`id`),
+    UNIQUE KEY unique_sensor_per_device (device_id, sensor_type)
+) COMMENT='Configuración y umbrales de sensores por dispositivo';
 
 CREATE TABLE `reading` (
     `id` BIGINT NOT NULL AUTO_INCREMENT UNIQUE,
-    `value` DOUBLE NOT NULL,
-    `sensor_id` INT NOT NULL,
     `user_id` INT NOT NULL,
+    `device_id` INT NOT NULL,
+    `mq7` DOUBLE NULL COMMENT 'Nivel de CO en ppm',
+    `pulse` INT NULL COMMENT 'Ritmo cardíaco en bpm',
+    `ax` DOUBLE NULL COMMENT 'Acelerómetro eje X (m/s²)',
+    `ay` DOUBLE NULL COMMENT 'Acelerómetro eje Y (m/s²)',
+    `az` DOUBLE NULL COMMENT 'Acelerómetro eje Z (m/s²)',
+    `gx` DOUBLE NULL COMMENT 'Giroscopio eje X (rad/s)',
+    `gy` DOUBLE NULL COMMENT 'Giroscopio eje Y (rad/s)',
+    `gz` DOUBLE NULL COMMENT 'Giroscopio eje Z (rad/s)',
     `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(`id`),
-    FOREIGN KEY (`sensor_id`) REFERENCES sensor(`id`),
-    FOREIGN KEY (`user_id`) REFERENCES user(`id`)
-) COMMENT='Lecturas en tiempo real de los sensores';
+    FOREIGN KEY (`user_id`) REFERENCES user(`id`),
+    FOREIGN KEY (`device_id`) REFERENCES device(`id`),
+    INDEX idx_user_timestamp (user_id, timestamp),
+    INDEX idx_device_timestamp (device_id, timestamp)
+) COMMENT='Lecturas agrupadas de todos los sensores del casco';
 
 CREATE TABLE `alert` (
     `id` INT NOT NULL AUTO_INCREMENT UNIQUE,
     `alert_type` VARCHAR(50) NOT NULL,
-    `severity` ENUM('low','medium','high') NOT NULL,
+    `severity` ENUM('low','medium','high','critical') NOT NULL,
+    `message` TEXT NOT NULL COMMENT 'Descripción de la alerta',
     `reading_id` BIGINT NOT NULL,
+    `user_id` INT NOT NULL,
     `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(`id`),
-    FOREIGN KEY (`reading_id`) REFERENCES reading(`id`)
+    FOREIGN KEY (`reading_id`) REFERENCES reading(`id`),
+    FOREIGN KEY (`user_id`) REFERENCES user(`id`),
+    INDEX idx_user_timestamp (user_id, timestamp),
+    INDEX idx_severity (severity)
 ) COMMENT='Alertas generadas automáticamente de lecturas críticas';
 
 CREATE TABLE `incident_report` (

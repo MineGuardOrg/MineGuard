@@ -41,10 +41,10 @@ export class ReadingsService {
   }
 
   /**
-   * Obtiene lecturas por sensor_id
+   * Obtiene lecturas por device_id
    */
-  getBySensor(sensorId: number, start?: string, end?: string): Observable<any> {
-    let url = `${this.apiUrl}/by-sensor/${sensorId}`;
+  getByDevice(deviceId: number, start?: string, end?: string): Observable<any> {
+    let url = `${this.apiUrl}/by-device/${deviceId}`;
     const params: string[] = [];
     
     if (start) params.push(`start=${start}`);
@@ -58,6 +58,13 @@ export class ReadingsService {
   }
 
   /**
+   * Obtiene la última lectura de un dispositivo
+   */
+  getLatestByDevice(deviceId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/by-device/${deviceId}/latest`, { headers: this.getHeaders() });
+  }
+
+  /**
    * Obtiene lecturas por user_id
    */
   getByUser(userId: number, limit: number = 100): Observable<any> {
@@ -65,7 +72,8 @@ export class ReadingsService {
   }
 
   /**
-   * Crea una nueva lectura (solo para propósitos de testing/admin)
+   * Crea una nueva lectura con todos los sensores
+   * (Las lecturas normalmente las crea el hardware del casco)
    */
   create(reading: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/`, reading, { headers: this.getHeaders() });
