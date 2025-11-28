@@ -1,0 +1,5 @@
+# Forzar que los archivos .sh siempre usen LF
+*.sh text eol=lf
+
+# (Opcional) Para Python
+*.py text eol=lf
