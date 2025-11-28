@@ -739,23 +739,7 @@
     "TOOLTIP_DEACTIVATE": "Desactivar sensor",
     "TOOLTIP_REACTIVATE": "Reactivar sensor"
   },
-    "ACTION": "Acción",
-    "ADD": "Agregar",
-    "UPDATE": "Actualizar",
-    "CANCEL": "Cancelar",
-    "SENSOR_NAME": "Nombre del Sensor",
-    "SENSOR_DESCRIPTION": "Descripción del Sensor",
-    "SENSOR_TYPE": "Tipo de Sensor",
-    "MEASUREMENT_UNIT": "Unidad de Medición",
-    "DEACTIVATE": "Desactivar",
-    "REACTIVATE": "Reactivar",
-    "DEACTIVATE_CONFIRM": "¿Está seguro de que desea desactivar el sensor",
-    "DEACTIVATE_INFO": "El sensor será marcado como inactivo pero los datos se conservarán.",
-    "REACTIVATE_CONFIRM": "¿Desea reactivar el sensor",
-    "REACTIVATE_INFO": "El sensor será marcado como activo nuevamente.",
-    "TOOLTIP_DEACTIVATE": "Desactivar sensor",
-    "TOOLTIP_REACTIVATE": "Reactivar sensor"
-  },
+
   "SHIFTS": {
     "TITLE": "Turnos",
     "SEARCH_PLACEHOLDER": "Buscar Turno",
