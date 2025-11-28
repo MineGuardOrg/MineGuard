@@ -5,7 +5,7 @@ Sistema integral de **supervisión y seguridad minera** con cascos inteligentes 
 **Stack tecnológico:**
 - 🐍 **Backend:** FastAPI + Python + MySQL
 - 🌐 **Web:** Angular + TypeScript  
-- 📱 **Mobile:** Kotlin + Jetpack Compose + Retrofit
+- 📱 **Mobile:** React Native + Expo + TypeScript
 
 ---
 
@@ -15,7 +15,7 @@ Sistema integral de **supervisión y seguridad minera** con cascos inteligentes 
 MineGuard/
 ├── backend/          # 🐍 API FastAPI + Python + MySQL
 ├── web/              # 🌐 Frontend Angular + TypeScript  
-├── mobile/           # 📱 App Android + Kotlin + Jetpack Compose
+├── mobile/           # 📱 App React Native + Expo (iOS/Android)
 └── README.md         # 📚 Documentación principal
 ```
 
@@ -128,46 +128,49 @@ ng serve
 
 http://localhost:4200/
 
-## 🔹 Mobile (Android/Kotlin)
+## 🔹 Mobile (React Native + Expo)
 
-Aplicación móvil para **supervisión de mineros** desarrollada con tecnologías modernas de Android.
+Aplicación móvil multiplataforma para **supervisión de mineros** con soporte iOS y Android.
 
 ### 🛠️ Stack Tecnológico
-- **Lenguaje:** Kotlin
-- **UI Framework:** Jetpack Compose
-- **Networking:** Retrofit + OkHttp
-- **Arquitectura:** MVVM Modular
-- **Navegación:** Navigation Compose
-- **Injection:** Hilt (próximo)
+- **Framework:** React Native + Expo
+- **Lenguaje:** TypeScript
+- **Networking:** Axios + Socket.IO
+- **Arquitectura:** Modular (Auth + Dashboard)
+- **Navegación:** React Navigation
+- **Storage:** AsyncStorage
+- **Testing:** Compatible con iPad desde Windows sin Mac
 
-### 🏗️ Arquitectura MVVM Modular
+### 🏗️ Arquitectura Modular
 
 ```
-com.example.mobile/
-├── MainActivity.kt              # Punto de entrada
-├── core/                       # Configuraciones esenciales
-│   └── utils/                  # Extensions, Constants, Helpers
-├── data/                       # Capa de datos unificada
-│   ├── api/                   # Services de API (Retrofit)
-│   ├── database/              # Room entities y DAOs
-│   └── repository/            # Repositories (patrón Repository)
-├── model/                     # Modelos de dominio
-│   └── *.kt                   # User, Alert, Device, etc.
-└── ui/                        # Capa de presentación
-    ├── components/            # Componentes Compose reutilizables
-    ├── navigation/            # Navegación entre pantallas
-    ├── screens/               # Pantallas principales
-    ├── theme/                 # Temas, colores, tipografías
-    └── viewmodel/             # ViewModels (MVVM)
+mobile/src/
+├── core/                       # ⚙️ Configuración base
+│   ├── config.ts              # URLs backend (API + WebSocket)
+│   ├── api.ts                 # Cliente HTTP con auth
+│   └── storage.ts             # AsyncStorage wrapper
+├── modules/                   # 📦 Módulos de la app
+│   ├── auth/                  # 🔐 Autenticación
+│   │   ├── screens/           # LoginScreen
+│   │   ├── services/          # AuthService
+│   │   └── types/             # Tipos TypeScript
+│   └── dashboard/             # 📊 Dashboard tiempo real
+│       ├── screens/           # DashboardScreen
+│       ├── components/        # StatCard, WorkerCard, AlertCard
+│       ├── services/          # DashboardService + WebSockets
+│       └── types/             # Tipos TypeScript
+├── navigation/                # 🧭 Navegación
+│   └── AppNavigator.tsx
+└── types/                     # Tipos globales
 ```
 
 ### 🚀 Configuración del proyecto
 
 #### Requisitos
-- **Android Studio** Arctic Fox o superior
-- **JDK 11** o superior
-- **Gradle 8.13**
-- **Android API Level:** Min 24, Target 36
+- **Node.js** 18 o superior
+- **npm** o **yarn**
+- **Expo Go** app (en tu dispositivo iOS/Android)
+- Para compilar nativamente: **EAS CLI**
 
 #### Primeros pasos
 
@@ -177,42 +180,119 @@ git clone https://github.com/MineGuardOrg/MineGuard.git
 cd MineGuard/mobile
 ```
 
-2. **Abrir en Android Studio:**
-   - Abrir Android Studio
-   - File → Open → Seleccionar carpeta `MineGuard/mobile`
-   - Esperar sincronización de Gradle
-
-3. **Compilar el proyecto:**
+2. **Instalar dependencias:**
 ```bash
-./gradlew assembleDebug
+npm install
 ```
 
-4. **Ejecutar en dispositivo/emulador:**
-   - Conectar dispositivo Android o iniciar emulador
-   - Presionar botón "Run" en Android Studio
-   - O usar comando: `./gradlew installDebug`
+3. **Configurar URL del backend:**
 
-#### 🔧 Variables de entorno
+Edita `src/core/config.ts`:
 
-Crear archivo `local.properties` en la raíz del proyecto mobile:
-```properties
-# API Backend
-API_BASE_URL=http://127.0.0.1:8000/
-# Firebase (para notificaciones push)
-FIREBASE_PROJECT_ID=mineguard-project
+```typescript
+export const API_BASE_URL = 'http://TU_IP:8000';  // ⬅️ CAMBIAR
+export const WS_BASE_URL = 'ws://TU_IP:8000';
 ```
 
-⚠️ **No subir `local.properties` al repositorio.**
+**Ejemplos según tu caso:**
+
+- **Dispositivo físico (misma WiFi):** `http://192.168.1.XX:8000`
+- **Android Emulator:** `http://10.0.2.2:8000`
+- **Backend en la nube:** `https://tu-dominio.com`
+
+💡 **Cómo encontrar tu IP local:**
+```bash
+# Windows
+ipconfig
+
+# Mac/Linux
+ifconfig | grep inet
+```
+
+4. **Iniciar servidor de desarrollo:**
+```bash
+npm start
+```
+
+Se mostrará un QR code en la terminal.
+
+5. **Probar en tu dispositivo:**
+   - **iOS:** Descarga Expo Go desde App Store, escanea el QR con la cámara
+   - **Android:** Descarga Expo Go desde Play Store, escanea el QR desde la app
+
+### 📱 Ejecución en emuladores
+
+**Android:**
+```bash
+npm run android
+```
+
+**iOS (solo Mac):**
+```bash
+npm run ios
+```
+
+**Web:**
+```bash
+npm run web
+```
+
+### 📦 Compilar APK/IPA (sin Mac)
+
+Usando **EAS Build** (gratis):
+
+1. **Instalar EAS CLI:**
+```bash
+npm install -g eas-cli
+```
+
+2. **Login en Expo:**
+```bash
+eas login
+```
+
+3. **Configurar proyecto:**
+```bash
+eas build:configure
+```
+
+4. **Compilar Android:**
+```bash
+eas build --platform android --profile preview
+```
+
+5. **Compilar iOS (sin Mac):**
+```bash
+eas build --platform ios --profile preview
+```
+
+### 🔧 Variables de entorno
+
+Las URLs del backend se configuran en `src/core/config.ts`. 
+
+⚠️ **No subir credenciales sensibles al repositorio.**
 
 ### 🧪 Testing
 
 ```bash
-# Tests unitarios
-./gradlew test
+# Tests unitarios (cuando estén implementados)
+npm test
 
-# Tests de interfaz
-./gradlew connectedAndroidTest
+# Limpiar caché
+npm start --reset-cache
 ```
+
+### 🎯 Funcionalidades implementadas
+
+✅ Login con backend FastAPI  
+✅ Dashboard en tiempo real con WebSockets  
+✅ Monitoreo de trabajadores activos  
+✅ Alertas en tiempo real  
+✅ Biométricas por área  
+✅ Pull-to-refresh  
+✅ Optimizado para iPad y móviles  
+✅ Navegación automática (Login → Dashboard)  
+✅ Almacenamiento seguro de tokens
 
 ## 🔒 Certificado SSL para conexión a MySQL (Azure)
 
