@@ -6,6 +6,7 @@ import { AppBiometricAvgComponent } from 'src/app/components/dashboard/biometric
 import { AppActiveWorkersComponent } from 'src/app/components/dashboard/active-workers/active-workers.component';
 import { AppRecentAlertsComponent } from 'src/app/components/dashboard/recent-alerts/recent-alerts.component';
 import { AppWorkoutByShiftComponent } from 'src/app/components/dashboard/workout-by-shift/workout-by-shift.component';
+import { GyroscopeOrientationComponent } from 'src/app/components/dashboard/3D-helmet/3D-helmet.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,6 +19,7 @@ import { AppWorkoutByShiftComponent } from 'src/app/components/dashboard/workout
     AppActiveWorkersComponent,
     AppRecentAlertsComponent,
     AppWorkoutByShiftComponent,
+    GyroscopeOrientationComponent, // ⚡ Nuevo componente agregado
   ],
   templateUrl: './dashboard.component.html',
 })
