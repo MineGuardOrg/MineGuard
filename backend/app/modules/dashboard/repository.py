@@ -34,10 +34,6 @@ class DashboardRepository:
 
     def get_active_workers(self) -> List[Dict[str, Any]]:
         """Trabajadores activos por última conexión online del casco con métricas recientes."""
-        HEART_ALIASES = ['heart_rate', 'ritmo_cardiaco', 'ritmo cardiaco']
-        TEMP_ALIASES = ['body_temperature', 'temperatura_corporal', 'temperatura corporal']
-        BATT_ALIASES = ['battery', 'nivel_bateria', 'bateria', 'battery_level']
-
         results: List[Dict[str, Any]] = []
         with SessionLocal() as db:
             # Subconsulta: última conexión por dispositivo
@@ -57,6 +53,7 @@ class DashboardRepository:
                     User.last_name,
                     Area.name.label('area_name'),
                     Device.id.label('device_id'),
+                    Device.battery.label('battery'),
                     Connection.status.label('conn_status'),
                     Connection.timestamp.label('conn_ts')
                 )
@@ -78,53 +75,32 @@ class DashboardRepository:
             rows = q.all()
 
             for r in rows:
-                # Última lectura por tipo
-                hr = (
-                    db.query(Reading.value)
-                    .join(Sensor, Sensor.id == Reading.sensor_id)
+                # Obtener la última lectura del dispositivo para el usuario
+                last_reading = (
+                    db.query(Reading)
                     .filter(
                         Reading.user_id == r.user_id,
-                        Sensor.device_id == r.device_id,
-                        Sensor.is_active == True,
-                        func.lower(Sensor.type).in_([a.lower() for a in HEART_ALIASES])
+                        Reading.device_id == r.device_id
                     )
                     .order_by(Reading.timestamp.desc())
                     .first()
                 )
 
-                temp = (
-                    db.query(Reading.value)
-                    .join(Sensor, Sensor.id == Reading.sensor_id)
-                    .filter(
-                        Reading.user_id == r.user_id,
-                        Sensor.device_id == r.device_id,
-                        Sensor.is_active == True,
-                        func.lower(Sensor.type).in_([a.lower() for a in TEMP_ALIASES])
-                    )
-                    .order_by(Reading.timestamp.desc())
-                    .first()
-                )
-
-                batt = (
-                    db.query(Reading.value)
-                    .join(Sensor, Sensor.id == Reading.sensor_id)
-                    .filter(
-                        Reading.user_id == r.user_id,
-                        Sensor.device_id == r.device_id,
-                        Sensor.is_active == True,
-                        func.lower(Sensor.type).in_([a.lower() for a in BATT_ALIASES])
-                    )
-                    .order_by(Reading.timestamp.desc())
-                    .first()
-                )
+                # Extraer valores
+                ritmo_cardiaco = None
+                temperatura_corporal = None
+                
+                if last_reading:
+                    ritmo_cardiaco = last_reading.pulse
+                    temperatura_corporal = last_reading.body_temp
 
                 results.append({
                     'id': r.user_id,
                     'nombre': f"{r.first_name} {r.last_name}",
                     'area': r.area_name,
-                    'ritmoCardiaco': hr[0] if hr else None,
-                    'temperaturaCorpral': temp[0] if temp else None,
-                    'nivelBateria': batt[0] if batt else None,
+                    'ritmoCardiaco': ritmo_cardiaco,
+                    'temperaturaCorporal': temperatura_corporal,
+                    'nivelBateria': r.battery,
                     'tiempoActivo_ts': r.conn_ts,
                     'cascoId': r.device_id,
                 })
@@ -170,45 +146,38 @@ class DashboardRepository:
         from datetime import datetime, timedelta, timezone
         start_ts = datetime.now(timezone.utc) - timedelta(days=days)
 
-        HEART_ALIASES = ['heart_rate', 'ritmo_cardiaco', 'ritmo cardiaco']
-        TEMP_ALIASES = ['body_temperature', 'temperatura_corporal', 'temperatura corporal']
-
         with SessionLocal() as db:
-            # Promedios de HR por área
+            # Promedios de ritmo cardíaco (pulse) por área
             hr_rows = (
                 db.query(
                     Area.name.label('area_name'),
-                    func.avg(Reading.value).label('hr_avg')
+                    func.avg(Reading.pulse).label('hr_avg')
                 )
                 .join(User, User.id == Reading.user_id)
                 .join(Area, Area.id == User.area_id)
-                .join(Sensor, Sensor.id == Reading.sensor_id)
                 .filter(
                     Reading.timestamp >= start_ts,
+                    Reading.pulse != None,
                     User.is_active == True,
-                    Area.is_active == True,
-                    Sensor.is_active == True,
-                    func.lower(Sensor.type).in_([a.lower() for a in HEART_ALIASES])
+                    Area.is_active == True
                 )
                 .group_by(Area.name)
                 .all()
             )
 
-            # Promedios de Temperatura por área
+            # Promedios de temperatura corporal (body_temp) por área
             temp_rows = (
                 db.query(
                     Area.name.label('area_name'),
-                    func.avg(Reading.value).label('temp_avg')
+                    func.avg(Reading.body_temp).label('temp_avg')
                 )
                 .join(User, User.id == Reading.user_id)
                 .join(Area, Area.id == User.area_id)
-                .join(Sensor, Sensor.id == Reading.sensor_id)
                 .filter(
                     Reading.timestamp >= start_ts,
+                    Reading.body_temp != None,
                     User.is_active == True,
-                    Area.is_active == True,
-                    Sensor.is_active == True,
-                    func.lower(Sensor.type).in_([a.lower() for a in TEMP_ALIASES])
+                    Area.is_active == True
                 )
                 .group_by(Area.name)
                 .all()
@@ -256,13 +225,14 @@ class DashboardRepository:
                     Alert.severity.label('severidad'),
                     Alert.timestamp.label('timestamp'),
                     Connection.status.label('estado'),
-                    Reading.value.label('valor')
+                    Reading.pulse.label('pulse'),
+                    Reading.body_temp.label('body_temp'),
+                    Reading.mq7.label('mq7')
                 )
                 .join(Reading, Reading.id == Alert.reading_id)
                 .join(User, User.id == Reading.user_id)
                 .outerjoin(Area, Area.id == User.area_id)
-                .join(Sensor, Sensor.id == Reading.sensor_id)
-                .join(Device, Device.id == Sensor.device_id)
+                .join(Device, Device.user_id == User.id)
                 .outerjoin(last_conn_sq, last_conn_sq.c.device_id == Device.id)
                 .outerjoin(Connection, and_(
                     Connection.device_id == last_conn_sq.c.device_id,
@@ -272,7 +242,6 @@ class DashboardRepository:
                     Alert.timestamp >= start_ts,
                     User.is_active == True,
                     Device.is_active == True,
-                    Sensor.is_active == True,
                     or_(Area.id == None, Area.is_active == True)
                 )
                 .order_by(Alert.timestamp.desc())
@@ -282,6 +251,16 @@ class DashboardRepository:
             rows = q.all()
             results: List[Dict[str, Any]] = []
             for r in rows:
+                # Determinar el valor relevante según el tipo de alerta
+                valor = None
+                alert_type_lower = r.tipo.lower() if r.tipo else ''
+                if 'heart' in alert_type_lower or 'cardiaco' in alert_type_lower:
+                    valor = float(r.pulse) if r.pulse is not None else None
+                elif 'temp' in alert_type_lower or 'temperatura' in alert_type_lower:
+                    valor = float(r.body_temp) if r.body_temp is not None else None
+                elif 'gas' in alert_type_lower or 'co' in alert_type_lower or 'mq7' in alert_type_lower:
+                    valor = float(r.mq7) if r.mq7 is not None else None
+                
                 results.append({
                     'id': r.id,
                     'tipo': r.tipo,
@@ -290,7 +269,7 @@ class DashboardRepository:
                     'severidad': r.severidad,
                     'timestamp': r.timestamp,
                     'estado': r.estado,
-                    'valor': float(r.valor) if r.valor is not None else None
+                    'valor': valor
                 })
 
             return results

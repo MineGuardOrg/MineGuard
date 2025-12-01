@@ -45,7 +45,7 @@ class DashboardService:
                     nombre=r['nombre'],
                     area=r.get('area'),
                     ritmoCardiaco=r.get('ritmoCardiaco'),
-                    temperaturaCorpral=r.get('temperaturaCorpral'),
+                    temperaturaCorporal=r.get('temperaturaCorporal'),
                     nivelBateria=r.get('nivelBateria'),
                     tiempoActivo=seconds_active,
                     cascoId=r['cascoId']

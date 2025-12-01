@@ -208,6 +208,163 @@ class DatabaseMaintenanceService:
             if connection:
                 connection.close()
     
+    def create_schema_backup(self) -> dict:
+        """
+        Crea un backup solo del schema de la base de datos (estructura sin datos)
+        Incluye: tablas, stored procedures, functions, triggers y eventos
+        Retorna información sobre el backup creado
+        """
+        connection = None
+        try:
+            # Generar nombre del archivo con fecha
+            backup_date = datetime.now()
+            filename = f"schema_backup_{backup_date.strftime('%Y%m%d')}.sql"
+            backup_path = self.backup_dir / filename
+            
+            # Conectar a la base de datos
+            connection = self._get_connection()
+            cursor = connection.cursor()
+            
+            # Abrir archivo para escribir backup
+            with open(backup_path, 'w', encoding='utf-8') as backup_file:
+                # Encabezado del backup
+                backup_file.write(f"-- MineGuard Database Schema Backup (Structure Only)\n")
+                backup_file.write(f"-- Database: {self.db_name}\n")
+                backup_file.write(f"-- Date: {backup_date.strftime('%Y-%m-%d %H:%M:%S')}\n")
+                backup_file.write(f"-- Host: {self.db_host}\n")
+                backup_file.write(f"--\n")
+                backup_file.write(f"-- This backup contains ONLY the database structure:\n")
+                backup_file.write(f"-- - Table definitions\n")
+                backup_file.write(f"-- - Indexes and constraints\n")
+                backup_file.write(f"-- - Stored procedures\n")
+                backup_file.write(f"-- - Functions\n")
+                backup_file.write(f"-- - Triggers\n")
+                backup_file.write(f"-- - Events\n")
+                backup_file.write(f"--\n")
+                backup_file.write(f"-- NO DATA is included in this backup\n")
+                backup_file.write(f"--\n\n")
+                backup_file.write("SET NAMES utf8mb4;\n")
+                backup_file.write("SET FOREIGN_KEY_CHECKS = 0;\n\n")
+                
+                # Obtener todas las tablas
+                cursor.execute("SHOW TABLES")
+                tables = [table[0] for table in cursor.fetchall()]
+                
+                backup_file.write(f"-- ----------------------------\n")
+                backup_file.write(f"-- Table structures\n")
+                backup_file.write(f"-- ----------------------------\n\n")
+                
+                for table in tables:
+                    backup_file.write(f"-- Table structure for {table}\n")
+                    backup_file.write(f"DROP TABLE IF EXISTS `{table}`;\n")
+                    
+                    # Obtener estructura de la tabla
+                    cursor.execute(f"SHOW CREATE TABLE `{table}`")
+                    create_table = cursor.fetchone()[1]
+                    backup_file.write(f"{create_table};\n\n")
+                
+                # Obtener y respaldar triggers
+                backup_file.write(f"\n-- ----------------------------\n")
+                backup_file.write(f"-- Triggers\n")
+                backup_file.write(f"-- ----------------------------\n\n")
+                
+                for table in tables:
+                    cursor.execute(f"SHOW TRIGGERS WHERE `Table` = '{table}'")
+                    triggers = cursor.fetchall()
+                    
+                    for trigger in triggers:
+                        trigger_name = trigger[0]
+                        cursor.execute(f"SHOW CREATE TRIGGER `{trigger_name}`")
+                        result = cursor.fetchone()
+                        if result:
+                            backup_file.write(f"DROP TRIGGER IF EXISTS `{trigger_name}`;\n")
+                            backup_file.write(f"DELIMITER ;;\n")
+                            backup_file.write(f"{result[2]};;\n")
+                            backup_file.write(f"DELIMITER ;\n\n")
+                
+                # Obtener y respaldar stored procedures
+                cursor.execute("SHOW PROCEDURE STATUS WHERE Db = %s", (self.db_name,))
+                procedures = cursor.fetchall()
+                
+                if procedures:
+                    backup_file.write(f"\n-- ----------------------------\n")
+                    backup_file.write(f"-- Stored Procedures\n")
+                    backup_file.write(f"-- ----------------------------\n\n")
+                    
+                    for proc in procedures:
+                        proc_name = proc[1]
+                        cursor.execute(f"SHOW CREATE PROCEDURE `{proc_name}`")
+                        result = cursor.fetchone()
+                        if result:
+                            backup_file.write(f"DROP PROCEDURE IF EXISTS `{proc_name}`;\n")
+                            backup_file.write(f"DELIMITER ;;\n")
+                            backup_file.write(f"{result[2]};;\n")
+                            backup_file.write(f"DELIMITER ;\n\n")
+                
+                # Obtener y respaldar functions
+                cursor.execute("SHOW FUNCTION STATUS WHERE Db = %s", (self.db_name,))
+                functions = cursor.fetchall()
+                
+                if functions:
+                    backup_file.write(f"\n-- ----------------------------\n")
+                    backup_file.write(f"-- Functions\n")
+                    backup_file.write(f"-- ----------------------------\n\n")
+                    
+                    for func in functions:
+                        func_name = func[1]
+                        cursor.execute(f"SHOW CREATE FUNCTION `{func_name}`")
+                        result = cursor.fetchone()
+                        if result:
+                            backup_file.write(f"DROP FUNCTION IF EXISTS `{func_name}`;\n")
+                            backup_file.write(f"DELIMITER ;;\n")
+                            backup_file.write(f"{result[2]};;\n")
+                            backup_file.write(f"DELIMITER ;\n\n")
+                
+                # Obtener y respaldar eventos
+                cursor.execute("SHOW EVENTS WHERE Db = %s", (self.db_name,))
+                events = cursor.fetchall()
+                
+                if events:
+                    backup_file.write(f"\n-- ----------------------------\n")
+                    backup_file.write(f"-- Events\n")
+                    backup_file.write(f"-- ----------------------------\n\n")
+                    
+                    for event in events:
+                        event_name = event[1]
+                        cursor.execute(f"SHOW CREATE EVENT `{event_name}`")
+                        result = cursor.fetchone()
+                        if result:
+                            backup_file.write(f"DROP EVENT IF EXISTS `{event_name}`;\n")
+                            backup_file.write(f"DELIMITER ;;\n")
+                            backup_file.write(f"{result[3]};;\n")
+                            backup_file.write(f"DELIMITER ;\n\n")
+                
+                # Restaurar configuración
+                backup_file.write("\nSET FOREIGN_KEY_CHECKS = 1;\n")
+            
+            cursor.close()
+            
+            # Obtener tamaño del archivo
+            file_size_bytes = backup_path.stat().st_size
+            file_size_mb = round(file_size_bytes / (1024 * 1024), 2)
+            
+            return {
+                "success": True,
+                "message": "Schema backup creado exitosamente (sin datos)",
+                "backup_file": filename,
+                "backup_date": backup_date,
+                "file_size_mb": file_size_mb,
+                "tables_count": len(tables)
+            }
+            
+        except pymysql.Error as e:
+            raise DatabaseError(f"Error de base de datos al crear schema backup: {str(e)}")
+        except Exception as e:
+            raise DatabaseError(f"Error inesperado al crear schema backup: {str(e)}")
+        finally:
+            if connection:
+                connection.close()
+    
     def create_csv_backup(self) -> dict:
         """
         Crea un backup en formato CSV con cada tabla en un archivo separado

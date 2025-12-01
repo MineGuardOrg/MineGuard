@@ -9,7 +9,7 @@ class ActiveWorkerSchema(BaseModel):
     nombre: str
     area: Optional[str] = None
     ritmoCardiaco: Optional[float] = None
-    temperaturaCorpral: Optional[float] = None
+    temperaturaCorporal: Optional[float] = None
     nivelBateria: Optional[float] = None
     tiempoActivo: int  # segundos desde que el dispositivo está online
     cascoId: int

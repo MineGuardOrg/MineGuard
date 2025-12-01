@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import FileResponse
 from pathlib import Path
 from app.modules.database_maintenance.service import DatabaseMaintenanceService
-from app.modules.database_maintenance.models import BackupResponse, CSVBackupResponse
+from app.modules.database_maintenance.models import BackupResponse, SchemaBackupResponse, CSVBackupResponse
 from app.modules.auth.service import AuthService
 from app.core.security import get_current_user
 from app.shared.exceptions import DatabaseError
@@ -38,6 +38,52 @@ async def create_database_backup(
         
         service = DatabaseMaintenanceService()
         result = service.create_backup()
+        
+        # Obtener la ruta completa del archivo
+        backup_dir = Path(__file__).resolve().parents[3] / "sql"
+        backup_path = backup_dir / result["backup_file"]
+        
+        # Retornar el archivo para descarga
+        return FileResponse(
+            path=str(backup_path),
+            filename=result["backup_file"],
+            media_type="application/sql",
+            headers={
+                "Content-Disposition": f"attachment; filename={result['backup_file']}"
+            }
+        )
+        
+    except DatabaseError as e:
+        raise HTTPException(status_code=500, detail=e.message)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error interno del servidor: {str(e)}")
+
+
+@database_maintenance_router.post("/backup-schema")
+async def create_schema_backup(
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Crea un backup SOLO del schema de la base de datos (estructura sin datos) y lo descarga automáticamente.
+    
+    El backup incluye:
+    - Estructura de todas las tablas (CREATE TABLE)
+    - Índices y constraints (PRIMARY KEY, FOREIGN KEY, UNIQUE, etc.)
+    - Stored procedures
+    - Functions
+    - Triggers
+    - Eventos programados
+    - Soporte completo para caracteres especiales (UTF-8)
+    
+    **NO incluye datos de las tablas**
+    
+    El archivo se guarda en backend/sql y se descarga automáticamente con formato: schema_backup_YYYYMMDD.sql
+    
+    **Requiere autenticación**
+    """
+    try:
+        service = DatabaseMaintenanceService()
+        result = service.create_schema_backup()
         
         # Obtener la ruta completa del archivo
         backup_dir = Path(__file__).resolve().parents[3] / "sql"

@@ -13,6 +13,7 @@ class Device(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
     model = Column(String(100), nullable=False)
+    battery = Column(Integer, nullable=True, comment="Nivel de batería en porcentaje")
     user_id = Column(Integer, ForeignKey("user.id"), nullable=False)
     is_active = Column(Boolean, nullable=False, default=True)
     assigned_at = Column(TIMESTAMP, nullable=False, server_default=func.now())
@@ -34,6 +35,7 @@ class DeviceUpdateSchema(BaseModel):
 class DeviceSchema(BaseModel):
     id: int
     model: str
+    battery: Optional[int] = None
     user_id: int
     is_active: bool
     assigned_at: datetime

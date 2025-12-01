@@ -12,6 +12,16 @@ class BackupResponse(BaseModel):
     file_size_mb: float
 
 
+class SchemaBackupResponse(BaseModel):
+    """Respuesta del endpoint de backup de schema"""
+    success: bool
+    message: str
+    backup_file: str
+    backup_date: datetime
+    file_size_mb: float
+    tables_count: int
+
+
 class CSVBackupResponse(BaseModel):
     """Respuesta del endpoint de backup CSV"""
     success: bool
