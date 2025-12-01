@@ -3,12 +3,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { LoginScreen } from '../modules/auth/screens/LoginScreen';
 import { DashboardScreen } from '../modules/dashboard/screens/DashboardScreen';
+import ProfileScreen from '../modules/profile/screens/ProfileScreen';
 import { AuthService } from '../modules/auth/services/authService';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
 type RootStackParamList = {
   Login: undefined;
   Dashboard: undefined;
+  Profile: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -63,9 +65,16 @@ export const AppNavigator: React.FC = () => {
             {(props) => <LoginScreen {...props} onLoginSuccess={handleLoginSuccess} />}
           </Stack.Screen>
         ) : (
-          <Stack.Screen name="Dashboard" options={{ headerShown: false }}>
-            {(props) => <DashboardScreen {...props} onLogout={handleLogout} />}
-          </Stack.Screen>
+          <>
+            <Stack.Screen name="Dashboard" options={{ headerShown: false }}>
+              {(props) => <DashboardScreen {...props} onLogout={handleLogout} />}
+            </Stack.Screen>
+            <Stack.Screen 
+              name="Profile" 
+              component={ProfileScreen}
+              options={{ headerShown: false }}
+            />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>

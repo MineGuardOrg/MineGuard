@@ -2,6 +2,19 @@
  * Tipos del módulo de dashboard
  */
 
+// Tipos que vienen del backend (en español)
+interface ActiveWorkerBackend {
+  id: number;
+  nombre: string;
+  area: string | null;
+  ritmoCardiaco: number | null;
+  temperaturaCorporal: number | null;
+  nivelBateria: number | null;
+  tiempoActivo: number;
+  cascoId: number;
+}
+
+// Tipos usados en el frontend (en inglés)
 export interface ActiveWorker {
   user_id: number;
   full_name: string;
@@ -9,10 +22,13 @@ export interface ActiveWorker {
   area_name: string;
   shift_name: string;
   hours_worked: number;
-  avg_heart_rate: number;
-  avg_temperature: number;
+  avg_heart_rate: number | null;
+  avg_temperature: number | null;
   last_reading_time: string;
+  battery_level: number | null;
 }
+
+export type { ActiveWorkerBackend }
 
 export interface AlertCounts {
   critical: number;

@@ -1,39 +1,73 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   RefreshControl,
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-} from 'react-native';
-import { DashboardService } from '../services/dashboardService';
-import { DashboardData } from '../types';
-import { StatCard } from '../components/StatCard';
-import { WorkerCard } from '../components/WorkerCard';
-import { AlertCard } from '../components/AlertCard';
-import { AuthService } from '../../auth/services/authService';
+  Dimensions,
+  Modal,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { DashboardService } from "../services/dashboardService";
+import { DashboardData } from "../types";
+import { StatCard } from "../components/StatCard";
+import { WorkerCard } from "../components/WorkerCard";
+import { AlertCard } from "../components/AlertCard";
+import { AuthService } from "../../auth/services/authService";
+import { StorageService } from "../../../core/storage";
+import { JWTHelper } from "../../../core/jwtHelper";
+import { styles } from "./DashboardScreen.styles";
+
+const { width } = Dimensions.get("window");
+
+type RootStackParamList = {
+  Dashboard: undefined;
+  Profile: undefined;
+};
+
+type DashboardNavigationProp = NativeStackNavigationProp<RootStackParamList, "Dashboard">;
 
 interface DashboardScreenProps {
   onLogout: () => void;
 }
 
 export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onLogout }) => {
+  const navigation = useNavigation<DashboardNavigationProp>();
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [userFullName, setUserFullName] = useState<string>("Usuario");
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   const loadData = async () => {
     try {
       const dashboardData = await DashboardService.getDashboardData();
       setData(dashboardData);
     } catch (error) {
-      console.error('Load data error:', error);
-      Alert.alert('Error', 'No se pudieron cargar los datos del dashboard');
+      console.error("Load data error:", error);
+      Alert.alert("Error", "No se pudieron cargar los datos del dashboard");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadUserInfo = async () => {
+    try {
+      const token = await StorageService.getToken();
+      if (token) {
+        const fullName = JWTHelper.getUserFullName(token);
+        // console.log('User full name from token:', fullName);
+        setUserFullName(fullName);
+      } else {
+        // console.log('No token found');
+      }
+    } catch (error) {
+      // console.error('Error loading user info:', error);
+      setUserFullName("Usuario");
     }
   };
 
@@ -44,30 +78,27 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onLogout }) =>
   }, []);
 
   const handleLogout = async () => {
-    Alert.alert(
-      'Cerrar Sesión',
-      '¿Estás seguro que deseas cerrar sesión?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Cerrar Sesión',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await AuthService.logout();
-              DashboardService.disconnectWebSocket();
-              onLogout();
-            } catch (error) {
-              console.error('Logout error:', error);
-            }
-          },
+    Alert.alert("Cerrar Sesión", "¿Estás seguro que deseas cerrar sesión?", [
+      { text: "Cancelar", style: "cancel" },
+      {
+        text: "Cerrar Sesión",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await AuthService.logout();
+            DashboardService.disconnectWebSocket();
+            onLogout();
+          } catch (error) {
+            console.error("Logout error:", error);
+          }
         },
-      ]
-    );
+      },
+    ]);
   };
 
   useEffect(() => {
     loadData();
+    loadUserInfo();
 
     // Conectar WebSocket para actualizaciones en tiempo real
     DashboardService.connectWebSocket(
@@ -78,7 +109,7 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onLogout }) =>
         });
       },
       (error) => {
-        console.error('WebSocket error:', error);
+        console.error("WebSocket error:", error);
       }
     );
 
@@ -113,232 +144,148 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onLogout }) =>
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.headerTitle}>Dashboard</Text>
-          <Text style={styles.headerSubtitle}>Monitoreo en Tiempo Real</Text>
+          <Text style={styles.headerTitle}>MineGuard Dashboard</Text>
+          <Text style={styles.headerSubtitle}>Monitoreo en Tiempo Real • {new Date().toLocaleDateString()}</Text>
         </View>
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutButtonText}>Cerrar Sesión</Text>
-        </TouchableOpacity>
+
+        {/* Menú de usuario */}
+        <View>
+          <TouchableOpacity style={styles.userMenuButton} onPress={() => setShowUserMenu(!showUserMenu)}>
+            <Text style={styles.userMenuName}>{userFullName}</Text>
+            <Text style={styles.userMenuIcon}>{showUserMenu ? "▲" : "▼"}</Text>
+          </TouchableOpacity>
+
+          {/* Dropdown Menu */}
+          {showUserMenu && (
+            <View style={styles.dropdownMenu}>
+              <TouchableOpacity
+                style={styles.dropdownItem}
+                onPress={() => {
+                  setShowUserMenu(false);
+                  navigation.navigate("Profile");
+                }}
+              >
+                <Text style={styles.dropdownItemText}>Perfil</Text>
+              </TouchableOpacity>
+
+              <View style={styles.dropdownDivider} />
+
+              <TouchableOpacity
+                style={styles.dropdownItem}
+                onPress={() => {
+                  setShowUserMenu(false);
+                  handleLogout();
+                }}
+              >
+                <Text style={[styles.dropdownItemText, styles.dropdownItemTextDanger]}>Cerrar Sesión</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
       </View>
 
-      <ScrollView
-        style={styles.scrollView}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        {/* Stats Cards */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Resumen de Alertas</Text>
-          <View style={styles.statsRow}>
-            <StatCard
-              title="Críticas"
-              value={data.alert_counts.critical}
-              color="#FF3B30"
-            />
-            <StatCard
-              title="Advertencias"
-              value={data.alert_counts.warning}
-              color="#FF9500"
-            />
-            <StatCard
-              title="Informativas"
-              value={data.alert_counts.info}
-              color="#007AFF"
-            />
-          </View>
-        </View>
-
-        {/* Active Workers */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            Trabajadores Activos ({data.active_workers.length})
-          </Text>
-          {data.active_workers.length > 0 ? (
-            data.active_workers.map((worker) => (
-              <WorkerCard key={worker.user_id} worker={worker} />
-            ))
-          ) : (
-            <Text style={styles.emptyText}>No hay trabajadores activos</Text>
-          )}
-        </View>
-
-        {/* Biometrics by Area */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Biométricas por Área</Text>
-          {data.biometrics_by_area.length > 0 ? (
-            data.biometrics_by_area.map((area, index) => (
-              <View key={index} style={styles.areaCard}>
-                <Text style={styles.areaName}>{area.area_name}</Text>
-                <View style={styles.areaStats}>
-                  <View style={styles.areaStat}>
-                    <Text style={styles.areaStatLabel}>Trabajadores</Text>
-                    <Text style={styles.areaStatValue}>{area.worker_count}</Text>
-                  </View>
-                  <View style={styles.areaStat}>
-                    <Text style={styles.areaStatLabel}>FC Promedio</Text>
-                    <Text style={styles.areaStatValue}>
-                      {area.avg_heart_rate.toFixed(0)} bpm
-                    </Text>
-                  </View>
-                  <View style={styles.areaStat}>
-                    <Text style={styles.areaStatLabel}>Temp Promedio</Text>
-                    <Text style={styles.areaStatValue}>
-                      {area.avg_temperature.toFixed(1)}°C
-                    </Text>
-                  </View>
+      <View style={styles.contentContainer}>
+        {/* Dashboard Grid Layout para iPad horizontal */}
+        <View style={styles.dashboardGrid}>
+          {/* Columna Izquierda - Alertas y Estadísticas */}
+          <ScrollView
+            style={styles.leftColumn}
+            showsVerticalScrollIndicator={true}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+          >
+            {/* Resumen de Alertas del Último Mes */}
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>Alertas del Último Mes</Text>
+              <View style={styles.alertStatsGrid}>
+                <View key="critical" style={[styles.alertStatCard, { backgroundColor: "#FFF5F5" }]}>
+                  <Text style={[styles.alertStatValue, { color: "#FF3B30" }]}>{data.alert_counts.critical}</Text>
+                  <Text style={styles.alertStatLabel}>Críticas</Text>
+                </View>
+                <View key="warning" style={[styles.alertStatCard, { backgroundColor: "#FFF9F0" }]}>
+                  <Text style={[styles.alertStatValue, { color: "#FF9500" }]}>{data.alert_counts.warning}</Text>
+                  <Text style={styles.alertStatLabel}>Advertencias</Text>
+                </View>
+                <View key="info" style={[styles.alertStatCard, { backgroundColor: "#F0F7FF" }]}>
+                  <Text style={[styles.alertStatValue, { color: "#007AFF" }]}>{data.alert_counts.info}</Text>
+                  <Text style={styles.alertStatLabel}>Informativas</Text>
                 </View>
               </View>
-            ))
-          ) : (
-            <Text style={styles.emptyText}>No hay datos de áreas</Text>
-          )}
-        </View>
+            </View>
 
-        {/* Recent Alerts */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Alertas Recientes</Text>
-          {data.recent_alerts.length > 0 ? (
-            data.recent_alerts.map((alert) => (
-              <AlertCard key={alert.id} alert={alert} />
-            ))
-          ) : (
-            <Text style={styles.emptyText}>No hay alertas recientes</Text>
-          )}
+            {/* Biométricas por Área */}
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>Biométricas por Área</Text>
+              {data.biometrics_by_area.length > 0 ? (
+                <View style={styles.biometricsTable}>
+                  {/* Encabezado de la tabla */}
+                  <View style={styles.tableHeader}>
+                    <Text style={[styles.tableHeaderText, styles.tableColArea]}>Área</Text>
+                    <Text style={[styles.tableHeaderText, styles.tableColMetric]}>❤️ BPM</Text>
+                    <Text style={[styles.tableHeaderText, styles.tableColMetric]}>🌡️ Temp (°C)</Text>
+                  </View>
+
+                  {/* Filas de la tabla */}
+                  {data.biometrics_by_area.map((area, index) => (
+                    <View
+                      key={area.area_name}
+                      style={[styles.tableRow, index % 2 === 0 ? styles.tableRowEven : styles.tableRowOdd]}
+                    >
+                      <Text style={[styles.tableCellText, styles.tableColArea, styles.tableAreaName]}>
+                        {area.area_name}
+                      </Text>
+                      <Text style={[styles.tableCellText, styles.tableColMetric, styles.tableMetricValue]}>
+                        {area.avg_heart_rate ? area.avg_heart_rate.toFixed(0) : "N/A"}
+                      </Text>
+                      <Text style={[styles.tableCellText, styles.tableColMetric, styles.tableMetricValue]}>
+                        {area.avg_temperature ? area.avg_temperature.toFixed(1) : "N/A"}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                <Text style={styles.emptyText}>No hay datos de áreas disponibles</Text>
+              )}
+            </View>
+
+            {/* Alertas Recientes */}
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>Alertas Recientes</Text>
+              {data.recent_alerts.length > 0 ? (
+                <View style={styles.alertsList}>
+                  {data.recent_alerts.slice(0, 8).map((alert) => (
+                    <AlertCard key={alert.id} alert={alert} />
+                  ))}
+                </View>
+              ) : (
+                <Text style={styles.emptyText}>No hay alertas recientes</Text>
+              )}
+            </View>
+          </ScrollView>
+
+          {/* Columna Derecha - Trabajadores Activos */}
+          <View style={styles.rightColumn}>
+            <View style={styles.card}>
+              <View style={styles.cardHeader}>
+                <Text style={styles.cardTitle}>Trabajadores Activos</Text>
+                <View style={styles.workerCountBadge}>
+                  <Text style={styles.workerCountText}>{data.active_workers.length}</Text>
+                </View>
+              </View>
+              {data.active_workers.length > 0 ? (
+                <ScrollView style={styles.workersList} showsVerticalScrollIndicator={true}>
+                  {data.active_workers.map((worker) => (
+                    <WorkerCard key={worker.user_id} worker={worker} />
+                  ))}
+                </ScrollView>
+              ) : (
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyText}>No hay trabajadores activos en este momento</Text>
+                </View>
+              )}
+            </View>
+          </View>
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-  },
-  loadingText: {
-    marginTop: 16,
-    fontSize: 16,
-    color: '#666',
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-    padding: 24,
-  },
-  errorText: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 16,
-  },
-  retryButton: {
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
-  },
-  retryButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  header: {
-    backgroundColor: '#fff',
-    padding: 20,
-    paddingTop: 60,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#1a1a1a',
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 4,
-  },
-  logoutButton: {
-    backgroundColor: '#FF3B30',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  logoutButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  scrollView: {
-    flex: 1,
-  },
-  section: {
-    padding: 20,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#1a1a1a',
-    marginBottom: 16,
-  },
-  statsRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginHorizontal: -6,
-  },
-  emptyText: {
-    fontSize: 14,
-    color: '#999',
-    textAlign: 'center',
-    padding: 32,
-  },
-  areaCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  areaName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1a1a1a',
-    marginBottom: 12,
-  },
-  areaStats: {
-    flexDirection: 'row',
-  },
-  areaStat: {
-    flex: 1,
-    marginRight: 16,
-  },
-  areaStatLabel: {
-    fontSize: 12,
-    color: '#999',
-    marginBottom: 4,
-  },
-  areaStatValue: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#007AFF',
-  },
-});

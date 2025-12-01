@@ -143,4 +143,31 @@ export class AppDatabaseMaintenanceComponent implements OnInit {
       });
     }
   }
+
+  exportSchema() {
+    this.loading = true;
+
+    this.dbService.exportSchemaBackup().subscribe({
+      next: (response) => {
+        const blob = new Blob([response], { type: 'application/sql' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        
+        // Generar nombre con fecha actual
+        const today = new Date();
+        const dateStr = today.toISOString().split('T')[0].replace(/-/g, '');
+        link.download = `schema_backup_${dateStr}.sql`;
+        
+        link.click();
+        window.URL.revokeObjectURL(url);
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error al exportar schema:', err);
+        alert('Error al generar el backup del schema. Por favor, intente nuevamente.');
+        this.loading = false;
+      },
+    });
+  }
 }

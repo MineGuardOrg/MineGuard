@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
+  ImageBackground,
 } from 'react-native';
 import { AuthService } from '../services/authService';
 
@@ -44,69 +45,83 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        {/* Logo/Header */}
-        <View style={styles.header}>
-          <Text style={styles.title}>MineGuard</Text>
-          <Text style={styles.subtitle}>Sistema de Monitoreo Minero</Text>
-        </View>
-
-        {/* Login Form */}
-        <View style={styles.form}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Número de Empleado</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Ej: EMP001"
-              value={employeeNumber}
-              onChangeText={setEmployeeNumber}
-              autoCapitalize="characters"
-              editable={!loading}
-            />
+    <ImageBackground
+      source={require('../../../../assets/mining-bg.jpg')}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay} />
+      <View style={styles.container}>
+        <View style={styles.content}>
+          {/* Logo/Header */}
+          <View style={styles.header}>
+            <Text style={styles.title}>MineGuard</Text>
+            <Text style={styles.subtitle}>Sistema de Monitoreo Minero</Text>
           </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Contraseña</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Ingresa tu contraseña"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={true}
-              autoCapitalize="none"
-              editable={!loading}
-            />
+          {/* Login Form */}
+          <View style={styles.formCard}>
+            <View style={styles.form}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Número de Empleado</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Ej: EMP001"
+                  value={employeeNumber}
+                  onChangeText={setEmployeeNumber}
+                  autoCapitalize="characters"
+                  editable={!loading}
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Contraseña</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Ingresa tu contraseña"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={true}
+                  autoCapitalize="none"
+                  editable={!loading}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={[styles.button, loading && styles.buttonDisabled]}
+                onPress={handleLogin}
+                disabled={loading === true}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.buttonText}>Iniciar Sesión</Text>
+                )}
+              </TouchableOpacity>
+            </View>
           </View>
-
-          <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={handleLogin}
-            disabled={loading === true}
-          >
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.buttonText}>Iniciar Sesión</Text>
-            )}
-          </TouchableOpacity>
-        </View>
-
-        {/* Footer */}
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Optimizado para iPad y dispositivos móviles
-          </Text>
         </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    zIndex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    zIndex: 2,
+    justifyContent: 'center',
   },
   content: {
     flex: 1,
@@ -123,22 +138,32 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 42,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: '#fff',
     marginBottom: 8,
+    textShadowColor: 'rgba(0,0,0,0.5)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: '#e0e0e0',
+    textShadowColor: 'rgba(0,0,0,0.4)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
+  },
+  formCard: {
+    backgroundColor: 'rgba(255,255,255,0.95)',
+    borderRadius: 20,
+    padding: 0,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 12,
+    elevation: 6,
+    marginBottom: 16,
   },
   form: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
     padding: 32,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
   },
   inputContainer: {
     marginBottom: 24,
@@ -178,6 +203,9 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 12,
-    color: '#999',
+    color: '#e0e0e0',
+    textShadowColor: 'rgba(0,0,0,0.3)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
 });

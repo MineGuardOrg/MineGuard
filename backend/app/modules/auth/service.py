@@ -141,8 +141,13 @@ class AuthService(BaseService[User, UserCreateSchema, UserUpdateSchema, UserSche
             # Autenticar usuario
             user = self.authenticate(credentials.employee_number, credentials.password)
             
-            # Generar token
-            token_data = {"sub": str(user.id), "role": user.role.name}
+            # Generar token con información del usuario
+            token_data = {
+                "sub": str(user.id),
+                "role": user.role.name,
+                "name": user.first_name,
+                "last_name": user.last_name
+            }
             access_token = create_access_token(data=token_data)
             
             return TokenResponse(

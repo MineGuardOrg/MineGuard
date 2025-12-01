@@ -2,8 +2,7 @@
  * Configuración global de la aplicación
  */
 
-// TODO: Cambiar esta URL por la URL de tu backend en producción
-export const API_BASE_URL = 'http://localhost:8000';
+export const API_BASE_URL = 'http://192.168.100.18:8000';
 export const WS_BASE_URL = 'ws://localhost:8000';
 
 export const API_ENDPOINTS = {
@@ -14,9 +13,9 @@ export const API_ENDPOINTS = {
   
   // Dashboard
   ACTIVE_WORKERS: '/dashboard/active-workers',
-  ALERT_COUNTS: '/dashboard/alert-counts',
-  BIOMETRICS_BY_AREA: '/dashboard/biometrics-by-area',
-  RECENT_ALERTS: '/dashboard/recent-alerts',
+  ALERT_COUNTS: '/dashboard/alerts/last-month-by-type',
+  BIOMETRICS_BY_AREA: '/dashboard/biometrics/avg-by-area',
+  RECENT_ALERTS: '/dashboard/alerts/recent',
 } as const;
 
 export const WS_ENDPOINTS = {

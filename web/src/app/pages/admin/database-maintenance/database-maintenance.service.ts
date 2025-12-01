@@ -47,4 +47,12 @@ export class DatabaseMaintenanceService {
       responseType: 'blob',
     });
   }
+
+  // Exportar solo el schema (estructura sin datos) en formato SQL
+  exportSchemaBackup(): Observable<Blob> {
+    return this.http.post(`${this.apiUrl}/backup-schema`, {}, {
+      headers: this.getHeaders(),
+      responseType: 'blob',
+    });
+  }
 }
