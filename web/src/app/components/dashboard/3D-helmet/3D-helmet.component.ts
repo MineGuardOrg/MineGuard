@@ -1,11 +1,9 @@
-// ---------------------------------------------------------------------------
-// GYROSCOPE + 3D HELMET - HIGH RESOLUTION + OPTIMIZED PERFORMANCE VERSION
-// ---------------------------------------------------------------------------
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { MaterialModule } from '../../../material.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { interval, Subscription } from 'rxjs';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 export interface GyroscopeData {
   pitch: number;
@@ -20,7 +18,6 @@ export interface GyroscopeData {
 
 export interface SafetyStatus {
   status: 'normal' | 'warning' | 'danger';
-  message: string;
   color: string;
   icon: string;
 }
@@ -28,7 +25,7 @@ export interface SafetyStatus {
 @Component({
   selector: 'app-gyroscope-orientation',
   standalone: true,
-  imports: [MaterialModule, CommonModule, FormsModule],
+  imports: [MaterialModule, CommonModule, FormsModule, TranslateModule],
   templateUrl: './3D-helmet.component.html',
   styleUrls: ['./3D-helmet.component.scss']
 })
@@ -48,7 +45,6 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
 
   public safetyStatus: SafetyStatus = {
     status: 'normal',
-    message: '✓ Normal',
     color: '#10b981',
     icon: 'check_circle'
   };
@@ -68,8 +64,6 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
 
   private autoSubscription?: Subscription;
   private time = 0;
-
-  // FPS limiter
   private lastRenderTime = 0;
 
   public readonly PITCH_THRESHOLD = 60;
@@ -78,7 +72,7 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
   public readonly ACCEL_WARNING = 2.0;
   public readonly ACCEL_DANGER = 2.5;
 
-  constructor() {}
+  constructor(public translate: TranslateService) {}
 
   async ngOnInit(): Promise<void> {
     await this.loadThreeJS();
@@ -100,9 +94,6 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
     this.THREE.OrbitControls = controlsModule.OrbitControls;
   }
 
-  // ----------------------------------------------------------------
-  // INIT 3D SCENE – OPTIMIZED
-  // ----------------------------------------------------------------
   init3DScene(): void {
     const canvas = this.canvasRef.nativeElement;
     const width = canvas.clientWidth || 400;
@@ -114,27 +105,22 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
     this.camera = new this.THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     this.camera.position.set(0, 1.1, 5);
 
-    // High-resolution renderer but with optimized pixel ratio
     this.renderer = new this.THREE.WebGLRenderer({
       canvas,
       alpha: true,
       antialias: true
     });
 
-    // Pixel ratio optimized (keeps quality high)
     const ratio = window.devicePixelRatio > 2 ? 2 : window.devicePixelRatio;
     this.renderer.setPixelRatio(ratio);
-
     this.renderer.setSize(width, height);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = this.THREE.PCFSoftShadowMap;
-
     this.renderer.physicallyCorrectLights = true;
     this.renderer.outputEncoding = this.THREE.sRGBEncoding;
     this.renderer.toneMapping = this.THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 0.9;
 
-    // -------------------------- LIGHT SETUP (OPTIMIZED) ------------------------
     const ambient = new this.THREE.AmbientLight(0xffffff, 1.0);
     this.scene.add(ambient);
 
@@ -145,8 +131,8 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
     const dirLight = new this.THREE.DirectionalLight(0xffffff, 1.2);
     dirLight.position.set(6, 10, 6);
     dirLight.castShadow = true;
-    dirLight.shadow.mapSize.width = 512;  // optimized
-    dirLight.shadow.mapSize.height = 512; // optimized
+    dirLight.shadow.mapSize.width = 512;
+    dirLight.shadow.mapSize.height = 512;
     this.scene.add(dirLight);
 
     const rimLight = new this.THREE.DirectionalLight(0xffffff, 0.7);
@@ -157,7 +143,6 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
     fillLight.position.set(0, 2, 4);
     this.scene.add(fillLight);
 
-    // ---------------------- ORBIT CONTROLS (Smooth + Lite) ---------------------
     this.controls = new this.THREE.OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.07;
@@ -169,9 +154,6 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
     window.addEventListener('resize', () => this.onWindowResize());
   }
 
-  // ----------------------------------------------------------------
-  // LOAD HELMET MODEL (CENTERED)
-  // ----------------------------------------------------------------
   async loadHelmetModel(): Promise<void> {
     try {
       const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader');
@@ -181,7 +163,6 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
         '../../../assets/models/casco2.glb',
         (gltf: any) => {
           this.helmetModel = gltf.scene;
-
           this.helmetModel.traverse((child: any) => {
             if (child.isMesh) {
               child.castShadow = true;
@@ -189,10 +170,8 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
             }
           });
 
-          // Center and scale
           this.helmetModel.scale.set(13, 13, 13);
           this.helmetModel.position.set(0, -0.55, 0);
-
           this.scene.add(this.helmetModel);
         },
         undefined,
@@ -217,13 +196,9 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
     this.scene.add(this.helmetModel);
   }
 
-  // ----------------------------------------------------------------
-  // MAIN ANIMATION LOOP – FPS OPTIMIZED
-  // ----------------------------------------------------------------
   animate(time: number = 0): void {
     this.animationFrameId = requestAnimationFrame((t) => this.animate(t));
 
-    // FPS limiter (~45 FPS)
     const delta = time - this.lastRenderTime;
     if (delta < 1000 / 45) return;
     this.lastRenderTime = time;
@@ -242,9 +217,6 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
     this.renderer.setSize(width, height);
   }
 
-  // ----------------------------------------------------------------
-  // SIMULATED MPU-6050 + STATUS
-  // ----------------------------------------------------------------
   startAutoMode(): void {
     this.manualMode = false;
     this.autoSubscription = interval(100).subscribe(() => {
@@ -264,7 +236,6 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
     const pitch = Math.sin(this.time) * 30 + (Math.random() - 0.5) * 10;
     const roll = Math.cos(this.time * 0.7) * 25 + (Math.random() - 0.5) * 8;
     const yaw = Math.sin(this.time * 0.5) * 50 + (Math.random() - 0.5) * 15;
-
     const accel = 1 + (Math.abs(pitch) + Math.abs(roll)) / 90 * 1.5;
 
     this.gyroData = {
@@ -294,13 +265,23 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
     const maxA = Math.max(Math.abs(pitch), Math.abs(roll));
 
     if (maxA > this.FALL_THRESHOLD || totalAccel > this.ACCEL_DANGER) {
-      this.safetyStatus = { status: 'danger', message: '🚨 CAÍDA', color: '#ef4444', icon: 'warning' };
-
+      this.safetyStatus = { 
+        status: 'danger', 
+        color: '#ef4444', 
+        icon: 'warning' 
+      };
     } else if (maxA > this.PITCH_THRESHOLD || totalAccel > this.ACCEL_WARNING) {
-      this.safetyStatus = { status: 'warning', message: '⚠️ Alerta', color: '#f59e0b', icon: 'error_outline' };
-
+      this.safetyStatus = { 
+        status: 'warning', 
+        color: '#f59e0b', 
+        icon: 'error_outline' 
+      };
     } else {
-      this.safetyStatus = { status: 'normal', message: '✓ Normal', color: '#10b981', icon: 'check_circle' };
+      this.safetyStatus = { 
+        status: 'normal', 
+        color: '#10b981', 
+        icon: 'check_circle' 
+      };
     }
   }
 
@@ -310,7 +291,6 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
     } else {
       this.stopAutoMode();
       this.manualMode = true;
-
       this.pitchControl = this.gyroData.pitch;
       this.rollControl = this.gyroData.roll;
       this.yawControl = this.gyroData.yaw;
@@ -319,11 +299,9 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
 
   onManualChange(): void {
     if (!this.manualMode) return;
-
     this.gyroData.pitch = this.pitchControl;
     this.gyroData.roll = this.rollControl;
     this.gyroData.yaw = this.yawControl;
-
     this.updateHelmetOrientation();
     this.updateSafetyStatus();
   }
@@ -333,10 +311,6 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
     this.rollControl = 0;
     this.yawControl = 0;
     this.onManualChange();
-  }
-
-  getAxisColor(axis: 'pitch' | 'roll' | 'yaw'): string {
-    return { pitch: '#ef4444', roll: '#3b82f6', yaw: '#10b981' }[axis];
   }
 
   getHelmetGlow(): string {

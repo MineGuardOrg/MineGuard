@@ -1,20 +1,26 @@
 <mat-card class="cardWithShadow helmet-card">
   <mat-card-content>
+
     <!-- Header -->
     <div class="card-header">
       <div>
-        <h2 class="card-title">Orientación 3D - Giroscopio MPU-6050</h2>
-        <p class="card-subtitle">Monitor en tiempo real</p>
+        <mat-card-title>{{ 'HELMET.TITLE' | translate }}</mat-card-title>
       </div>
-      <div class="status-badge" [style.background-color]="safetyStatus.color + '20'" 
-                                [style.border-color]="safetyStatus.color">
+
+      <div class="status-badge" 
+           [style.background-color]="safetyStatus.color + '20'" 
+           [style.border-color]="safetyStatus.color">
         <mat-icon [style.color]="safetyStatus.color">{{ safetyStatus.icon }}</mat-icon>
-        <span [style.color]="safetyStatus.color">{{ safetyStatus.message }}</span>
+        <!-- CAMBIO CLAVE: Usar pipe translate dinámicamente según el estado -->
+        <span [style.color]="safetyStatus.color">
+          {{ ('HELMET.STATUS.' + safetyStatus.status.toUpperCase()) | translate }}
+        </span>
       </div>
     </div>
 
     <!-- Main Container -->
     <div class="helmet-container">
+      
       <!-- Left: 3D Visualization -->
       <div class="visualization-area">
         <canvas #canvas3d class="canvas-3d" [style.box-shadow]="getHelmetGlow()"></canvas>
@@ -22,98 +28,108 @@
 
       <!-- Right: Live Data -->
       <div class="data-panel">
-        <div class="data-title">
-          <mat-icon>show_chart</mat-icon>
-          <span>Datos en Vivo</span>
-        </div>
-
         <div class="data-grid">
+
+          <!-- Pitch -->
           <div class="data-item pitch">
             <div class="data-icon">
               <mat-icon>arrow_upward</mat-icon>
             </div>
             <div class="data-info">
-              <span class="data-label">Pitch (X)</span>
+              <span class="data-label">{{ 'HELMET.AXES.PITCH' | translate }}</span>
               <span class="data-value">{{ gyroData.pitch.toFixed(1) }}°</span>
             </div>
           </div>
 
+          <!-- Roll -->
           <div class="data-item roll">
             <div class="data-icon">
               <mat-icon>swap_horiz</mat-icon>
             </div>
             <div class="data-info">
-              <span class="data-label">Roll (Y)</span>
+              <span class="data-label">{{ 'HELMET.AXES.ROLL' | translate }}</span>
               <span class="data-value">{{ gyroData.roll.toFixed(1) }}°</span>
             </div>
           </div>
 
+          <!-- Yaw -->
           <div class="data-item yaw">
             <div class="data-icon">
               <mat-icon>rotate_right</mat-icon>
             </div>
             <div class="data-info">
-              <span class="data-label">Yaw (Z)</span>
+              <span class="data-label">{{ 'HELMET.AXES.YAW' | translate }}</span>
               <span class="data-value">{{ gyroData.yaw.toFixed(1) }}°</span>
             </div>
           </div>
 
+          <!-- Acceleration -->
           <div class="data-item accel">
             <div class="data-icon">
               <mat-icon>speed</mat-icon>
             </div>
             <div class="data-info">
-              <span class="data-label">Aceleración</span>
+              <span class="data-label">{{ 'HELMET.AXES.ACCELERATION' | translate }}</span>
               <span class="data-value">{{ gyroData.totalAccel.toFixed(2) }}g</span>
             </div>
           </div>
+
         </div>
       </div>
     </div>
 
     <!-- Controls -->
     <div class="control-section" *ngIf="manualMode">
+
+      <!-- Pitch Slider -->
       <div class="control-item">
         <label>
           <mat-icon class="pitch-color">arrow_upward</mat-icon>
-          Pitch: {{ pitchControl.toFixed(0) }}°
+          {{ 'HELMET.CONTROLS.PITCH' | translate }}: {{ pitchControl.toFixed(0) }}°
         </label>
         <mat-slider min="-90" max="90" step="1" [(ngModel)]="pitchControl" (input)="onManualChange()">
           <input matSliderThumb>
         </mat-slider>
       </div>
 
+      <!-- Roll Slider -->
       <div class="control-item">
         <label>
           <mat-icon class="roll-color">swap_horiz</mat-icon>
-          Roll: {{ rollControl.toFixed(0) }}°
+          {{ 'HELMET.CONTROLS.ROLL' | translate }}: {{ rollControl.toFixed(0) }}°
         </label>
         <mat-slider min="-90" max="90" step="1" [(ngModel)]="rollControl" (input)="onManualChange()">
           <input matSliderThumb>
         </mat-slider>
       </div>
 
+      <!-- Yaw Slider -->
       <div class="control-item">
         <label>
           <mat-icon class="yaw-color">rotate_right</mat-icon>
-          Yaw: {{ yawControl.toFixed(0) }}°
+          {{ 'HELMET.CONTROLS.YAW' | translate }}: {{ yawControl.toFixed(0) }}°
         </label>
         <mat-slider min="-180" max="180" step="1" [(ngModel)]="yawControl" (input)="onManualChange()">
           <input matSliderThumb>
         </mat-slider>
       </div>
+
     </div>
 
     <!-- Action Buttons -->
     <div class="action-buttons">
+
       <button mat-raised-button [color]="manualMode ? 'primary' : 'accent'" (click)="toggleManualMode()">
         <mat-icon>{{ manualMode ? 'play_arrow' : 'tune' }}</mat-icon>
-        {{ manualMode ? 'Auto' : 'Manual' }}
+        {{ (manualMode ? 'HELMET.BUTTONS.AUTO' : 'HELMET.BUTTONS.MANUAL') | translate }}
       </button>
+
       <button mat-raised-button color="warn" (click)="resetOrientation()" [disabled]="!manualMode">
         <mat-icon>refresh</mat-icon>
-        Reset
+        {{ 'HELMET.BUTTONS.RESET' | translate }}
       </button>
+
     </div>
+
   </mat-card-content>
 </mat-card>

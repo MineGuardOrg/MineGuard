@@ -802,5 +802,31 @@
     "DEVICE_ID": "Device ID",
     "PERFORMED_BY": "Performed By",
     "CREATED_AT": "Created At"
-  }
+  },
+ 
+  
+  "HELMET": {
+    "TITLE": "Orientación 3D - Giroscopio MPU-6050",
+    "STATUS": {
+      "NORMAL": "✓ Normal",
+      "WARNING": "⚠️ Alerta",
+      "DANGER": "🚨 CAÍDA"
+    },
+    "AXES": {
+      "PITCH": "Pitch (X)",
+      "ROLL": "Roll (Y)",
+      "YAW": "Yaw (Z)",
+      "ACCELERATION": "Aceleración"
+    },
+    "CONTROLS": {
+      "PITCH": "Pitch",
+      "ROLL": "Roll",
+      "YAW": "Yaw"
+    },
+    "BUTTONS": {
+      "AUTO": "Auto",
+      "MANUAL": "Manual",
+      "RESET": "Reset"
+    }
+}
 }
