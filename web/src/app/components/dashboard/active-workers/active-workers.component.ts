@@ -4,6 +4,7 @@ import {
   Optional,
   ViewChild,
   AfterViewInit,
+  OnInit,
 } from '@angular/core';
 import {
   MatTableDataSource,
@@ -27,15 +28,19 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
+import { DashboardService } from '../../../services/dashboard.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface Worker {
   id: number;
-  trabajador: string;
-  area: string;
-  ritmoCardiaco: number;
-  temperatura: number;
-  bateria: number;
-  estado: string;
+  nombre: string;
+  numeroEmpleado: string;
+  area: string | null;
+  ritmoCardiaco: number | null;
+  temperaturaCorporal: number | null;
+  nivelBateria: number | null;
+  tiempoActivo_ts: string;
+  cascoId: number;
 }
 
 const workers = [
@@ -123,30 +128,53 @@ const workers = [
     MatNativeDateModule,
     NgScrollbarModule,
     CommonModule,
+    TranslateModule,
   ],
   providers: [DatePipe],
 })
-export class AppActiveWorkersComponent implements AfterViewInit {
+export class AppActiveWorkersComponent implements AfterViewInit, OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
   searchText: any;
   displayedColumns: string[] = [
-    'trabajador',
+    'nombre',
     'area',
     'ritmoCardiaco',
-    'temperatura',
-    'bateria',
-    'estado',
-    'acciones',
+    'temperaturaCorporal',
+    'nivelBateria',
+    // 'tiempoActivo',
+    // 'acciones',
   ];
-  dataSource = new MatTableDataSource(workers);
+  dataSource = new MatTableDataSource<Worker>([]);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
     Object.create(null);
 
-  constructor(public dialog: MatDialog, public datePipe: DatePipe) {}
+  constructor(
+    public dialog: MatDialog,
+    public datePipe: DatePipe,
+    private dashboardService: DashboardService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadActiveWorkers();
+  }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+  }
+
+  /**
+   * Carga los trabajadores activos desde el endpoint
+   */
+  loadActiveWorkers(): void {
+    this.dashboardService.getActiveWorkers().subscribe({
+      next: (workers) => {
+        this.dataSource.data = workers;
+      },
+      error: (error) => {
+        console.error('Error loading active workers:', error);
+      },
+    });
   }
 
   applyFilter(filterValue: string): void {
@@ -172,13 +200,15 @@ export class AppActiveWorkersComponent implements AfterViewInit {
   // tslint:disable-next-line - Disables all
   addRowData(row_obj: Worker): void {
     this.dataSource.data.unshift({
-      id: workers.length + 1,
-      trabajador: row_obj.trabajador,
+      id: this.dataSource.data.length + 1,
+      nombre: row_obj.nombre,
+      numeroEmpleado: row_obj.numeroEmpleado,
       area: row_obj.area,
       ritmoCardiaco: row_obj.ritmoCardiaco,
-      temperatura: row_obj.temperatura,
-      bateria: row_obj.bateria,
-      estado: row_obj.estado,
+      temperaturaCorporal: row_obj.temperaturaCorporal,
+      nivelBateria: row_obj.nivelBateria,
+      tiempoActivo_ts: row_obj.tiempoActivo_ts,
+      cascoId: row_obj.cascoId,
     });
     this.dialog.open(AppAddKichenSinkComponent);
     this.table.renderRows();
@@ -188,12 +218,13 @@ export class AppActiveWorkersComponent implements AfterViewInit {
   updateRowData(row_obj: Worker): boolean | any {
     this.dataSource.data = this.dataSource.data.filter((value: any) => {
       if (value.id === row_obj.id) {
-        value.trabajador = row_obj.trabajador;
+        value.nombre = row_obj.nombre;
+        value.numeroEmpleado = row_obj.numeroEmpleado;
         value.area = row_obj.area;
         value.ritmoCardiaco = row_obj.ritmoCardiaco;
-        value.temperatura = row_obj.temperatura;
-        value.bateria = row_obj.bateria;
-        value.estado = row_obj.estado;
+        value.temperaturaCorporal = row_obj.temperaturaCorporal;
+        value.nivelBateria = row_obj.nivelBateria;
+        value.tiempoActivo_ts = row_obj.tiempoActivo_ts;
       }
       return true;
     });

@@ -46,6 +46,16 @@ class DashboardRepository:
                 .subquery()
             )
 
+            # Subconsulta: usuarios que tienen al menos una lectura con valores válidos
+            users_with_readings_sq = (
+                db.query(Reading.user_id.distinct())
+                .filter(
+                    Reading.pulse.isnot(None),
+                    Reading.body_temp.isnot(None)
+                )
+                .subquery()
+            )
+
             q = (
                 db.query(
                     User.id.label('user_id'),
@@ -69,19 +79,22 @@ class DashboardRepository:
                     User.is_active == True,
                     Device.is_active == True,
                     Connection.status == 'online',
-                    or_(Area.id == None, Area.is_active == True)
+                    or_(Area.id == None, Area.is_active == True),
+                    User.id.in_(users_with_readings_sq)
                 )
             )
 
             rows = q.all()
 
             for r in rows:
-                # Obtener la última lectura del dispositivo para el usuario
+                # Obtener la última lectura con valores válidos del dispositivo para el usuario
                 last_reading = (
                     db.query(Reading)
                     .filter(
                         Reading.user_id == r.user_id,
-                        Reading.device_id == r.device_id
+                        Reading.device_id == r.device_id,
+                        Reading.pulse.isnot(None),
+                        Reading.body_temp.isnot(None)
                     )
                     .order_by(Reading.timestamp.desc())
                     .first()
@@ -123,6 +136,16 @@ class DashboardRepository:
                 .subquery()
             )
 
+            # Subconsulta: usuarios que tienen al menos una lectura con valores válidos
+            users_with_readings_sq = (
+                db.query(Reading.user_id.distinct())
+                .filter(
+                    Reading.pulse.isnot(None),
+                    Reading.body_temp.isnot(None)
+                )
+                .subquery()
+            )
+
             q = (
                 db.query(
                     User.id.label('user_id'),
@@ -147,19 +170,22 @@ class DashboardRepository:
                     User.is_active == True,
                     Device.is_active == True,
                     Connection.status == 'online',
-                    or_(Area.id == None, Area.is_active == True)
+                    or_(Area.id == None, Area.is_active == True),
+                    User.id.in_(users_with_readings_sq)
                 )
             )
 
             rows = q.all()
 
             for r in rows:
-                # Obtener la última lectura del dispositivo para el usuario
+                # Obtener la última lectura con valores válidos del dispositivo para el usuario
                 last_reading = (
                     db.query(Reading)
                     .filter(
                         Reading.user_id == r.user_id,
-                        Reading.device_id == r.device_id
+                        Reading.device_id == r.device_id,
+                        Reading.pulse.isnot(None),
+                        Reading.body_temp.isnot(None)
                     )
                     .order_by(Reading.timestamp.desc())
                     .first()
@@ -186,6 +212,120 @@ class DashboardRepository:
                 })
 
         return results
+
+    def get_critical_alerts_stats(self) -> Dict[str, int]:
+        """Obtiene estadísticas de alertas críticas y de alta severidad de las últimas 24h."""
+        from datetime import datetime, timedelta, timezone
+        from app.modules.alert.models import Alert
+        
+        with SessionLocal() as db:
+            now = datetime.now(timezone.utc)
+            last_24h = now - timedelta(hours=24)
+            
+            # Contar alertas críticas y de alta severidad de las últimas 24h
+            critical_count = (
+                db.query(Alert)
+                .filter(
+                    Alert.severity.in_(['critical', 'high']),
+                    Alert.timestamp >= last_24h
+                )
+                .count()
+            )
+            
+            # Contar todas las alertas de las últimas 24h
+            total_last_24h = (
+                db.query(Alert)
+                .filter(Alert.timestamp >= last_24h)
+                .count()
+            )
+            
+            return {
+                'critical_count': critical_count,
+                'total_last_24h': total_last_24h
+            }
+
+    def get_device_stats(self) -> Dict[str, any]:
+        """Obtiene estadísticas de dispositivos activos y totales."""
+        from app.modules.device.models import Device
+        
+        with SessionLocal() as db:
+            # Total de dispositivos activos en el sistema
+            total_devices = (
+                db.query(Device)
+                .filter(Device.is_active == True)
+                .count()
+            )
+            
+            # Dispositivos actualmente conectados (desde active_workers)
+            active_devices_count = len(self.get_active_workers())
+            
+            # Calcular porcentaje de conexión
+            connection_rate = round((active_devices_count / total_devices * 100), 2) if total_devices > 0 else 0.0
+            
+            return {
+                'active_devices': active_devices_count,
+                'total_devices': total_devices,
+                'connection_rate': connection_rate
+            }
+
+    def get_risk_level(self) -> Dict[str, any]:
+        """Calcula el nivel de riesgo basado en alertas críticas de las últimas 24h."""
+        from datetime import datetime, timedelta, timezone
+        from app.modules.alert.models import Alert
+        from app.modules.users.models import User
+        from app.modules.area.models import Area
+        from sqlalchemy import distinct
+        
+        with SessionLocal() as db:
+            now = datetime.now(timezone.utc)
+            last_24h = now - timedelta(hours=24)
+            
+            # Contar alertas críticas y high de las últimas 24h
+            critical_alerts_count = (
+                db.query(Alert)
+                .filter(
+                    Alert.severity.in_(['critical', 'high']),
+                    Alert.timestamp >= last_24h
+                )
+                .count()
+            )
+            
+            # Contar áreas únicas afectadas por alertas críticas/high
+            affected_areas = (
+                db.query(distinct(User.area_id))
+                .join(Alert, Alert.user_id == User.id)
+                .filter(
+                    Alert.severity.in_(['critical', 'high']),
+                    Alert.timestamp >= last_24h,
+                    User.area_id.isnot(None)
+                )
+                .all()
+            )
+            affected_areas_count = len(affected_areas)
+            
+            # Calcular nivel de riesgo
+            if critical_alerts_count == 0:
+                risk_level = 'low'
+                recommendation = 'Sistema operando normalmente'
+            elif critical_alerts_count <= 2:
+                risk_level = 'low'
+                recommendation = f'{affected_areas_count} área(s) con alertas menores'
+            elif critical_alerts_count <= 5:
+                risk_level = 'medium'
+                recommendation = f'{affected_areas_count} área(s) requieren atención'
+            elif critical_alerts_count <= 10:
+                risk_level = 'high'
+                recommendation = f'{affected_areas_count} área(s) requieren atención urgente'
+            else:
+                risk_level = 'critical'
+                recommendation = f'Situación crítica en {affected_areas_count} área(s)'
+            
+            return {
+                'risk_level': risk_level,
+                'critical_alerts_count': critical_alerts_count,
+                'affected_areas_count': affected_areas_count,
+                'recommendation': recommendation
+            }
 
     def get_alert_counts_last_month_by_type(self) -> Dict[str, int]:
         """Cuenta alertas del último mes por categorías de dashboard."""
@@ -221,8 +361,63 @@ class DashboardRepository:
                 'caidasImpactos': count_for(impact_aliases)
             }
 
+    def get_alerts_by_type_weekly(self) -> Dict[str, any]:
+        """Cuenta alertas de las últimas 4 semanas por categorías, agrupadas por semana."""
+        from datetime import datetime, timedelta, timezone
+        from app.modules.alert.models import Alert
+        
+        now = datetime.now(timezone.utc)
+        
+        # Aliases por categoría
+        gases_aliases = [
+            'toxic_gas', 'toxic gas', 'gases toxicos', 'gases_toxicos', 'toxicgas'
+        ]
+        hr_aliases = [
+            'heart_rate_anomaly', 'heart rate anomaly', 'heart_rate_high', 'heart rate high',
+            'heart_rate_low', 'heart rate low', 'ritmo_cardiaco_anormal', 'ritmo cardiaco anormal'
+        ]
+        temp_aliases = [
+            'high_body_temperature', 'body temperature high', 'temperatura_corporal_alta', 'temperatura corporal alta'
+        ]
+        impact_aliases = [
+            'fall_detected', 'impact_detected', 'caida', 'impacto', 'caidas_impactos', 'caidas impactos'
+        ]
+
+        with SessionLocal() as db:
+            def count_for_week(aliases: List[str], week_start: datetime, week_end: datetime) -> int:
+                return db.query(func.count(Alert.id)).filter(
+                    Alert.timestamp >= week_start,
+                    Alert.timestamp < week_end,
+                    func.lower(Alert.alert_type).in_([a.lower() for a in aliases])
+                ).scalar() or 0
+
+            # Calcular rangos de 4 semanas (28 días hacia atrás)
+            weeks = []
+            gases_data = []
+            hr_data = []
+            temp_data = []
+            impact_data = []
+            
+            for i in range(4):
+                week_end = now - timedelta(days=i*7)
+                week_start = week_end - timedelta(days=7)
+                weeks.insert(0, f'Semana {4-i}')
+                
+                gases_data.insert(0, count_for_week(gases_aliases, week_start, week_end))
+                hr_data.insert(0, count_for_week(hr_aliases, week_start, week_end))
+                temp_data.insert(0, count_for_week(temp_aliases, week_start, week_end))
+                impact_data.insert(0, count_for_week(impact_aliases, week_start, week_end))
+
+            return {
+                'labels': weeks,
+                'gasesToxicos': gases_data,
+                'ritmoCardiacoAnormal': hr_data,
+                'temperaturaCorporalAlta': temp_data,
+                'caidasImpactos': impact_data
+            }
+
     def get_biometrics_avg_by_area(self, days: int = 30) -> List[Dict[str, Any]]:
-        """Promedios de ritmo cardiaco y temperatura corporal por área en el rango indicado."""
+        """Promedios de ritmo cardiaco y temperatura corporal por área en el rango indicado (máximo 4 áreas)."""
         from datetime import datetime, timedelta, timezone
         start_ts = datetime.now(timezone.utc) - timedelta(days=days)
 
@@ -242,6 +437,8 @@ class DashboardRepository:
                     Area.is_active == True
                 )
                 .group_by(Area.name)
+                .order_by(func.count(Reading.id).desc())  # Ordenar por cantidad de lecturas
+                .limit(4)  # Limitar a 4 áreas
                 .all()
             )
 
@@ -260,6 +457,8 @@ class DashboardRepository:
                     Area.is_active == True
                 )
                 .group_by(Area.name)
+                .order_by(func.count(Reading.id).desc())  # Ordenar por cantidad de lecturas
+                .limit(4)  # Limitar a 4 áreas
                 .all()
             )
 
@@ -267,8 +466,8 @@ class DashboardRepository:
             hr_map = {r.area_name: float(r.hr_avg) for r in hr_rows if r.hr_avg is not None}
             temp_map = {r.area_name: float(r.temp_avg) for r in temp_rows if r.temp_avg is not None}
 
-            # Áreas presentes en cualquiera de los dos mapas
-            all_areas = sorted(set(hr_map.keys()) | set(temp_map.keys()))
+            # Áreas presentes en cualquiera de los dos mapas (máximo 4)
+            all_areas = sorted(set(hr_map.keys()) | set(temp_map.keys()))[:4]
 
             results: List[Dict[str, Any]] = []
             for area in all_areas:

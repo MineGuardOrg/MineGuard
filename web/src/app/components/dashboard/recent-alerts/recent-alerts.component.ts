@@ -4,6 +4,7 @@ import {
   Optional,
   ViewChild,
   AfterViewInit,
+  OnInit,
 } from '@angular/core';
 import {
   MatTableDataSource,
@@ -24,82 +25,23 @@ import { TablerIconsModule } from 'angular-tabler-icons';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MaterialModule } from 'src/app/material.module';
+import { DashboardService } from '../../../services/dashboard.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface Alert {
   id: number;
-  hora: Date;
   tipo: string;
-  empleado: string;
-  area: string;
+  mensaje: string;
+  trabajador: string;
+  area: string | null;
   severidad: string;
+  timestamp: string;
+  estado: string | null;
+  valor: number | null;
+  user_id: number;
+  device_id: number;
+  reading_id: number;
 }
-
-const alerts = [
-  {
-    id: 1,
-    hora: new Date('2025-11-11T08:30:00'),
-    tipo: 'Gases tóxicos',
-    empleado: 'Juan Pérez',
-    area: 'Túnel Principal',
-    severidad: 'Alta',
-  },
-  {
-    id: 2,
-    hora: new Date('2025-11-11T09:15:00'),
-    tipo: 'Ritmo cardíaco anormal',
-    empleado: 'María González',
-    area: 'Zona de Extracción A',
-    severidad: 'Media',
-  },
-  {
-    id: 3,
-    hora: new Date('2025-11-11T10:45:00'),
-    tipo: 'Temperatura corporal alta',
-    empleado: 'Carlos López',
-    area: 'Área de Maquinaria',
-    severidad: 'Media',
-  },
-  {
-    id: 4,
-    hora: new Date('2025-11-11T11:20:00'),
-    tipo: 'Caídas/Impactos',
-    empleado: 'Ana Martínez',
-    area: 'Escaleras Sector B',
-    severidad: 'Alta',
-  },
-  {
-    id: 5,
-    hora: new Date('2025-11-11T12:05:00'),
-    tipo: 'Gases tóxicos',
-    empleado: 'Roberto Silva',
-    area: 'Ventilación Norte',
-    severidad: 'Crítica',
-  },
-  {
-    id: 6,
-    hora: new Date('2025-11-11T13:30:00'),
-    tipo: 'Ritmo cardíaco anormal',
-    empleado: 'Luis Torres',
-    area: 'Zona de Carga',
-    severidad: 'Baja',
-  },
-  {
-    id: 7,
-    hora: new Date('2025-11-11T14:15:00'),
-    tipo: 'Temperatura corporal alta',
-    empleado: 'Sofia Ramírez',
-    area: 'Túnel Secundario',
-    severidad: 'Media',
-  },
-  {
-    id: 8,
-    hora: new Date('2025-11-11T15:00:00'),
-    tipo: 'Caídas/Impactos',
-    empleado: 'Diego Morales',
-    area: 'Plataforma Sur',
-    severidad: 'Alta',
-  },
-];
 
 @Component({
   selector: 'app-recent-alerts',
@@ -111,29 +53,52 @@ const alerts = [
     MatNativeDateModule,
     NgScrollbarModule,
     CommonModule,
+    TranslateModule,
   ],
   providers: [DatePipe],
 })
-export class AppRecentAlertsComponent implements AfterViewInit {
+export class AppRecentAlertsComponent implements AfterViewInit, OnInit {
   @ViewChild(MatTable, { static: true }) table: MatTable<any> =
     Object.create(null);
   searchText: any;
   displayedColumns: string[] = [
-    'hora',
+    'timestamp',
     'tipo',
-    'empleado',
+    'trabajador',
     'area',
     'severidad',
-    'acciones',
+    // 'acciones',
   ];
-  dataSource = new MatTableDataSource(alerts);
+  dataSource = new MatTableDataSource<Alert>([]);
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator =
     Object.create(null);
 
-  constructor(public dialog: MatDialog, public datePipe: DatePipe) {}
+  constructor(
+    public dialog: MatDialog,
+    public datePipe: DatePipe,
+    private dashboardService: DashboardService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadRecentAlerts();
+  }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+  }
+
+  /**
+   * Carga las alertas recientes desde el endpoint
+   */
+  loadRecentAlerts(): void {
+    this.dashboardService.getRecentAlerts(7, 20).subscribe({
+      next: (alerts) => {
+        this.dataSource.data = alerts;
+      },
+      error: (error) => {
+        console.error('Error loading recent alerts:', error);
+      },
+    });
   }
 
   applyFilter(filterValue: string): void {
@@ -159,12 +124,18 @@ export class AppRecentAlertsComponent implements AfterViewInit {
   // tslint:disable-next-line - Disables all
   addRowData(row_obj: Alert): void {
     this.dataSource.data.unshift({
-      id: alerts.length + 1,
-      hora: row_obj.hora,
+      id: this.dataSource.data.length + 1,
       tipo: row_obj.tipo,
-      empleado: row_obj.empleado,
+      mensaje: row_obj.mensaje,
+      trabajador: row_obj.trabajador,
       area: row_obj.area,
       severidad: row_obj.severidad,
+      timestamp: row_obj.timestamp,
+      estado: row_obj.estado,
+      valor: row_obj.valor,
+      user_id: row_obj.user_id,
+      device_id: row_obj.device_id,
+      reading_id: row_obj.reading_id,
     });
     this.dialog.open(AppAddKichenSinkComponent);
     this.table.renderRows();
@@ -174,11 +145,14 @@ export class AppRecentAlertsComponent implements AfterViewInit {
   updateRowData(row_obj: Alert): boolean | any {
     this.dataSource.data = this.dataSource.data.filter((value: any) => {
       if (value.id === row_obj.id) {
-        value.hora = row_obj.hora;
         value.tipo = row_obj.tipo;
-        value.empleado = row_obj.empleado;
+        value.mensaje = row_obj.mensaje;
+        value.trabajador = row_obj.trabajador;
         value.area = row_obj.area;
         value.severidad = row_obj.severidad;
+        value.timestamp = row_obj.timestamp;
+        value.estado = row_obj.estado;
+        value.valor = row_obj.valor;
       }
       return true;
     });

@@ -764,12 +764,17 @@
   },
   "ALERTS": {
     "TITLE": "Alertas",
+    "RECENT_ALERTS_TITLE": "Alertas recientes",
     "SEARCH_PLACEHOLDER": "Buscar Alerta",
     "ADD_ALERT": "Agregar Alerta",
     "ALERT_TYPE": "Tipo de Alerta",
+    "TYPE": "Tipo",
+    "EMPLOYEE": "Empleado",
+    "AREA": "Área",
     "SEVERITY": "Severidad",
-    "READING_ID": "ID de Lectura",
     "TIMESTAMP": "Fecha y Hora",
+    "ACTIONS": "Acciones",
+    "READING_ID": "ID de Lectura",
     "ACTION": "Acción",
     "ADD": "Agregar",
     "UPDATE": "Actualizar",
@@ -826,5 +831,44 @@
     "DEVICE_ID": "ID Dispositivo",
     "PERFORMED_BY": "Realizado Por",
     "CREATED_AT": "Fecha de Creación"
+  },
+  "ACTIVE_WORKERS": {
+    "TITLE": "Trabajadores Activos",
+    "SEARCH_PLACEHOLDER": "Buscar Trabajador",
+    "WORKER": "Trabajador",
+    "AREA": "Área",
+    "HEART_RATE": "Ritmo Cardíaco",
+    "TEMPERATURE": "Temperatura",
+    "BATTERY": "Batería",
+    "STATUS": "Estado",
+    "ACTIONS": "Acciones",
+    "ACTIVE": "Activo",
+    "ALERT": "Alerta",
+    "CRITICAL": "Crítico",
+    "REST": "Descanso"
+  },
+  "CHARTS": {
+    "ALERTS_BY_TYPE": {
+      "TITLE": "Alertas por Tipo",
+      "TOXIC_GASES": "Gases tóxicos",
+      "ABNORMAL_HEART_RATE": "Ritmo cardíaco anormal",
+      "HIGH_BODY_TEMPERATURE": "Temperatura corporal alta",
+      "FALLS_IMPACTS": "Caídas/Impactos",
+      "WEEK": "Semana",
+      "ALERTS_COUNT": "Número de alertas"
+    },
+    "BIOMETRIC_AVG": {
+      "TITLE": "Promedios Biométricos por Área",
+      "HEART_RATE": "Ritmo cardíaco (bpm)",
+      "BODY_TEMPERATURE": "Temperatura corporal (°C)",
+      "HEART_RATE_AXIS": "Ritmo Cardíaco (BPM)",
+      "TEMPERATURE_AXIS": "Temperatura Corporal (°C)"
+    },
+    "WORKOUT_BY_SHIFT": {
+      "TITLE": "Actividad por Turno",
+      "MORNING_SHIFT": "Turno Mañana (06:00-14:00)",
+      "AFTERNOON_SHIFT": "Turno Tarde (14:00-22:00)",
+      "NIGHT_SHIFT": "Turno Noche (22:00-06:00)"
+    }
   }
 }
