@@ -1,14 +1,19 @@
 # Router del módulo Reading
-from fastapi import APIRouter, Depends, status, Query
+from fastapi import APIRouter, Depends, status, Query, WebSocket, WebSocketDisconnect
 from typing import List, Optional
 from datetime import datetime
 from app.modules.reading.models import ReadingCreateSchema, ReadingUpdateSchema, ReadingSchema
 from app.modules.reading.service import ReadingService
 from app.core.security import get_current_user
+import json
 
 reading_router = APIRouter()
 service = ReadingService()
 
+
+# =====================================================
+#                RUTAS HTTP EXISTENTES
+# =====================================================
 
 @reading_router.get("/", response_model=List[ReadingSchema])
 def get_all(current_user=Depends(get_current_user)):
@@ -56,19 +61,65 @@ async def create(payload: ReadingCreateSchema, current_user=Depends(get_current_
     """
     Crea una nueva lectura con todos los valores de sensores.
     Acepta: user_id, device_id, mq7, pulse, ax, ay, az, gx, gy, gz
-    
-    Ejemplo de payload del hardware:
+    """
+    return await service.create(payload)
+
+
+
+# =====================================================
+#                 WEBSOCKET PARA ESP32
+# =====================================================
+
+@reading_router.websocket("/ws/reading")
+async def websocket_reading(websocket: WebSocket):
+    """
+    WebSocket para recibir lecturas directamente del ESP32.
+    No requiere token ni autenticación (hardware no maneja JWT).
+    Formato esperado:
     {
         "user_id": 1,
         "device_id": 1,
         "mq7": 403,
-        "pulse": 2914,
-        "ax": 10.20169,
-        "ay": -0.198719,
-        "az": -3.337517,
-        "gx": -0.001466,
-        "gy": 0.020917,
-        "gz": -0.028911
+        "pulse": 72,
+        "ax": 0.12,
+        "ay": 9.81,
+        "az": -0.21,
+        "gx": 0.02,
+        "gy": 0.01,
+        "gz": 0.00
     }
     """
-    return await service.create(payload)
+    await websocket.accept()
+    print("ESP32 conectado al WebSocket /ws/reading")
+
+    try:
+        while True:
+            raw_msg = await websocket.receive_text()
+
+            # Intentar parsear el JSON
+            try:
+                data = json.loads(raw_msg)
+            except Exception as e:
+                print("Error JSON recibido:", raw_msg)
+                await websocket.send_text("error-json")
+                continue
+
+            try:
+                # Validar con el schema real del backend
+                reading_payload = ReadingCreateSchema(**data)
+
+                # Guardar en la base de datos usando tu service real
+                saved = await service.create(reading_payload)
+
+                print(f"Lectura guardada correctamente (ID={saved.id})")
+
+                # Responder al ESP32
+                await websocket.send_text("ok")
+
+            except Exception as e:
+                print("Error procesando lectura:", e)
+                await websocket.send_text("error")
+                continue
+
+    except WebSocketDisconnect:
+        print("ESP32 desconectado del WebSocket /ws/reading")
