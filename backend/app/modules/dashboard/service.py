@@ -117,6 +117,58 @@ class DashboardService:
                 detail="Error interno del servidor al obtener alertas"
             )
 
+    def get_alerts_by_type_weekly(self):
+        """Devuelve alertas por tipo agrupadas por semana para gráfica"""
+        from app.modules.dashboard.models import AlertsByTypeWeeklySchema
+        try:
+            data = self.repository.get_alerts_by_type_weekly()
+            return AlertsByTypeWeeklySchema(**data)
+        except Exception as e:
+            logger.error(f"Error al obtener alertas por tipo semanales: {str(e)}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Error interno del servidor al obtener alertas semanales"
+            )
+
+    def get_critical_alerts_stats(self):
+        """Devuelve estadísticas de alertas críticas para el dashboard"""
+        from app.modules.dashboard.models import CriticalAlertsStatsSchema
+        try:
+            stats = self.repository.get_critical_alerts_stats()
+            return CriticalAlertsStatsSchema(**stats)
+        except Exception as e:
+            logger.error(f"Error al obtener estadísticas de alertas críticas: {str(e)}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Error interno del servidor al obtener estadísticas de alertas"
+            )
+
+    def get_device_stats(self):
+        """Devuelve estadísticas de dispositivos para el dashboard"""
+        from app.modules.dashboard.models import DeviceStatsSchema
+        try:
+            stats = self.repository.get_device_stats()
+            return DeviceStatsSchema(**stats)
+        except Exception as e:
+            logger.error(f"Error al obtener estadísticas de dispositivos: {str(e)}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Error interno del servidor al obtener estadísticas de dispositivos"
+            )
+
+    def get_risk_level(self):
+        """Devuelve el nivel de riesgo calculado para el dashboard"""
+        from app.modules.dashboard.models import RiskLevelSchema
+        try:
+            risk_data = self.repository.get_risk_level()
+            return RiskLevelSchema(**risk_data)
+        except Exception as e:
+            logger.error(f"Error al obtener nivel de riesgo: {str(e)}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Error interno del servidor al obtener nivel de riesgo"
+            )
+
     def get_biometrics_avg_by_area(self, days: int = 30) -> BiometricsByAreaSchema:
         """Devuelve arrays con promedios de HR y temperatura por área en el rango indicado."""
         try:

@@ -72,7 +72,7 @@ export class AppBoxedLoginComponent {
         if (role === 'Admin') {
           this.router.navigate(['/admin/maintenance']);
         } else {
-          this.router.navigate(['/learning/courses']);
+          this.router.navigate(['/main/dashboard']);
         }
       },
       error: (err) => {

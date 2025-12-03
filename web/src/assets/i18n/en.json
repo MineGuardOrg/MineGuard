@@ -740,12 +740,17 @@
   },
   "ALERTS": {
     "TITLE": "Alerts",
+    "RECENT_ALERTS_TITLE": "Recent Alerts",
     "SEARCH_PLACEHOLDER": "Search Alert",
     "ADD_ALERT": "Add Alert",
     "ALERT_TYPE": "Alert Type",
+    "TYPE": "Type",
+    "EMPLOYEE": "Employee",
+    "AREA": "Area",
     "SEVERITY": "Severity",
-    "READING_ID": "Reading ID",
     "TIMESTAMP": "Timestamp",
+    "ACTIONS": "Actions",
+    "READING_ID": "Reading ID",
     "ACTION": "Action",
     "ADD": "Add",
     "UPDATE": "Update",
@@ -803,9 +808,47 @@
     "PERFORMED_BY": "Performed By",
     "CREATED_AT": "Created At"
   },
- 
-  
-  "HELMET": {
+
+  "ACTIVE_WORKERS": {
+    "TITLE": "Active Workers",
+    "SEARCH_PLACEHOLDER": "Search Worker",
+    "WORKER": "Worker",
+    "AREA": "Area",
+    "HEART_RATE": "Heart Rate",
+    "TEMPERATURE": "Temperature",
+    "BATTERY": "Battery",
+    "STATUS": "Status",
+    "ACTIONS": "Actions",
+    "ACTIVE": "Active",
+    "ALERT": "Alert",
+    "CRITICAL": "Critical",
+    "REST": "Rest"
+  },
+  "CHARTS": {
+    "ALERTS_BY_TYPE": {
+      "TITLE": "Alerts by Type",
+      "TOXIC_GASES": "Toxic gases",
+      "ABNORMAL_HEART_RATE": "Abnormal heart rate",
+      "HIGH_BODY_TEMPERATURE": "High body temperature",
+      "FALLS_IMPACTS": "Falls/Impacts",
+      "WEEK": "Week",
+      "ALERTS_COUNT": "Number of alerts"
+    },
+    "BIOMETRIC_AVG": {
+      "TITLE": "Biometric Averages by Area",
+      "HEART_RATE": "Heart rate (bpm)",
+      "BODY_TEMPERATURE": "Body temperature (°C)",
+      "HEART_RATE_AXIS": "Heart Rate (BPM)",
+      "TEMPERATURE_AXIS": "Body Temperature (°C)"
+    },
+    "WORKOUT_BY_SHIFT": {
+      "TITLE": "Activity by Shift",
+      "MORNING_SHIFT": "Morning Shift (06:00-14:00)",
+      "AFTERNOON_SHIFT": "Afternoon Shift (14:00-22:00)",
+      "NIGHT_SHIFT": "Night Shift (22:00-06:00)"
+    }
+  },
+    "HELMET": {
     "TITLE": "Orientación 3D - Giroscopio MPU-6050",
     "STATUS": {
       "NORMAL": "✓ Normal",
@@ -828,5 +871,6 @@
       "MANUAL": "Manual",
       "RESET": "Reset"
     }
+
 }
 }
