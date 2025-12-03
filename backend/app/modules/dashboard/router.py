@@ -12,7 +12,11 @@ from app.modules.dashboard.models import (
     CreateIncidentFromAlertSchema,
     IncidentCreatedResponseSchema,
     SupervisorAreaBiometricsSchema,
-    SupervisorIncidentItemSchema
+    SupervisorIncidentItemSchema,
+    CriticalAlertsStatsSchema,
+    DeviceStatsSchema,
+    RiskLevelSchema,
+    AlertsByTypeWeeklySchema
 )
 from app.modules.dashboard.service import DashboardService
 
@@ -46,6 +50,38 @@ def get_alerts_last_month_by_type(
 ):
     """Conteo de alertas por tipo en el último mes para el dashboard"""
     return _dashboard_service.get_alert_counts_last_month_by_type()
+
+
+@dashboard_router.get("/alerts/by-type-weekly", response_model=AlertsByTypeWeeklySchema)
+def get_alerts_by_type_weekly(
+    current_user: User = Depends(get_current_user)
+):
+    """Obtiene alertas por tipo agrupadas por semana para gráfica del manager"""
+    return _dashboard_service.get_alerts_by_type_weekly()
+
+
+@dashboard_router.get("/alerts/critical-stats", response_model=CriticalAlertsStatsSchema)
+def get_critical_alerts_stats(
+    current_user: User = Depends(get_current_user)
+):
+    """Obtiene estadísticas de alertas críticas para el dashboard del manager"""
+    return _dashboard_service.get_critical_alerts_stats()
+
+
+@dashboard_router.get("/devices/stats", response_model=DeviceStatsSchema)
+def get_device_stats(
+    current_user: User = Depends(get_current_user)
+):
+    """Obtiene estadísticas de dispositivos activos y totales para el dashboard del manager"""
+    return _dashboard_service.get_device_stats()
+
+
+@dashboard_router.get("/risk-level", response_model=RiskLevelSchema)
+def get_risk_level(
+    current_user: User = Depends(get_current_user)
+):
+    """Calcula el nivel de riesgo basado en alertas críticas de las últimas 24h"""
+    return _dashboard_service.get_risk_level()
 
 
 @dashboard_router.get("/biometrics/avg-by-area", response_model=BiometricsByAreaSchema)

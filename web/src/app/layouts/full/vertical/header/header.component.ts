@@ -170,11 +170,11 @@ export class HeaderComponent {
   ];
 
   profiledd: profiledd[] = [
-    {
-      id: 1,
-      title: 'Account Settings',
-      link: '/learning/account-settings',
-    },
+    // {
+    //   id: 1,
+    //   title: 'Account Settings',
+    //   link: '/learning/account-settings',
+    // },
     {
       id: 2,
       title: 'Sign Out',

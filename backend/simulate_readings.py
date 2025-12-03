@@ -8,9 +8,9 @@ import random
 from datetime import datetime
 
 # Configuración
-API_BASE_URL = "http://192.168.100.18:8000"
-USERS = [4, 6, 8, 10, 13, 15, 17, 19, 21]
-INTERVAL_SECONDS = 7
+API_BASE_URL = "http://127.0.0.1:8000"
+USERS = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+INTERVAL_SECONDS = 11
 
 # Credenciales para autenticación (ajusta según tu usuario)
 LOGIN_EMPLOYEE_NUMBER = "0322103782"

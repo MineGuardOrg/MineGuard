@@ -7,6 +7,7 @@ import { AppActiveWorkersComponent } from 'src/app/components/dashboard/active-w
 import { AppRecentAlertsComponent } from 'src/app/components/dashboard/recent-alerts/recent-alerts.component';
 import { AppWorkoutByShiftComponent } from 'src/app/components/dashboard/workout-by-shift/workout-by-shift.component';
 import { GyroscopeOrientationComponent } from 'src/app/components/dashboard/3D-helmet/3D-helmet.component';
+import { MlComponent } from 'src/app/components/dashboard/machinelearning/ml.component'; // ⬅️ AGREGAR ESTA LÍNEA
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +20,8 @@ import { GyroscopeOrientationComponent } from 'src/app/components/dashboard/3D-h
     AppActiveWorkersComponent,
     AppRecentAlertsComponent,
     AppWorkoutByShiftComponent,
-    GyroscopeOrientationComponent, // ⚡ Nuevo componente agregado
+    GyroscopeOrientationComponent,
+    MlComponent, // ⬅️ AGREGAR AQUÍ
   ],
   templateUrl: './dashboard.component.html',
 })

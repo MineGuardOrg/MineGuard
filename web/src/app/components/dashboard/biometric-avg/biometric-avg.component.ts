@@ -1,6 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { MaterialModule } from '../../../material.module';
 import { TablerIconsModule } from 'angular-tabler-icons';
+import { DashboardService } from '../../../services/dashboard.service';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import {
   ApexChart,
   ChartComponent,
@@ -32,23 +34,42 @@ export interface biometricAvgChart {
 @Component({
   selector: 'app-biometric-avg',
   standalone: true,
-  imports: [MaterialModule, TablerIconsModule, NgApexchartsModule],
+  imports: [MaterialModule, TablerIconsModule, NgApexchartsModule, TranslateModule],
   templateUrl: './biometric-avg.component.html',
 })
-export class AppBiometricAvgComponent {
+export class AppBiometricAvgComponent implements OnInit {
   @ViewChild('chart') chart: ChartComponent = Object.create(null);
   public biometricAvgChart!: Partial<biometricAvgChart> | any;
 
-  constructor() {
+  constructor(
+    private dashboardService: DashboardService,
+    private translate: TranslateService
+  ) {
+    this.initializeChart();
+  }
+
+  ngOnInit(): void {
+    this.loadBiometricsByArea();
+    
+    // Suscribirse a cambios de idioma
+    this.translate.onLangChange.subscribe(() => {
+      this.updateChartTranslations();
+    });
+  }
+
+  /**
+   * Inicializa la configuración de la gráfica
+   */
+  initializeChart(): void {
     this.biometricAvgChart = {
       series: [
         {
-          name: 'Ritmo cardíaco (bpm)',
-          data: [80, 72, 65, 100],
+          name: this.translate.instant('CHARTS.BIOMETRIC_AVG.HEART_RATE'),
+          data: [],
         },
         {
-          name: 'Temperatura corporal (°C)',
-          data: [36.5, 37.2, 36.8, 37.1],
+          name: this.translate.instant('CHARTS.BIOMETRIC_AVG.BODY_TEMPERATURE'),
+          data: [],
         },
       ],
 
@@ -128,12 +149,12 @@ export class AppBiometricAvgComponent {
 
       yaxis: [
         {
-          seriesName: 'Ritmo cardíaco (bpm)',
+          seriesName: this.translate.instant('CHARTS.BIOMETRIC_AVG.HEART_RATE'),
           min: 0,
           max: 120,
           tickAmount: 6,
           title: {
-            text: 'Ritmo Cardíaco (BPM)',
+            text: this.translate.instant('CHARTS.BIOMETRIC_AVG.HEART_RATE_AXIS'),
             style: {
             color: '#adb0bb',
               fontSize: '12px',
@@ -151,13 +172,13 @@ export class AppBiometricAvgComponent {
           },
         },
         {
-          seriesName: 'Temperatura corporal (°C)',
+          seriesName: this.translate.instant('CHARTS.BIOMETRIC_AVG.BODY_TEMPERATURE'),
           opposite: true,
           min: 0,
           max: 45,
           tickAmount: 6,
           title: {
-            text: 'Temperatura Corporal (°C)',
+            text: this.translate.instant('CHARTS.BIOMETRIC_AVG.TEMPERATURE_AXIS'),
             style: {
             color: '#adb0bb',
               fontSize: '12px',
@@ -183,8 +204,9 @@ export class AppBiometricAvgComponent {
         axisTicks: {
           show: false,
         },
-        categories: ['Tunel 1', 'Tunel 2', 'Tunel 3', 'Tunel 4'],
+        categories: [],
         labels: {
+          rotate: 0,
           style: { fontSize: '13px', colors: '#adb0bb', fontWeight: '400' },
         },
       },
@@ -195,5 +217,45 @@ export class AppBiometricAvgComponent {
         },
       },
     };
+  }
+
+  /**
+   * Carga los datos de biométricos por área
+   */
+  loadBiometricsByArea(): void {
+    this.dashboardService.getBiometricsByArea(30).subscribe({
+      next: (data) => {
+        // Actualizar toda la configuración de la gráfica con los nuevos datos
+        this.biometricAvgChart = {
+          ...this.biometricAvgChart,
+          series: [
+            {
+              name: this.translate.instant('CHARTS.BIOMETRIC_AVG.HEART_RATE'),
+              data: data.ritmoCardiaco,
+            },
+            {
+              name: this.translate.instant('CHARTS.BIOMETRIC_AVG.BODY_TEMPERATURE'),
+              data: data.temperaturaCorporal,
+            },
+          ],
+          xaxis: {
+            ...this.biometricAvgChart.xaxis,
+            categories: data.areas,
+          },
+        };
+      },
+      error: (error) => {
+        console.error('Error loading biometrics by area:', error);
+      },
+    });
+  }
+
+  /**
+   * Actualiza las traducciones de la gráfica cuando cambia el idioma
+   */
+  updateChartTranslations(): void {
+    this.biometricAvgChart.yaxis[0].title.text = this.translate.instant('CHARTS.BIOMETRIC_AVG.HEART_RATE_AXIS');
+    this.biometricAvgChart.yaxis[1].title.text = this.translate.instant('CHARTS.BIOMETRIC_AVG.TEMPERATURE_AXIS');
+    this.loadBiometricsByArea();
   }
 }

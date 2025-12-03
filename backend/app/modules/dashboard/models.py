@@ -28,6 +28,15 @@ class AlertCountsLastMonthSchema(BaseModel):
     caidasImpactos: int
 
 
+class AlertsByTypeWeeklySchema(BaseModel):
+    """Schema para gráfica de alertas por tipo agrupadas por semana"""
+    labels: list[str] = Field(..., description="Labels de las semanas")
+    gasesToxicos: list[int] = Field(..., description="Datos semanales de gases tóxicos")
+    ritmoCardiacoAnormal: list[int] = Field(..., description="Datos semanales de ritmo cardíaco anormal")
+    temperaturaCorporalAlta: list[int] = Field(..., description="Datos semanales de temperatura alta")
+    caidasImpactos: list[int] = Field(..., description="Datos semanales de caídas e impactos")
+
+
 class BiometricsByAreaSchema(BaseModel):
     """Schema para 'Promedios Biométricos por Área'"""
     areas: list[str]
@@ -86,3 +95,24 @@ class IncidentCreatedResponseSchema(BaseModel):
     id: int
     message: str = "Incidente creado exitosamente"
     created_at: datetime
+
+
+class CriticalAlertsStatsSchema(BaseModel):
+    """Estadísticas de alertas críticas para el dashboard"""
+    critical_count: int = Field(..., description="Número de alertas críticas actuales")
+    total_last_24h: int = Field(..., description="Total de alertas en las últimas 24 horas")
+
+
+class DeviceStatsSchema(BaseModel):
+    """Estadísticas de dispositivos para el dashboard"""
+    active_devices: int = Field(..., description="Número de dispositivos actualmente activos")
+    total_devices: int = Field(..., description="Total de dispositivos en el sistema")
+    connection_rate: float = Field(..., description="Porcentaje de conexión")
+
+
+class RiskLevelSchema(BaseModel):
+    """Nivel de riesgo calculado para el dashboard"""
+    risk_level: str = Field(..., description="Nivel de riesgo: low, medium, high, critical")
+    critical_alerts_count: int = Field(..., description="Número de alertas críticas/high en últimas 24h")
+    affected_areas_count: int = Field(..., description="Número de áreas afectadas")
+    recommendation: str = Field(..., description="Recomendación para el manager")

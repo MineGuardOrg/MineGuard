@@ -4,7 +4,7 @@
       <div class="col-lg-4">
         <div class="hstack align-items-center flex-column flex-lg-row">
           <div class="w-100">
-            <mat-card-title>Trabajadores Activos</mat-card-title>
+            <mat-card-title>{{ 'ACTIVE_WORKERS.TITLE' | translate }}</mat-card-title>
           </div>
         </div>
       </div>
@@ -13,7 +13,7 @@
         <mat-form-field appearance="outline" class="w-100 hide-hint">
           <input
             matInput
-            placeholder="Buscar trabajador"
+            [placeholder]="'ACTIVE_WORKERS.SEARCH_PLACEHOLDER' | translate"
             (keyup)="applyFilter($any($event.target).value)"
           />
           <mat-icon matSuffix>
@@ -25,84 +25,59 @@
 
     <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" class="w-100">
-        <ng-container matColumnDef="trabajador">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Trabajador</th>
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">{{ 'ACTIVE_WORKERS.WORKER' | translate }}</th>
           <td mat-cell *matCellDef="let element" class="f-s-14 f-w-500">
-            {{ element.trabajador }}
+            {{ element.nombre }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="area">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Área</th>
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">{{ 'ACTIVE_WORKERS.AREA' | translate }}</th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
             {{ element.area }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="ritmoCardiaco">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Ritmo Cardíaco/BPM</th>
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">{{ 'ACTIVE_WORKERS.HEART_RATE' | translate }}</th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            <span 
-              [ngClass]="{
-                'text-success': element.ritmoCardiaco >= 60 && element.ritmoCardiaco <= 80,
-                'text-warning': element.ritmoCardiaco > 80 && element.ritmoCardiaco <= 90,
-                'text-danger': element.ritmoCardiaco > 90 || element.ritmoCardiaco < 60
-              }"
-              class="f-w-600">
+            <span class="f-w-600">
               {{ element.ritmoCardiaco }} BPM
             </span>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="temperatura">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Temperatura</th>
+        <ng-container matColumnDef="temperaturaCorporal">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">{{ 'ACTIVE_WORKERS.TEMPERATURE' | translate }}</th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            <span 
-              [ngClass]="{
-                'text-success': element.temperatura >= 36.0 && element.temperatura <= 37.0,
-                'text-warning': element.temperatura > 37.0 && element.temperatura <= 37.5,
-                'text-danger': element.temperatura > 37.5 || element.temperatura < 36.0
-              }"
-              class="f-w-600">
-              {{ element.temperatura }}°C
+            <span class="f-w-600">
+              {{ element.temperaturaCorporal }}°C
             </span>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="bateria">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Batería</th>
+        <ng-container matColumnDef="nivelBateria">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">{{ 'ACTIVE_WORKERS.BATTERY' | translate }}</th>
           <td mat-cell *matCellDef="let element" class="f-s-14">
-            <span 
-              [ngClass]="{
-                'text-success': element.bateria >= 70,
-                'text-warning': element.bateria >= 50 && element.bateria < 70,
-                'text-danger': element.bateria < 50
-              }"
-              class="f-w-600">
-              {{ element.bateria }}%
+            <span class="f-w-600">
+              {{ element.nivelBateria }}%
             </span>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="estado">
-          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">Estado</th>
+        <!-- <ng-container matColumnDef="tiempoActivo">
+          <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">{{ 'ACTIVE_WORKERS.STATUS' | translate }}</th>
           <td mat-cell *matCellDef="let element">
-            <mat-chip 
-              [ngClass]="{
-                'bg-success text-white': element.estado === 'Activo',
-                'bg-warning text-white': element.estado === 'Alerta',
-                'bg-error text-white': element.estado === 'Crítico',
-                'bg-accent text-white': element.estado === 'Descanso'
-              }"
-              class="f-s-12">
-              {{ element.estado }}
-            </mat-chip>
+            <span class="f-s-14">
+              {{ element.tiempoActivo_ts | date : 'HH:mm:ss' }}
+            </span>
           </td>
-        </ng-container>
+        </ng-container> -->
 
-        <ng-container matColumnDef="acciones">
+        <!-- <ng-container matColumnDef="acciones">
           <th mat-header-cell *matHeaderCellDef class="f-s-16 f-w-600">
-            Acciones
+            {{ 'ACTIVE_WORKERS.ACTIONS' | translate }}
           </th>
           <td mat-cell *matCellDef="let element" class="action-link">
             <a
@@ -119,7 +94,7 @@
               <i-tabler name="trash" class="icon-18"></i-tabler>
             </a>
           </td>
-        </ng-container>
+        </ng-container> -->
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>

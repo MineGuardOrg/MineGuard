@@ -1,6 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { MaterialModule } from '../../../material.module';
 import { TablerIconsModule } from 'angular-tabler-icons';
+import { DashboardService } from '../../../services/dashboard.service';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import {
   ApexChart,
   ChartComponent,
@@ -28,32 +30,51 @@ export interface alertsByTypeChart {
 @Component({
   selector: 'app-alerts-by-type',
   standalone: true,
-  imports: [MaterialModule, TablerIconsModule, NgApexchartsModule],
+  imports: [MaterialModule, TablerIconsModule, NgApexchartsModule, TranslateModule],
   templateUrl: './alerts-by-type.component.html',
 })
 
-export class AppAlertsByTypeComponent {
+export class AppAlertsByTypeComponent implements OnInit {
   @ViewChild('chart') chart: ChartComponent = Object.create(null);
   public alertsByTypeChart!: Partial<alertsByTypeChart> | any;
 
-  constructor() {
+  constructor(
+    private dashboardService: DashboardService,
+    private translate: TranslateService
+  ) {
+    this.initializeChart();
+  }
+
+  ngOnInit(): void {
+    this.loadAlertsByTypeWeekly();
+    
+    // Suscribirse a cambios de idioma
+    this.translate.onLangChange.subscribe(() => {
+      this.updateChartTranslations();
+    });
+  }
+
+  /**
+   * Inicializa la configuración de la gráfica
+   */
+  initializeChart(): void {
     this.alertsByTypeChart = {
       series: [
         {
-          name: 'Gases tóxicos',
-          data: [8, 12, 6, 10],
+          name: this.translate.instant('CHARTS.ALERTS_BY_TYPE.TOXIC_GASES'),
+          data: [],
         },
         {
-          name: 'Ritmo cardíaco anormal',
-          data: [6, 8, 14, 7],
+          name: this.translate.instant('CHARTS.ALERTS_BY_TYPE.ABNORMAL_HEART_RATE'),
+          data: [],
         },
         {
-          name: 'Temperatura corporal alta',
-          data: [4, 9, 7, 11],
+          name: this.translate.instant('CHARTS.ALERTS_BY_TYPE.HIGH_BODY_TEMPERATURE'),
+          data: [],
         },
         {
-          name: 'Caídas/Impactos',
-          data: [9, 5, 8, 6],
+          name: this.translate.instant('CHARTS.ALERTS_BY_TYPE.FALLS_IMPACTS'),
+          data: [],
         },
       ],
 
@@ -133,7 +154,7 @@ export class AppAlertsByTypeComponent {
         max: 35,
         tickAmount: 7,
         title: {
-          text: 'Número de alertas',
+          text: this.translate.instant('CHARTS.ALERTS_BY_TYPE.ALERTS_COUNT'),
           style: {
             color: '#adb0bb',
             fontSize: '12px',
@@ -148,14 +169,15 @@ export class AppAlertsByTypeComponent {
         axisTicks: {
           show: false,
         },
-        categories: [
-          'Semana 1',
-          'Semana 2',
-          'Semana 3',
-          'Semana 4',
-        ],
+        categories: [],
         labels: {
-          style: { fontSize: '13px', colors: '#adb0bb', fontWeight: '400' },
+          show: true,
+          rotate: 0,
+          style: { 
+            fontSize: '13px', 
+            colors: '#adb0bb', 
+            fontWeight: '400' 
+          },
         },
       },
       tooltip: {
@@ -165,5 +187,50 @@ export class AppAlertsByTypeComponent {
         },
       },
     };
+  }
+
+  /**
+   * Carga los datos de alertas por tipo agrupadas por semana
+   */
+  loadAlertsByTypeWeekly(): void {
+    this.dashboardService.getAlertsByTypeWeekly().subscribe({
+      next: (data) => {
+        // Actualizar los datos de las series
+        this.alertsByTypeChart.series = [
+          {
+            name: this.translate.instant('CHARTS.ALERTS_BY_TYPE.TOXIC_GASES'),
+            data: data.gasesToxicos,
+          },
+          {
+            name: this.translate.instant('CHARTS.ALERTS_BY_TYPE.ABNORMAL_HEART_RATE'),
+            data: data.ritmoCardiacoAnormal,
+          },
+          {
+            name: this.translate.instant('CHARTS.ALERTS_BY_TYPE.HIGH_BODY_TEMPERATURE'),
+            data: data.temperaturaCorporalAlta,
+          },
+          {
+            name: this.translate.instant('CHARTS.ALERTS_BY_TYPE.FALLS_IMPACTS'),
+            data: data.caidasImpactos,
+          },
+        ];
+        
+        // Formatear las categorías para mostrar "Semana #"
+        const weekLabel = this.translate.instant('CHARTS.ALERTS_BY_TYPE.WEEK');
+        const formattedLabels = data.labels.map((label, index) => `${weekLabel} ${index + 1}`);
+        this.alertsByTypeChart.xaxis.categories = formattedLabels;
+      },
+      error: (error) => {
+        console.error('Error loading alerts by type weekly:', error);
+      },
+    });
+  }
+
+  /**
+   * Actualiza las traducciones de la gráfica cuando cambia el idioma
+   */
+  updateChartTranslations(): void {
+    this.alertsByTypeChart.yaxis.title.text = this.translate.instant('CHARTS.ALERTS_BY_TYPE.ALERTS_COUNT');
+    this.loadAlertsByTypeWeekly();
   }
 }

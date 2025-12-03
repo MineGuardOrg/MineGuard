@@ -1,0 +1,265 @@
+<div class="ml-dashboard">
+  <!-- Header con gradiente animado -->
+
+  <!-- Status Cards -->
+  <div class="status-grid">
+    <div class="status-card" [class.active]="modelReady">
+      <div class="status-icon"><i class="fas" [ngClass]="modelReady ? 'fa-check-circle' : 'fa-hourglass'"></i></div>
+      <div class="status-info">
+        <h3>Modelo ML</h3>
+        <p>{{ modelReady ? 'Operativo' : 'Cargando...' }}</p>
+        <div class="status-bar" *ngIf="!modelReady">
+          <div class="status-progress"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-card" [class.active]="dataset.length > 0">
+      <div class="status-icon"><i class="fas" [ngClass]="dataset.length > 0 ? 'fa-chart-bar' : 'fa-hourglass'"></i></div>
+      <div class="status-info">
+        <h3>Dataset</h3>
+        <p>{{ dataset.length > 0 ? dataset.length + ' registros' : 'Cargando...' }}</p>
+        <div class="status-bar" *ngIf="dataset.length === 0">
+          <div class="status-progress"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-card" [class.active]="sensores.length > 0">
+      <div class="status-icon"><i class="fas fa-satellite"></i></div>
+      <div class="status-info">
+        <h3>Sensores</h3>
+        <p>{{ sensores.length }} tipos detectados</p>
+      </div>
+    </div>
+
+    <div class="status-card active" *ngIf="resultado">
+      <div class="status-icon"><i class="fas" [ngClass]="'fa-' + resultado.icono"></i></div>
+      <div class="status-info">
+        <h3>Última Predicción</h3>
+        <p>{{ resultado.nivel }} - {{ resultado.porcentaje }}%</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  <div class="alert alert-danger" *ngIf="error">
+    <span class="alert-icon"><i class="fas fa-exclamation-triangle"></i></span>
+    <span>{{ error }}</span>
+    <button class="alert-close" (click)="error = ''">&times;</button>
+  </div>
+
+  <!-- Predicción Manual - Card Premium -->
+  <div class="prediction-card">
+    <div class="card-header">
+      <div class="card-title">
+        <span class="card-icon"><i class="fas fa-magic"></i></span>
+        <h2>Realizar Predicción</h2>
+      </div>
+      <div class="card-badge">En Tiempo real</div>
+    </div>
+
+    <div class="prediction-form">
+      <div class="form-row">
+        <div class="input-group">
+          <label class="input-label">
+            <span class="label-icon"><i class="fas fa-chart-line"></i></span>
+            Valor del Sensor
+          </label>
+          <input 
+            type="number" 
+            [(ngModel)]="valor" 
+            class="input-field"
+            placeholder="Ingresa el valor medido"
+            [class.error]="error && !valor"
+            step="0.01"
+          >
+          <div class="input-hint">Ejemplo: 520, 35.5, 98.6, 1024</div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">
+            <span class="label-icon"><i class="fas fa-sliders-h"></i></span>
+            Tipo de Sensor
+          </label>
+          <select 
+            [(ngModel)]="tipoSeleccionado" 
+            class="select-field"
+            [class.error]="error && !tipoSeleccionado"
+          >
+            <option value="">Selecciona un sensor</option>
+            <option value="mq7">MQ-7 (Monóxido de Carbono)</option>
+            <option value="pulse">Pulse (Frecuencia Cardíaca)</option>
+            <option value="body_temp">Body Temp (Temperatura Corporal)</option>
+            <option value="ax">AX (Acelerómetro X)</option>
+            <option value="ay">AY (Acelerómetro Y)</option>
+          </select>
+          <div class="input-hint">Selecciona el tipo de sensor utilizado</div>
+        </div>
+      </div>
+
+      <button 
+        class="btn-predict" 
+        (click)="predecir()"
+        [disabled]="!modelReady"
+        [class.loading]="!modelReady"
+      >
+        <span class="btn-icon"><i class="fas fa-rocket"></i></span>
+        <span>{{ modelReady ? 'Analizar con IA' : 'Cargando modelo...' }}</span>
+        <span class="btn-shine"></span>
+      </button>
+    </div>
+
+    <!-- Resultado de Predicción -->
+    <div class="result-container" *ngIf="resultado">
+      <div class="result-card" [ngClass]="'result-' + resultado.color">
+        <div class="result-header">
+          <div class="result-icon-lg">{{ resultado.icono }}</div>
+          <div class="result-info">
+            <h3 class="result-title">{{ resultado.risk_label }}</h3>
+            <p class="result-subtitle">Nivel de Riesgo: <strong>{{ resultado.nivel }}</strong></p>
+          </div>
+        </div>
+
+        <div class="result-stats">
+          <div class="stat-item">
+            <div class="stat-label">Probabilidad de Riesgo</div>
+            <div class="stat-value">{{ resultado.porcentaje }}%</div>
+            <div class="stat-bar">
+              <div 
+                class="stat-fill" 
+                [style.width.%]="resultado.porcentaje"
+                [ngClass]="'fill-' + resultado.color"
+              ></div>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-label">Sensor Analizado</div>
+            <div class="stat-value-sm">{{ resultado.tipo_sensor }}</div>
+          </div>
+
+          <div class="stat-item">
+            <div class="stat-label">Valor Medido</div>
+            <div class="stat-value-sm">{{ resultado.valor_ingresado }}</div>
+          </div>
+        </div>
+
+        <div class="result-message">
+          <div class="message-icon"><i class="fas fa-lightbulb"></i></div>
+          <p>{{ resultado.mensaje }}</p>
+        </div>
+
+        <div class="result-interpretation">
+          <small><i class="fas fa-info-circle"></i> {{ resultado.interpretacion }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selector de Sensor -->
+  <div class="sensor-selector-card" *ngIf="sensores.length > 0">
+    <div class="selector-header">
+      <span class="selector-icon"><i class="fas fa-microscope"></i></span>
+      <h3>Análisis Detallado por Sensor</h3>
+    </div>
+    <div class="sensor-pills">
+      <button 
+        *ngFor="let sensor of sensores"
+        class="sensor-pill"
+        [class.active]="sensor === sensorSeleccionado"
+        (click)="sensorSeleccionado = sensor; cambiarSensor()"
+      >
+        <i class="fas" 
+           [ngClass]="{
+             'fa-wind': sensor === 'mq7',
+             'fa-heartbeat': sensor === 'pulse',
+             'fa-thermometer-half': sensor === 'body_temp',
+             'fa-arrows-alt-h': sensor === 'ax',
+             'fa-arrows-alt-v': sensor === 'ay'
+           }"></i>
+        {{ sensor }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Gráficas con Diseño Premium -->
+  <div class="charts-container" *ngIf="modelReady && dataset.length > 0">
+    
+    <!-- Gráfica 1 - Full Width -->
+    <div class="chart-card chart-full">
+      <div class="chart-header">
+        <div class="chart-title">
+          <span class="chart-icon"><i class="fas fa-bullseye"></i></span>
+          <h3>Rendimiento del Modelo</h3>
+        </div>
+        <div class="chart-badge">Métricas de Precisión</div>
+      </div>
+      <div class="chart-body">
+        <canvas id="chart1"></canvas>
+      </div>
+      <div class="chart-footer">
+        <div class="metric-badge">
+          <span class="metric-label">Accuracy</span>
+          <span class="metric-value">{{ accuracy }}%</span>
+        </div>
+        <div class="metric-badge">
+          <span class="metric-label">Precision</span>
+          <span class="metric-value">{{ precision }}%</span>
+        </div>
+        <div class="metric-badge">
+          <span class="metric-label">Recall</span>
+          <span class="metric-value">{{ recall }}%</span>
+        </div>
+        <div class="metric-badge">
+          <span class="metric-label">F1-Score</span>
+          <span class="metric-value">{{ f1score }}%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfica 2 -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">
+          <span class="chart-icon"><i class="fas fa-chart-pie"></i></span>
+          <h3>Distribución de Probabilidades</h3>
+        </div>
+      </div>
+      <div class="chart-body">
+        <canvas id="chart2"></canvas>
+      </div>
+    </div>
+
+    <!-- Gráfica 3 -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">
+          <span class="chart-icon"><i class="fas fa-flask"></i></span>
+          <h3>Valores vs Predicciones</h3>
+        </div>
+        <div class="chart-badge">{{ sensorSeleccionado }}</div>
+      </div>
+      <div class="chart-body">
+        <canvas id="chart3"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" *ngIf="!modelReady || dataset.length === 0">
+    <div class="loading-content">
+      <div class="loading-spinner">
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+      </div>
+      <h2 class="loading-title">Inicializando Sistema </h2>
+      <p class="loading-text">Cargando modelo y dataset...</p>
+      <div class="loading-progress-bar">
+        <div class="loading-progress-fill"></div>
+      </div>
+    </div>
+  </div>  
+</div>
