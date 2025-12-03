@@ -52,7 +52,7 @@ def by_user(user_id: int, limit: int = 100, current_user=Depends(get_current_use
 
 
 @reading_router.post("/", response_model=ReadingSchema, status_code=status.HTTP_201_CREATED)
-def create(payload: ReadingCreateSchema, current_user=Depends(get_current_user)):
+async def create(payload: ReadingCreateSchema, current_user=Depends(get_current_user)):
     """
     Crea una nueva lectura con todos los valores de sensores.
     Acepta: user_id, device_id, mq7, pulse, ax, ay, az, gx, gy, gz
@@ -71,4 +71,4 @@ def create(payload: ReadingCreateSchema, current_user=Depends(get_current_user))
         "gz": -0.028911
     }
     """
-    return service.create(payload)
+    return await service.create(payload)

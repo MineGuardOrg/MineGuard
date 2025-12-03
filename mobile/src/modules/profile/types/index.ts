@@ -15,4 +15,6 @@ export interface UserProfile {
   is_active: boolean;
   created_at: string;
   updated_at: string | null;
+  area_name?: string | null;
+  position_name?: string | null;
 }

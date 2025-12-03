@@ -14,6 +14,7 @@ from app.modules.auth.models import (
     LoginSchema,
     TokenResponse
 )
+from app.modules.users.models import UserDetailSchema
 from app.modules.auth.repository import AuthRepository
 from app.core.security import get_password_hash, verify_password, create_access_token
 
@@ -165,6 +166,55 @@ class AuthService(BaseService[User, UserCreateSchema, UserUpdateSchema, UserSche
                 detail="Error interno del servidor en el proceso de login"
             )
     
-    def get_current_user_info(self, user_id: int) -> UserSchema:
-        """Obtiene información del usuario actual"""
-        return self.get_by_id(user_id)
+    def get_current_user_info(self, user_id: int) -> UserDetailSchema:
+        """Obtiene información detallada del usuario actual con nombres de área y posición"""
+        from app.core.database import SessionLocal
+        from app.modules.area.models import Area
+        from app.modules.position.models import Position
+        
+        with SessionLocal() as db:
+            result = (
+                db.query(
+                    User.id,
+                    User.employee_number,
+                    User.first_name,
+                    User.last_name,
+                    User.email,
+                    User.role_id,
+                    User.area_id,
+                    Area.name.label('area_name'),
+                    User.position_id,
+                    Position.name.label('position_name'),
+                    User.supervisor_id,
+                    User.is_active,
+                    User.created_at,
+                    User.updated_at
+                )
+                .outerjoin(Area, Area.id == User.area_id)
+                .outerjoin(Position, Position.id == User.position_id)
+                .filter(User.id == user_id)
+                .first()
+            )
+            
+            if not result:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Usuario no encontrado"
+                )
+            
+            return UserDetailSchema(
+                id=result.id,
+                employee_number=result.employee_number,
+                first_name=result.first_name,
+                last_name=result.last_name,
+                email=result.email,
+                role_id=result.role_id,
+                area_id=result.area_id,
+                area_name=result.area_name,
+                position_id=result.position_id,
+                position_name=result.position_name,
+                supervisor_id=result.supervisor_id,
+                is_active=result.is_active,
+                created_at=result.created_at,
+                updated_at=result.updated_at
+            )

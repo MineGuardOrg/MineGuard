@@ -14,9 +14,12 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { DashboardService } from "../services/dashboardService";
 import { DashboardData } from "../types";
+import { RealtimeAlert } from "../types/alert.types";
 import { StatCard } from "../components/StatCard";
 import { WorkerCard } from "../components/WorkerCard";
 import { AlertCard } from "../components/AlertCard";
+import { AlertModal } from "../components/AlertModal";
+import { CreateIncidentModal } from "../components/CreateIncidentModal";
 import { AuthService } from "../../auth/services/authService";
 import { StorageService } from "../../../core/storage";
 import { JWTHelper } from "../../../core/jwtHelper";
@@ -42,6 +45,14 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onLogout }) =>
   const [refreshing, setRefreshing] = useState(false);
   const [userFullName, setUserFullName] = useState<string>("Usuario");
   const [showUserMenu, setShowUserMenu] = useState(false);
+
+  // Estado para alertas en tiempo real
+  const [currentAlert, setCurrentAlert] = useState<RealtimeAlert | null>(null);
+  const [showAlertModal, setShowAlertModal] = useState(false);
+
+  // Estado para modal de crear incidente
+  const [selectedAlertForIncident, setSelectedAlertForIncident] = useState<any>(null);
+  const [showIncidentModal, setShowIncidentModal] = useState(false);
 
   const loadData = async () => {
     try {
@@ -96,17 +107,31 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onLogout }) =>
     ]);
   };
 
+  const handleAlertPress = (alert: any) => {
+    setSelectedAlertForIncident(alert);
+    setShowIncidentModal(true);
+  };
+
+  const handleIncidentSuccess = async () => {
+    // Recargar datos después de crear incidente
+    await loadData();
+  };
+
   useEffect(() => {
     loadData();
     loadUserInfo();
 
-    // Conectar WebSocket para actualizaciones en tiempo real
+    // Conectar WebSocket para alertas en tiempo real
     DashboardService.connectWebSocket(
-      (update) => {
-        setData((prev) => {
-          if (!prev) return null;
-          return { ...prev, ...update };
-        });
+      (alert: RealtimeAlert) => {
+        console.log("Nueva alerta recibida:", alert);
+
+        // Mostrar modal con la alerta
+        setCurrentAlert(alert);
+        setShowAlertModal(true);
+
+        // Recargar datos para actualizar la lista de alertas recientes
+        loadData();
       },
       (error) => {
         console.error("WebSocket error:", error);
@@ -144,8 +169,18 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onLogout }) =>
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.headerTitle}>MineGuard Dashboard</Text>
-          <Text style={styles.headerSubtitle}>Monitoreo en Tiempo Real • {new Date().toLocaleDateString()}</Text>
+          <Text style={styles.headerTitle}>
+            {data.area_biometrics?.area || 'MineGuard Dashboard'}
+          </Text>
+          <Text style={styles.headerSubtitle}>
+            {data.area_biometrics && 
+             data.area_biometrics.avg_heart_rate !== undefined && 
+             data.area_biometrics.avg_temperature !== undefined ? (
+              `❤️ ${data.area_biometrics.avg_heart_rate.toFixed(0)} BPM • 🌡️ ${data.area_biometrics.avg_temperature.toFixed(1)}°C • 👥 ${data.area_biometrics.worker_count || 0} trabajadores`
+            ) : (
+              `Monitoreo en Tiempo Real • ${new Date().toLocaleDateString()}`
+            )}
+          </Text>
         </View>
 
         {/* Menú de usuario */}
@@ -187,80 +222,98 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onLogout }) =>
       <View style={styles.contentContainer}>
         {/* Dashboard Grid Layout para iPad horizontal */}
         <View style={styles.dashboardGrid}>
-          {/* Columna Izquierda - Alertas y Estadísticas */}
-          <ScrollView
-            style={styles.leftColumn}
-            showsVerticalScrollIndicator={true}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-          >
-            {/* Resumen de Alertas del Último Mes */}
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>Alertas del Último Mes</Text>
-              <View style={styles.alertStatsGrid}>
-                <View key="critical" style={[styles.alertStatCard, { backgroundColor: "#FFF5F5" }]}>
-                  <Text style={[styles.alertStatValue, { color: "#FF3B30" }]}>{data.alert_counts.critical}</Text>
-                  <Text style={styles.alertStatLabel}>Críticas</Text>
-                </View>
-                <View key="warning" style={[styles.alertStatCard, { backgroundColor: "#FFF9F0" }]}>
-                  <Text style={[styles.alertStatValue, { color: "#FF9500" }]}>{data.alert_counts.warning}</Text>
-                  <Text style={styles.alertStatLabel}>Advertencias</Text>
-                </View>
-                <View key="info" style={[styles.alertStatCard, { backgroundColor: "#F0F7FF" }]}>
-                  <Text style={[styles.alertStatValue, { color: "#007AFF" }]}>{data.alert_counts.info}</Text>
-                  <Text style={styles.alertStatLabel}>Informativas</Text>
-                </View>
-              </View>
-            </View>
-
-            {/* Biométricas por Área */}
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>Biométricas por Área</Text>
-              {data.biometrics_by_area.length > 0 ? (
-                <View style={styles.biometricsTable}>
-                  {/* Encabezado de la tabla */}
-                  <View style={styles.tableHeader}>
-                    <Text style={[styles.tableHeaderText, styles.tableColArea]}>Área</Text>
-                    <Text style={[styles.tableHeaderText, styles.tableColMetric]}>❤️ BPM</Text>
-                    <Text style={[styles.tableHeaderText, styles.tableColMetric]}>🌡️ Temp (°C)</Text>
-                  </View>
-
-                  {/* Filas de la tabla */}
-                  {data.biometrics_by_area.map((area, index) => (
-                    <View
-                      key={area.area_name}
-                      style={[styles.tableRow, index % 2 === 0 ? styles.tableRowEven : styles.tableRowOdd]}
-                    >
-                      <Text style={[styles.tableCellText, styles.tableColArea, styles.tableAreaName]}>
-                        {area.area_name}
-                      </Text>
-                      <Text style={[styles.tableCellText, styles.tableColMetric, styles.tableMetricValue]}>
-                        {area.avg_heart_rate ? area.avg_heart_rate.toFixed(0) : "N/A"}
-                      </Text>
-                      <Text style={[styles.tableCellText, styles.tableColMetric, styles.tableMetricValue]}>
-                        {area.avg_temperature ? area.avg_temperature.toFixed(1) : "N/A"}
-                      </Text>
-                    </View>
-                  ))}
-                </View>
-              ) : (
-                <Text style={styles.emptyText}>No hay datos de áreas disponibles</Text>
-              )}
-            </View>
-
-            {/* Alertas Recientes */}
-            <View style={styles.card}>
+          {/* Columna Izquierda - Alertas y Biométricas (50/50) */}
+          <View style={styles.leftColumn}>
+            {/* Alertas Recientes - 50% superior */}
+            <View style={styles.topCard}>
               <Text style={styles.cardTitle}>Alertas Recientes</Text>
               {data.recent_alerts.length > 0 ? (
-                <View style={styles.alertsList}>
-                  {data.recent_alerts.slice(0, 8).map((alert) => (
-                    <AlertCard key={alert.id} alert={alert} />
-                  ))}
-                </View>
+                <ScrollView
+                  style={styles.alertsScrollContainer}
+                  showsVerticalScrollIndicator={true}
+                  refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                >
+                  <View style={styles.alertsList}>
+                    {data.recent_alerts.slice(0, 8).map((alert) => (
+                      <AlertCard key={alert.id} alert={alert} onPress={handleAlertPress} />
+                    ))}
+                  </View>
+                </ScrollView>
               ) : (
                 <Text style={styles.emptyText}>No hay alertas recientes</Text>
               )}
             </View>
-          </ScrollView>
+
+            {/* Incidentes - 50% inferior */}
+            <View style={styles.bottomCard}>
+              <Text style={styles.cardTitle}>Incidentes Reportados</Text>
+              {data.incidents && data.incidents.length > 0 ? (
+                <ScrollView style={styles.biometricsScrollContainer} showsVerticalScrollIndicator={true}>
+                  <View style={styles.biometricsTable}>
+                    {/* Encabezado de la tabla */}
+                    <View style={styles.tableHeader}>
+                      <Text style={[styles.tableHeaderText, { flex: 2 }]}>Usuario</Text>
+                      <Text style={[styles.tableHeaderText, { flex: 2 }]}>Descripción</Text>
+                      <Text style={[styles.tableHeaderText, { flex: 1 }]}>Severidad</Text>
+                      <Text style={[styles.tableHeaderText, { flex: 1 }]}>Fecha</Text>
+                    </View>
+
+                    {/* Filas de la tabla */}
+                    {data.incidents.map((incident, index) => (
+                      <View
+                        key={incident.id}
+                        style={[styles.tableRow, index % 2 === 0 ? styles.tableRowEven : styles.tableRowOdd]}
+                      >
+                        <Text style={[styles.tableCellText, { flex: 2 }]} numberOfLines={1}>
+                          {incident.user_full_name}
+                        </Text>
+                        <Text style={[styles.tableCellText, { flex: 2 }]} numberOfLines={2}>
+                          {incident.description}
+                        </Text>
+                        <View style={{ flex: 1, justifyContent: "center" }}>
+                          <View
+                            style={[
+                              styles.severityBadge,
+                              {
+                                backgroundColor:
+                                  incident.severity === "critical"
+                                    ? "#DC2626"
+                                    : incident.severity === "high"
+                                    ? "#EF4444"
+                                    : incident.severity === "medium"
+                                    ? "#F59E0B"
+                                    : "#3B82F6",
+                              },
+                            ]}
+                          >
+                            <Text style={styles.severityBadgeText}>
+                              {incident.severity === "critical"
+                                ? "Crítico"
+                                : incident.severity === "high"
+                                ? "Alto"
+                                : incident.severity === "medium"
+                                ? "Medio"
+                                : "Bajo"}
+                            </Text>
+                          </View>
+                        </View>
+                        <Text style={[styles.tableCellText, { flex: 1, fontSize: 11 }]} numberOfLines={2}>
+                          {new Date(incident.created_at).toLocaleDateString("es-ES", {
+                            day: "2-digit",
+                            month: "short",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                </ScrollView>
+              ) : (
+                <Text style={styles.emptyText}>No hay incidentes reportados</Text>
+              )}
+            </View>
+          </View>
 
           {/* Columna Derecha - Trabajadores Activos */}
           <View style={styles.rightColumn}>
@@ -286,6 +339,31 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onLogout }) =>
           </View>
         </View>
       </View>
+
+      {/* Modal de Alerta en Tiempo Real */}
+      <AlertModal
+        alert={currentAlert}
+        visible={showAlertModal}
+        onDismiss={() => {
+          setShowAlertModal(false);
+          setCurrentAlert(null);
+        }}
+        onAction={() => {
+          setShowAlertModal(false);
+          // Aquí podrías navegar a una vista de detalles de la alerta
+        }}
+      />
+
+      {/* Modal para Crear Incidente */}
+      <CreateIncidentModal
+        visible={showIncidentModal}
+        alert={selectedAlertForIncident}
+        onClose={() => {
+          setShowIncidentModal(false);
+          setSelectedAlertForIncident(null);
+        }}
+        onSuccess={handleIncidentSuccess}
+      />
     </View>
   );
 };

@@ -22,6 +22,7 @@ from app.modules.ml_training_data.router import ml_training_data_router
 from app.modules.ml_prediction.router import ml_prediction_router
 from app.modules.dashboard.router import dashboard_router
 from app.modules.database_maintenance.router import database_maintenance_router
+from app.core.websocket_router import websocket_router
 
 app = FastAPI(title="MineGuard API", version="1.0.0")
 
@@ -58,6 +59,7 @@ app.include_router(sensor_router, prefix="/sensors", tags=["Sensors"])
 app.include_router(shift_router, prefix="/shifts", tags=["Shifts"])
 app.include_router(user_router, prefix="/users", tags=["Users"])
 app.include_router(user_shift_router, prefix="/user-shifts", tags=["UserShifts"])
+app.include_router(websocket_router, tags=["WebSocket"])
 
 @app.get("/")
 def root():

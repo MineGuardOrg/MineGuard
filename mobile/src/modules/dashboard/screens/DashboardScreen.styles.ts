@@ -162,12 +162,42 @@ export const styles = StyleSheet.create({
   },
   leftColumn: {
     flex: 1,
-    paddingVertical: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+  topCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4,
+    flex: 1,
+    marginBottom: 20,
+  },
+  bottomCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 4,
+    flex: 1,
+  },
+  alertsScrollContainer: {
+    flex: 1,
+  },
+  biometricsScrollContainer: {
+    flex: 1,
   },
   rightColumn: {
     flex: 0.7,
-    maxHeight: '100%',
-    paddingVertical: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
   },
   card: {
     backgroundColor: '#FFFFFF',
@@ -179,7 +209,6 @@ export const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
     flex: 1,
-    marginBottom: 20,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -337,5 +366,17 @@ export const styles = StyleSheet.create({
     color: '#9CA3AF',
     textAlign: 'center',
     fontStyle: 'italic',
+  },
+  severityBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    alignSelf: 'flex-start',
+  },
+  severityBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 11,
+    fontWeight: '700',
+    textTransform: 'uppercase',
   },
 });

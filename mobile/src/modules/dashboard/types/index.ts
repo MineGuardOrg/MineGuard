@@ -6,6 +6,7 @@
 interface ActiveWorkerBackend {
   id: number;
   nombre: string;
+  numeroEmpleado: string;
   area: string | null;
   ritmoCardiaco: number | null;
   temperaturaCorporal: number | null;
@@ -50,7 +51,28 @@ export interface RecentAlert {
   message: string;
   created_at: string;
   user_full_name: string;
+  user_id: number;
   area_name: string;
+  reading_id: number;
+  device_id?: number;
+}
+
+export interface Incident {
+  id: number;
+  description: string;
+  severity: string;
+  user_full_name: string;
+  user_employee_number: string;
+  area: string | null;
+  created_at: string;
+  reading_timestamp: string | null;
+}
+
+export interface AreaBiometrics {
+  area: string;
+  avg_heart_rate: number;
+  avg_temperature: number;
+  worker_count: number;
 }
 
 export interface DashboardData {
@@ -58,4 +80,6 @@ export interface DashboardData {
   alert_counts: AlertCounts;
   biometrics_by_area: BiometricsByArea[];
   recent_alerts: RecentAlert[];
+  area_biometrics: AreaBiometrics | null;
+  incidents: Incident[];
 }

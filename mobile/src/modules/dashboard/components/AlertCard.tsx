@@ -1,31 +1,38 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { RecentAlert } from '../types';
 
 interface AlertCardProps {
   alert: RecentAlert;
+  onPress?: (alert: RecentAlert) => void;
 }
 
-export const AlertCard: React.FC<AlertCardProps> = ({ alert }) => {
+export const AlertCard: React.FC<AlertCardProps> = ({ alert, onPress }) => {
   const getSeverityColor = (severity: string) => {
     switch (severity.toLowerCase()) {
+      case 'high':      // Crítico
       case 'critical':
-        return '#FF3B30';
+        return '#EF4444'; // Rojo
+      case 'medium':    // Advertencia
       case 'warning':
-        return '#FF9500';
+        return '#F59E0B'; // Amarillo/Naranja
+      case 'low':       // Bajo
       case 'info':
-        return '#007AFF';
+        return '#3B82F6'; // Azul
       default:
-        return '#8E8E93';
+        return '#6B7280'; // Gris
     }
   };
 
   const getSeverityLabel = (severity: string) => {
     switch (severity.toLowerCase()) {
+      case 'high':
       case 'critical':
         return 'CRÍTICO';
+      case 'medium':
       case 'warning':
         return 'ADVERTENCIA';
+      case 'low':
       case 'info':
         return 'INFO';
       default:
@@ -44,7 +51,11 @@ export const AlertCard: React.FC<AlertCardProps> = ({ alert }) => {
   };
 
   return (
-    <View style={styles.card}>
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => onPress?.(alert)}
+      activeOpacity={onPress ? 0.7 : 1}
+    >
       <View style={styles.header}>
         <View
           style={[
@@ -62,10 +73,10 @@ export const AlertCard: React.FC<AlertCardProps> = ({ alert }) => {
       <Text style={styles.message}>{alert.message}</Text>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>👤 {alert.user_full_name}</Text>
-        <Text style={styles.footerText}>📍 {alert.area_name}</Text>
+        <Text style={styles.footerText}>{alert.user_full_name}</Text>
+        <Text style={styles.footerText}>{alert.area_name}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

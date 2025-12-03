@@ -85,8 +85,8 @@ export class StorageService {
     try {
       await AsyncStorage.clear();
     } catch (error) {
-      console.error('Error clearing storage:', error);
-      throw error;
+      // Ignorar errores si el storage ya está vacío
+      // Esto puede ocurrir cuando se cierra sesión múltiples veces
     }
   }
 }

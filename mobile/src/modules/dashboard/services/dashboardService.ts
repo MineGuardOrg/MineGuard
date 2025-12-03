@@ -8,13 +8,15 @@ import {
   RecentAlert,
   DashboardData,
 } from '../types';
-import { io, Socket } from 'socket.io-client';
+import { RealtimeAlert } from '../types/alert.types';
 
 /**
  * Servicio del dashboard con soporte para WebSockets
  */
 export class DashboardService {
-  private static socket: Socket | null = null;
+  private static ws: WebSocket | null = null;
+  private static reconnectTimer: NodeJS.Timeout | null = null;
+  private static shouldReconnect: boolean = true;
 
   /**
    * Obtiene los trabajadores activos
@@ -27,7 +29,7 @@ export class DashboardService {
       return backendData.map((worker: any) => ({
         user_id: worker.id,
         full_name: worker.nombre || 'N/A',
-        employee_number: worker.cascoId ? `#${worker.cascoId}` : 'N/A',
+        employee_number: worker.numeroEmpleado || 'N/A',
         area_name: worker.area || 'Sin área',
         shift_name: 'Activo', // El backend no devuelve el turno actualmente
         hours_worked: worker.tiempoActivo ? worker.tiempoActivo / 3600 : 0, // Convertir segundos a horas
@@ -68,19 +70,17 @@ export class DashboardService {
     try {
       const backendData = await apiClient.get<any>(API_ENDPOINTS.BIOMETRICS_BY_AREA);
       
-      // El backend devuelve: { areas: [], ritmoCardiaco: [], temperaturaCorporal: [] }
-      // Convertir a array de objetos
+      // El backend ahora devuelve un solo objeto: { area, ritmoCardiaco, temperaturaCorporal, workerCount }
+      // Convertir a array con un solo elemento para mantener compatibilidad
       const result: BiometricsByArea[] = [];
       
-      if (backendData.areas && Array.isArray(backendData.areas)) {
-        for (let i = 0; i < backendData.areas.length; i++) {
-          result.push({
-            area_name: backendData.areas[i],
-            avg_heart_rate: backendData.ritmoCardiaco[i] || 0,
-            avg_temperature: backendData.temperaturaCorporal[i] || 0,
-            worker_count: 0, // El backend no devuelve este dato en este endpoint
-          });
-        }
+      if (backendData && backendData.area) {
+        result.push({
+          area_name: backendData.area,
+          avg_heart_rate: backendData.ritmoCardiaco || 0,
+          avg_temperature: backendData.temperaturaCorporal || 0,
+          worker_count: backendData.workerCount || 0,
+        });
       }
       
       return result;
@@ -98,15 +98,25 @@ export class DashboardService {
       const backendData = await apiClient.get<any[]>(API_ENDPOINTS.RECENT_ALERTS);
       
       // Mapear del formato backend (español) al frontend (inglés)
-      return backendData.map((alert: any) => ({
-        id: alert.id,
-        alert_type: alert.tipo || 'Desconocido',
-        severity: alert.severidad || 'info',
-        message: `${alert.tipo}: ${alert.valor.toFixed(2)}`,
-        created_at: alert.timestamp,
-        user_full_name: alert.trabajador || 'N/A',
-        area_name: alert.area || 'Sin área',
-      }));
+      return backendData.map((alert: any) => {
+        // Validar que los campos requeridos existan
+        if (!alert.user_id || !alert.reading_id) {
+          console.warn('Alerta con campos faltantes:', alert);
+        }
+        
+        return {
+          id: alert.id,
+          alert_type: alert.tipo || 'Desconocido',
+          severity: alert.severidad || 'info',
+          message: alert.mensaje || `${alert.tipo}: ${alert.valor?.toFixed(2) || 'N/A'}`,
+          created_at: alert.timestamp,
+          user_full_name: alert.trabajador || 'N/A',
+          user_id: alert.user_id,
+          area_name: alert.area || 'Sin área',
+          reading_id: alert.reading_id,
+          device_id: alert.device_id,
+        };
+      });
     } catch (error) {
       console.error('Get recent alerts error:', error);
       throw error;
@@ -114,16 +124,31 @@ export class DashboardService {
   }
 
   /**
+   * Obtiene los incidentes del supervisor
+   */
+  static async getIncidents(): Promise<any[]> {
+    try {
+      const incidents = await apiClient.get<any[]>(API_ENDPOINTS.INCIDENTS);
+      return incidents;
+    } catch (error) {
+      console.error('Get incidents error:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Obtiene todos los datos del dashboard
    */
-  static async getDashboardData(): Promise<DashboardData> {
+  static async getDashboardData(): Promise<any> {
     try {
-      const [active_workers, alert_counts, biometrics_by_area, recent_alerts] =
+      const [active_workers, alert_counts, biometrics_by_area, recent_alerts, area_biometrics, incidents] =
         await Promise.all([
           this.getActiveWorkers(),
           this.getAlertCounts(),
           this.getBiometricsByArea(),
           this.getRecentAlerts(),
+          apiClient.get<any>(API_ENDPOINTS.BIOMETRICS_BY_AREA),
+          this.getIncidents(),
         ]);
 
       return {
@@ -131,6 +156,8 @@ export class DashboardService {
         alert_counts,
         biometrics_by_area,
         recent_alerts,
+        area_biometrics,
+        incidents,
       };
     } catch (error) {
       console.error('Get dashboard data error:', error);
@@ -139,48 +166,76 @@ export class DashboardService {
   }
 
   /**
-   * Conecta al WebSocket del dashboard para actualizaciones en tiempo real
+   * Conecta al WebSocket de alertas para actualizaciones en tiempo real
    */
-  static async connectWebSocket(
-    onUpdate: (data: Partial<DashboardData>) => void,
+  static connectWebSocket(
+    onAlert: (alert: RealtimeAlert) => void,
     onError?: (error: any) => void
-  ): Promise<void> {
+  ): void {
     try {
-      const token = await StorageService.getToken();
-      if (!token) {
-        throw new Error('No authentication token found');
+      this.shouldReconnect = true;
+      
+      // Si ya hay una conexión, cerrarla
+      if (this.ws) {
+        this.ws.close();
       }
 
-      // Crear conexión WebSocket
-      this.socket = io(WS_BASE_URL + WS_ENDPOINTS.DASHBOARD, {
-        auth: {
-          token: token,
-        },
-        transports: ['websocket'],
-      });
+      // Generar un ID único para este cliente
+      const clientId = `tablet_${Date.now()}`;
+      const wsUrl = `${WS_BASE_URL}${WS_ENDPOINTS.ALERTS}?client_id=${clientId}`;
 
-      // Eventos del WebSocket
-      this.socket.on('connect', () => {
-        console.log('WebSocket connected');
-      });
+      console.log('Conectando a WebSocket:', wsUrl);
+      this.ws = new WebSocket(wsUrl);
 
-      this.socket.on('dashboard_update', (data: Partial<DashboardData>) => {
-        console.log('Dashboard update received:', data);
-        onUpdate(data);
-      });
+      // Evento: Conexión establecida
+      this.ws.onopen = () => {
+        console.log('WebSocket conectado');
+        
+        // Limpiar timer de reconexión si existe
+        if (this.reconnectTimer) {
+          clearTimeout(this.reconnectTimer);
+          this.reconnectTimer = null;
+        }
+      };
 
-      this.socket.on('disconnect', () => {
-        console.log('WebSocket disconnected');
-      });
+      // Evento: Mensaje recibido
+      this.ws.onmessage = (event) => {
+        try {
+          const message = JSON.parse(event.data);
+          console.log('WebSocket mensaje recibido:', message);
 
-      this.socket.on('error', (error: any) => {
+          // Si es una alerta, procesarla
+          if (message.type === 'alert' && message.data) {
+            onAlert(message.data as RealtimeAlert);
+          }
+        } catch (error) {
+          console.error('Error al parsear mensaje de WebSocket:', error);
+        }
+      };
+
+      // Evento: Error
+      this.ws.onerror = (error) => {
         console.error('WebSocket error:', error);
         if (onError) {
           onError(error);
         }
-      });
+      };
+
+      // Evento: Conexión cerrada
+      this.ws.onclose = (event) => {
+        console.log('WebSocket desconectado', event.code, event.reason);
+        this.ws = null;
+
+        // Intentar reconectar después de 3 segundos si shouldReconnect está activo
+        if (this.shouldReconnect) {
+          console.log('Intentando reconectar en 3 segundos...');
+          this.reconnectTimer = setTimeout(() => {
+            this.connectWebSocket(onAlert, onError);
+          }, 3000);
+        }
+      };
     } catch (error) {
-      console.error('WebSocket connection error:', error);
+      console.error('Error al conectar WebSocket:', error);
       if (onError) {
         onError(error);
       }
@@ -191,9 +246,18 @@ export class DashboardService {
    * Desconecta el WebSocket
    */
   static disconnectWebSocket(): void {
-    if (this.socket) {
-      this.socket.disconnect();
-      this.socket = null;
+    this.shouldReconnect = false;
+    
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
     }
+    
+    if (this.ws) {
+      this.ws.close();
+      this.ws = null;
+    }
+    
+    console.log('WebSocket desconectado manualmente');
   }
 }

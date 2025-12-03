@@ -51,6 +51,7 @@ class DashboardRepository:
                     User.id.label('user_id'),
                     User.first_name,
                     User.last_name,
+                    User.employee_number,
                     Area.name.label('area_name'),
                     Device.id.label('device_id'),
                     Device.battery.label('battery'),
@@ -97,6 +98,85 @@ class DashboardRepository:
                 results.append({
                     'id': r.user_id,
                     'nombre': f"{r.first_name} {r.last_name}",
+                    'numeroEmpleado': r.employee_number,
+                    'area': r.area_name,
+                    'ritmoCardiaco': ritmo_cardiaco,
+                    'temperaturaCorporal': temperatura_corporal,
+                    'nivelBateria': r.battery,
+                    'tiempoActivo_ts': r.conn_ts,
+                    'cascoId': r.device_id,
+                })
+
+        return results
+
+    def get_active_workers_by_supervisor(self, supervisor_id: int) -> List[Dict[str, Any]]:
+        """Trabajadores activos filtrados por supervisor_id con métricas recientes."""
+        results: List[Dict[str, Any]] = []
+        with SessionLocal() as db:
+            # Subconsulta: última conexión por dispositivo
+            last_conn_sq = (
+                db.query(
+                    Connection.device_id.label('device_id'),
+                    func.max(Connection.timestamp).label('max_ts')
+                )
+                .group_by(Connection.device_id)
+                .subquery()
+            )
+
+            q = (
+                db.query(
+                    User.id.label('user_id'),
+                    User.first_name,
+                    User.last_name,
+                    User.employee_number,
+                    Area.name.label('area_name'),
+                    Device.id.label('device_id'),
+                    Device.battery.label('battery'),
+                    Connection.status.label('conn_status'),
+                    Connection.timestamp.label('conn_ts')
+                )
+                .join(Device, Device.user_id == User.id)
+                .outerjoin(Area, Area.id == User.area_id)
+                .join(last_conn_sq, last_conn_sq.c.device_id == Device.id)
+                .join(Connection, and_(
+                    Connection.device_id == last_conn_sq.c.device_id,
+                    Connection.timestamp == last_conn_sq.c.max_ts
+                ))
+                .filter(
+                    User.supervisor_id == supervisor_id,
+                    User.is_active == True,
+                    Device.is_active == True,
+                    Connection.status == 'online',
+                    or_(Area.id == None, Area.is_active == True)
+                )
+            )
+
+            rows = q.all()
+
+            for r in rows:
+                # Obtener la última lectura del dispositivo para el usuario
+                last_reading = (
+                    db.query(Reading)
+                    .filter(
+                        Reading.user_id == r.user_id,
+                        Reading.device_id == r.device_id
+                    )
+                    .order_by(Reading.timestamp.desc())
+                    .first()
+                )
+
+                # Extraer valores
+                ritmo_cardiaco = None
+                temperatura_corporal = None
+                
+                if last_reading:
+                    ritmo_cardiaco = last_reading.pulse
+                    temperatura_corporal = last_reading.body_temp
+
+                results.append({
+                    'id': r.user_id,
+                    'nombre': f"{r.first_name} {r.last_name}",
+                    'numeroEmpleado': r.employee_number,
                     'area': r.area_name,
                     'ritmoCardiaco': ritmo_cardiaco,
                     'temperaturaCorporal': temperatura_corporal,
@@ -200,6 +280,67 @@ class DashboardRepository:
 
             return results
 
+    def get_biometrics_avg_by_area_by_supervisor(self, supervisor_id: int, days: int = 30) -> List[Dict[str, Any]]:
+        """Promedios de ritmo cardiaco y temperatura corporal por área filtrados por supervisor."""
+        from datetime import datetime, timedelta, timezone
+        start_ts = datetime.now(timezone.utc) - timedelta(days=days)
+
+        with SessionLocal() as db:
+            # Promedios de ritmo cardíaco (pulse) por área
+            hr_rows = (
+                db.query(
+                    Area.name.label('area_name'),
+                    func.avg(Reading.pulse).label('hr_avg')
+                )
+                .join(User, User.id == Reading.user_id)
+                .join(Area, Area.id == User.area_id)
+                .filter(
+                    User.supervisor_id == supervisor_id,
+                    Reading.timestamp >= start_ts,
+                    Reading.pulse != None,
+                    User.is_active == True,
+                    Area.is_active == True
+                )
+                .group_by(Area.name)
+                .all()
+            )
+
+            # Promedios de temperatura corporal (body_temp) por área
+            temp_rows = (
+                db.query(
+                    Area.name.label('area_name'),
+                    func.avg(Reading.body_temp).label('temp_avg')
+                )
+                .join(User, User.id == Reading.user_id)
+                .join(Area, Area.id == User.area_id)
+                .filter(
+                    User.supervisor_id == supervisor_id,
+                    Reading.timestamp >= start_ts,
+                    Reading.body_temp != None,
+                    User.is_active == True,
+                    Area.is_active == True
+                )
+                .group_by(Area.name)
+                .all()
+            )
+
+            # Combinar resultados por área
+            hr_map = {r.area_name: float(r.hr_avg) for r in hr_rows if r.hr_avg is not None}
+            temp_map = {r.area_name: float(r.temp_avg) for r in temp_rows if r.temp_avg is not None}
+
+            # Áreas presentes en cualquiera de los dos mapas
+            all_areas = sorted(set(hr_map.keys()) | set(temp_map.keys()))
+
+            results: List[Dict[str, Any]] = []
+            for area in all_areas:
+                results.append({
+                    'area': area,
+                    'hr_avg': hr_map.get(area),
+                    'temp_avg': temp_map.get(area)
+                })
+
+            return results
+
     def get_recent_alerts(self, days: int = 7, limit: int = 20) -> List[Dict[str, Any]]:
         """Obtiene alertas recientes con datos enriquecidos de trabajador, área, estado de dispositivo y valor."""
         from datetime import datetime, timedelta, timezone
@@ -220,11 +361,15 @@ class DashboardRepository:
                 db.query(
                     Alert.id.label('id'),
                     Alert.alert_type.label('tipo'),
+                    Alert.message.label('mensaje'),
+                    Alert.reading_id.label('reading_id'),
+                    Alert.user_id.label('user_id'),
                     func.concat(User.first_name, ' ', User.last_name).label('trabajador'),
                     Area.name.label('area'),
                     Alert.severity.label('severidad'),
                     Alert.timestamp.label('timestamp'),
                     Connection.status.label('estado'),
+                    Device.id.label('device_id'),
                     Reading.pulse.label('pulse'),
                     Reading.body_temp.label('body_temp'),
                     Reading.mq7.label('mq7')
@@ -265,11 +410,188 @@ class DashboardRepository:
                     'id': r.id,
                     'tipo': r.tipo,
                     'trabajador': r.trabajador,
+                    'user_id': r.user_id,
                     'area': r.area,
                     'severidad': r.severidad,
                     'timestamp': r.timestamp,
                     'estado': r.estado,
-                    'valor': valor
+                    'device_id': r.device_id,
+                    'reading_id': r.reading_id,
+                    'valor': valor,
+                    'mensaje': r.mensaje  # Usar el mensaje de la tabla alert
+                })
+
+            return results
+
+    def get_recent_alerts_by_supervisor(self, supervisor_id: int, days: int = 7, limit: int = 20) -> List[Dict[str, Any]]:
+        """Obtiene alertas recientes filtradas por supervisor_id."""
+        from datetime import datetime, timedelta, timezone
+        start_ts = datetime.now(timezone.utc) - timedelta(days=days)
+
+        with SessionLocal() as db:
+            # Última conexión por dispositivo (puede no existir, usamos outer join)
+            last_conn_sq = (
+                db.query(
+                    Connection.device_id.label('device_id'),
+                    func.max(Connection.timestamp).label('max_ts')
+                )
+                .group_by(Connection.device_id)
+                .subquery()
+            )
+
+            q = (
+                db.query(
+                    Alert.id.label('id'),
+                    Alert.alert_type.label('tipo'),
+                    Alert.message.label('mensaje'),
+                    Alert.reading_id.label('reading_id'),
+                    Alert.user_id.label('user_id'),
+                    func.concat(User.first_name, ' ', User.last_name).label('trabajador'),
+                    Area.name.label('area'),
+                    Alert.severity.label('severidad'),
+                    Alert.timestamp.label('timestamp'),
+                    Connection.status.label('estado'),
+                    Device.id.label('device_id'),
+                    Reading.pulse.label('pulse'),
+                    Reading.body_temp.label('body_temp'),
+                    Reading.mq7.label('mq7')
+                )
+                .join(Reading, Reading.id == Alert.reading_id)
+                .join(User, User.id == Reading.user_id)
+                .outerjoin(Area, Area.id == User.area_id)
+                .join(Device, Device.user_id == User.id)
+                .outerjoin(last_conn_sq, last_conn_sq.c.device_id == Device.id)
+                .outerjoin(Connection, and_(
+                    Connection.device_id == last_conn_sq.c.device_id,
+                    Connection.timestamp == last_conn_sq.c.max_ts
+                ))
+                .filter(
+                    User.supervisor_id == supervisor_id,
+                    Alert.timestamp >= start_ts,
+                    User.is_active == True,
+                    Device.is_active == True,
+                    or_(Area.id == None, Area.is_active == True)
+                )
+                .order_by(Alert.timestamp.desc())
+                .limit(limit)
+            )
+
+            rows = q.all()
+            results: List[Dict[str, Any]] = []
+            for r in rows:
+                # Determinar el valor relevante según el tipo de alerta
+                valor = None
+                alert_type_lower = r.tipo.lower() if r.tipo else ''
+                if 'heart' in alert_type_lower or 'cardiaco' in alert_type_lower:
+                    valor = float(r.pulse) if r.pulse is not None else None
+                elif 'temp' in alert_type_lower or 'temperatura' in alert_type_lower:
+                    valor = float(r.body_temp) if r.body_temp is not None else None
+                elif 'gas' in alert_type_lower or 'co' in alert_type_lower or 'mq7' in alert_type_lower:
+                    valor = float(r.mq7) if r.mq7 is not None else None
+                
+                results.append({
+                    'id': r.id,
+                    'tipo': r.tipo,
+                    'trabajador': r.trabajador,
+                    'area': r.area,
+                    'severidad': r.severidad,
+                    'timestamp': r.timestamp,
+                    'estado': r.estado,
+                    'valor': valor,
+                    'mensaje': r.mensaje,  # Usar el mensaje de la tabla alert
+                    'user_id': r.user_id,
+                    'device_id': r.device_id,
+                    'reading_id': r.reading_id
+                })
+
+            return results
+
+    def get_supervisor_area_biometrics(self, supervisor_id: int, days: int = 30) -> Dict[str, Any]:
+        """Obtiene promedios biométricos del área del supervisor."""
+        from datetime import datetime, timedelta, timezone
+        start_ts = datetime.now(timezone.utc) - timedelta(days=days)
+
+        with SessionLocal() as db:
+            # Primero obtener el área del supervisor
+            supervisor = db.query(User).filter(User.id == supervisor_id).first()
+            if not supervisor or not supervisor.area_id:
+                return None
+
+            # Calcular promedios para el área del supervisor
+            result = (
+                db.query(
+                    Area.name.label('area'),
+                    func.avg(Reading.pulse).label('hr_avg'),
+                    func.avg(Reading.body_temp).label('temp_avg'),
+                    func.count(func.distinct(User.id)).label('worker_count')
+                )
+                .join(User, User.area_id == Area.id)
+                .join(Reading, Reading.user_id == User.id)
+                .filter(
+                    Area.id == supervisor.area_id,
+                    Area.is_active == True,
+                    User.is_active == True,
+                    Reading.timestamp >= start_ts,
+                    Reading.pulse.isnot(None),
+                    Reading.body_temp.isnot(None)
+                )
+                .group_by(Area.name)
+                .first()
+            )
+
+            if not result:
+                return None
+
+            return {
+                'area': result.area,
+                'hr_avg': float(result.hr_avg) if result.hr_avg else 0.0,
+                'temp_avg': float(result.temp_avg) if result.temp_avg else 0.0,
+                'worker_count': result.worker_count or 0
+            }
+
+    def get_incidents_by_supervisor(self, supervisor_id: int, days: int = 30, limit: int = 50) -> List[Dict[str, Any]]:
+        """Obtiene incidentes de usuarios a cargo del supervisor."""
+        from datetime import datetime, timedelta, timezone
+        from app.modules.incident_report.models import IncidentReport
+        
+        start_ts = datetime.now(timezone.utc) - timedelta(days=days)
+
+        with SessionLocal() as db:
+            q = (
+                db.query(
+                    IncidentReport.id.label('id'),
+                    IncidentReport.description.label('description'),
+                    IncidentReport.severity.label('severity'),
+                    func.concat(User.first_name, ' ', User.last_name).label('user_full_name'),
+                    User.employee_number.label('user_employee_number'),
+                    Area.name.label('area'),
+                    IncidentReport.created_at.label('created_at'),
+                    Reading.timestamp.label('reading_timestamp')
+                )
+                .join(User, User.id == IncidentReport.user_id)
+                .outerjoin(Area, Area.id == User.area_id)
+                .outerjoin(Reading, Reading.id == IncidentReport.reading_id)
+                .filter(
+                    User.supervisor_id == supervisor_id,
+                    IncidentReport.created_at >= start_ts,
+                    User.is_active == True
+                )
+                .order_by(IncidentReport.created_at.desc())
+                .limit(limit)
+            )
+
+            rows = q.all()
+            results: List[Dict[str, Any]] = []
+            for r in rows:
+                results.append({
+                    'id': r.id,
+                    'description': r.description,
+                    'severity': r.severity,
+                    'user_full_name': r.user_full_name,
+                    'user_employee_number': r.user_employee_number,
+                    'area': r.area,
+                    'created_at': r.created_at,
+                    'reading_timestamp': r.reading_timestamp
                 })
 
             return results

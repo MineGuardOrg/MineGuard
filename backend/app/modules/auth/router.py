@@ -7,6 +7,7 @@ from app.modules.auth.models import (
     UserRegisterSchema, 
     UserSchema
 )
+from app.modules.users.models import UserDetailSchema
 from app.modules.auth.service import AuthService
 from app.core.security import get_current_user
 
@@ -26,7 +27,7 @@ def login(credentials: LoginSchema):
     """Inicia sesión y devuelve un JWT token"""
     return auth_service.login(credentials)
 
-@auth_router.get("/me", response_model=UserSchema)
+@auth_router.get("/me", response_model=UserDetailSchema)
 def get_current_user_info(current_user: User = Depends(get_current_user)):
     """Obtiene información del usuario actual autenticado"""
     return auth_service.get_current_user_info(current_user.id)

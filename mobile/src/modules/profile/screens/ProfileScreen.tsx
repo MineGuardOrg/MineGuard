@@ -135,8 +135,8 @@ const ProfileScreen: React.FC = () => {
           {/* Información Laboral */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Información Laboral</Text>
-            {renderField("Área", profile.area_id)}
-            {renderField("Puesto", profile.position_id)}
+            {renderField("Área", profile.area_name || "No asignado")}
+            {renderField("Puesto", profile.position_name || "No asignado")}
           </View>
         </View>
       </ScrollView>

@@ -53,14 +53,8 @@ export class AuthService {
    * Cierra la sesión actual
    */
   static async logout(): Promise<void> {
-    try {
-      await apiClient.post(API_ENDPOINTS.LOGOUT);
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      // Limpiar storage siempre, aunque falle la petición
-      await StorageService.clear();
-    }
+    // Solo limpiar el storage local, no hay endpoint de logout en backend
+    await StorageService.clear();
   }
 
   /**
