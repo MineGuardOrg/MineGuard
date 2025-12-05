@@ -109,53 +109,57 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
     this.scene.background = null;
 
     this.camera = new this.THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    this.camera.position.set(0, 1.1, 5);
+    this.camera.position.set(0, 1.5, 6);
 
     this.renderer = new this.THREE.WebGLRenderer({
       canvas,
       alpha: true,
-      antialias: true
+      antialias: true,
+      premultipliedAlpha: false
     });
 
     const ratio = window.devicePixelRatio > 2 ? 2 : window.devicePixelRatio;
     this.renderer.setPixelRatio(ratio);
     this.renderer.setSize(width, height);
+    this.renderer.setClearColor(0x000000, 0);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = this.THREE.PCFSoftShadowMap;
     this.renderer.physicallyCorrectLights = true;
     this.renderer.outputEncoding = this.THREE.sRGBEncoding;
     this.renderer.toneMapping = this.THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 0.9;
+    this.renderer.toneMappingExposure = 1.1;
 
-    const ambient = new this.THREE.AmbientLight(0xffffff, 1.0);
+    const ambient = new this.THREE.AmbientLight(0xffffff, 1.2);
     this.scene.add(ambient);
 
-    const hemiLight = new this.THREE.HemisphereLight(0xffffff, 0x444444, 1.0);
-    hemiLight.position.set(0, 2, 0);
+    const hemiLight = new this.THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
+    hemiLight.position.set(0, 3, 0);
     this.scene.add(hemiLight);
 
-    const dirLight = new this.THREE.DirectionalLight(0xffffff, 1.2);
-    dirLight.position.set(6, 10, 6);
+    const dirLight = new this.THREE.DirectionalLight(0xffffff, 1.5);
+    dirLight.position.set(8, 12, 8);
     dirLight.castShadow = true;
-    dirLight.shadow.mapSize.width = 512;
-    dirLight.shadow.mapSize.height = 512;
+    dirLight.shadow.mapSize.width = 1024;
+    dirLight.shadow.mapSize.height = 1024;
     this.scene.add(dirLight);
 
-    const rimLight = new this.THREE.DirectionalLight(0xffffff, 0.7);
-    rimLight.position.set(-4, 6, -6);
+    const rimLight = new this.THREE.DirectionalLight(0x667eea, 0.8);
+    rimLight.position.set(-6, 8, -6);
     this.scene.add(rimLight);
 
-    const fillLight = new this.THREE.DirectionalLight(0xffffff, 0.6);
-    fillLight.position.set(0, 2, 4);
+    const fillLight = new this.THREE.DirectionalLight(0xffffff, 0.7);
+    fillLight.position.set(0, 3, 6);
     this.scene.add(fillLight);
 
     this.controls = new this.THREE.OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
-    this.controls.dampingFactor = 0.07;
-    this.controls.rotateSpeed = 0.7;
+    this.controls.dampingFactor = 0.08;
+    this.controls.rotateSpeed = 0.6;
     this.controls.enablePan = false;
     this.controls.enableZoom = true;
-    this.controls.zoomSpeed = 0.6;
+    this.controls.zoomSpeed = 0.5;
+    this.controls.minDistance = 3;
+    this.controls.maxDistance = 10;
 
     window.addEventListener('resize', () => this.onWindowResize());
   }
@@ -350,9 +354,13 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
 
   onManualChange(): void {
     if (!this.manualMode) return;
-    this.gyroData.pitch = this.pitchControl;
-    this.gyroData.roll = this.rollControl;
-    this.gyroData.yaw = this.yawControl;
+    this.gyroData = {
+      ...this.gyroData,
+      pitch: this.pitchControl,
+      roll: this.rollControl,
+      yaw: this.yawControl,
+      timestamp: new Date()
+    };
     this.updateHelmetOrientation();
     this.updateSafetyStatus();
   }

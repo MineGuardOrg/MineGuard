@@ -116,20 +116,7 @@
 
     </div>
 
-    <!-- Action Buttons -->
-    <div class="action-buttons">
-
-      <button mat-raised-button [color]="manualMode ? 'primary' : 'accent'" (click)="toggleManualMode()">
-        <mat-icon>{{ manualMode ? 'play_arrow' : 'tune' }}</mat-icon>
-        {{ (manualMode ? 'HELMET.BUTTONS.AUTO' : 'HELMET.BUTTONS.MANUAL') | translate }}
-      </button>
-
-      <button mat-raised-button color="warn" (click)="resetOrientation()" [disabled]="!manualMode">
-        <mat-icon>refresh</mat-icon>
-        {{ 'HELMET.BUTTONS.RESET' | translate }}
-      </button>
-
-    </div>
+    
 
   </mat-card-content>
 </mat-card>
