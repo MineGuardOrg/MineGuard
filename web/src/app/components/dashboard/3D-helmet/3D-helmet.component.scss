@@ -54,8 +54,10 @@
 
 // ========== 3D VISUALIZATION ==========
 .visualization-area {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  backdrop-filter: blur(10px);
   border-radius: 16px;
+  border: 1px solid rgba(102, 126, 234, 0.1);
   padding: 20px;
   min-height: 400px;
   display: flex;
@@ -63,6 +65,7 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.1);
 }
 
 .canvas-3d {
@@ -70,7 +73,8 @@
   height: 100%;
   min-height: 400px;
   border-radius: 12px;
-  transition: box-shadow 0.3s ease;
+  transition: all 0.3s ease;
+  background: transparent !important;
 }
 
 // ========== DATA PANEL ==========
@@ -116,6 +120,7 @@
 
   &:hover {
     transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
 
   &.pitch {
