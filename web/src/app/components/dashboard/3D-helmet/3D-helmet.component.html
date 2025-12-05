@@ -37,7 +37,7 @@
             </div>
             <div class="data-info">
               <span class="data-label">{{ 'HELMET.AXES.PITCH' | translate }}</span>
-              <span class="data-value">{{ gyroData.pitch.toFixed(1) }}°</span>
+              <span class="data-value">{{ (gyroData?.pitch || 0).toFixed(1) }}°</span>
             </div>
           </div>
 
@@ -48,7 +48,7 @@
             </div>
             <div class="data-info">
               <span class="data-label">{{ 'HELMET.AXES.ROLL' | translate }}</span>
-              <span class="data-value">{{ gyroData.roll.toFixed(1) }}°</span>
+              <span class="data-value">{{ (gyroData?.roll || 0).toFixed(1) }}°</span>
             </div>
           </div>
 
@@ -59,7 +59,7 @@
             </div>
             <div class="data-info">
               <span class="data-label">{{ 'HELMET.AXES.YAW' | translate }}</span>
-              <span class="data-value">{{ gyroData.yaw.toFixed(1) }}°</span>
+              <span class="data-value">{{ (gyroData?.yaw || 0).toFixed(1) }}°</span>
             </div>
           </div>
 
@@ -70,7 +70,7 @@
             </div>
             <div class="data-info">
               <span class="data-label">{{ 'HELMET.AXES.ACCELERATION' | translate }}</span>
-              <span class="data-value">{{ gyroData.totalAccel.toFixed(2) }}g</span>
+              <span class="data-value">{{ (gyroData?.totalAccel || 0).toFixed(2) }}g</span>
             </div>
           </div>
 

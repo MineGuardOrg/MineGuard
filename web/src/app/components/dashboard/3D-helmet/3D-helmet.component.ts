@@ -33,16 +33,7 @@ export interface SafetyStatus {
 export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
   @ViewChild('canvas3d', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
 
-  public gyroData: GyroscopeData = {
-    pitch: 0,
-    roll: 0,
-    yaw: 0,
-    accelX: 0,
-    accelY: 0,
-    accelZ: 1,
-    totalAccel: 1.0,
-    timestamp: new Date()
-  };
+  public gyroData: GyroscopeData | null = null;
 
   public safetyStatus: SafetyStatus = {
     status: 'normal',
@@ -239,8 +230,8 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Error al obtener lecturas:', err);
-        // Si falla, usar simulación
-        this.startSimulationFallback();
+        // Simulación desactivada - solo datos reales
+        // this.startSimulationFallback();
       }
     });
   }
@@ -303,10 +294,11 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
 
   updateHelmetOrientation(): void {
     if (!this.helmetModel) return;
+    if (!this.gyroData && !this.manualMode) return; // No actualizar sin datos
 
     const { pitch, roll, yaw } = this.manualMode
       ? { pitch: this.pitchControl, roll: this.rollControl, yaw: this.yawControl }
-      : this.gyroData;
+      : this.gyroData!;
 
     this.helmetModel.rotation.x = this.THREE.MathUtils.degToRad(-pitch);
     this.helmetModel.rotation.y = this.THREE.MathUtils.degToRad(yaw);
@@ -314,6 +306,7 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
   }
 
   updateSafetyStatus(): void {
+    if (!this.gyroData) return; // No actualizar sin datos
     const { pitch, roll, totalAccel } = this.gyroData;
     const maxA = Math.max(Math.abs(pitch), Math.abs(roll));
 
@@ -346,19 +339,22 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
       // Cambiar a modo manual
       this.stopAutoMode();
       this.manualMode = true;
-      this.pitchControl = this.gyroData.pitch;
-      this.rollControl = this.gyroData.roll;
-      this.yawControl = this.gyroData.yaw;
+      this.pitchControl = this.gyroData?.pitch || 0;
+      this.rollControl = this.gyroData?.roll || 0;
+      this.yawControl = this.gyroData?.yaw || 0;
     }
   }
 
   onManualChange(): void {
     if (!this.manualMode) return;
     this.gyroData = {
-      ...this.gyroData,
       pitch: this.pitchControl,
       roll: this.rollControl,
       yaw: this.yawControl,
+      accelX: this.gyroData?.accelX || 0,
+      accelY: this.gyroData?.accelY || 0,
+      accelZ: this.gyroData?.accelZ || 1,
+      totalAccel: this.gyroData?.totalAccel || 1.0,
       timestamp: new Date()
     };
     this.updateHelmetOrientation();
