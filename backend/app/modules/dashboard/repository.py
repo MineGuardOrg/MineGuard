@@ -794,3 +794,13 @@ class DashboardRepository:
                 })
 
             return results
+
+    def get_my_latest_reading(self, user_id: int):
+        """Obtiene la última lectura del usuario autenticado"""
+        with SessionLocal() as db:
+            return (
+                db.query(Reading)
+                .filter(Reading.user_id == user_id)
+                .order_by(Reading.timestamp.desc())
+                .first()
+            )

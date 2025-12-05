@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { interval, Subscription } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { HelmetService, ReadingData } from './3D-helmet.service';
 
 export interface GyroscopeData {
   pitch: number;
@@ -65,6 +66,7 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
   private autoSubscription?: Subscription;
   private time = 0;
   private lastRenderTime = 0;
+  private dataSubscription?: Subscription;
 
   public readonly PITCH_THRESHOLD = 60;
   public readonly ROLL_THRESHOLD = 60;
@@ -72,7 +74,10 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
   public readonly ACCEL_WARNING = 2.0;
   public readonly ACCEL_DANGER = 2.5;
 
-  constructor(public translate: TranslateService) {}
+  constructor(
+    public translate: TranslateService,
+    private helmetService: HelmetService
+  ) {}
 
   async ngOnInit(): Promise<void> {
     await this.loadThreeJS();
@@ -84,6 +89,7 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.stopAutoMode();
+    if (this.dataSubscription) this.dataSubscription.unsubscribe();
     if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
     if (this.renderer) this.renderer.dispose();
   }
@@ -219,6 +225,24 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
 
   startAutoMode(): void {
     this.manualMode = false;
+    
+    // Suscribirse a las lecturas reales cada 2 segundos
+    this.dataSubscription = this.helmetService.getMyLatestReadingPolling(2000).subscribe({
+      next: (data: ReadingData) => {
+        this.updateFromRealData(data);
+        this.updateHelmetOrientation();
+        this.updateSafetyStatus();
+      },
+      error: (err) => {
+        console.error('Error al obtener lecturas:', err);
+        // Si falla, usar simulación
+        this.startSimulationFallback();
+      }
+    });
+  }
+
+  startSimulationFallback(): void {
+    // Fallback: usar datos simulados si falla la API
     this.autoSubscription = interval(100).subscribe(() => {
       this.simulateMPU6050Data();
       this.updateHelmetOrientation();
@@ -228,6 +252,31 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
 
   stopAutoMode(): void {
     if (this.autoSubscription) this.autoSubscription.unsubscribe();
+    if (this.dataSubscription) this.dataSubscription.unsubscribe();
+  }
+
+  updateFromRealData(data: ReadingData): void {
+    // Convertir giroscopio (rad/s) a grados
+    const pitch = data.gy ? data.gy * (180 / Math.PI) * 10 : 0;  // Multiplicado para más movimiento visible
+    const roll = data.gx ? data.gx * (180 / Math.PI) * 10 : 0;
+    const yaw = data.gz ? data.gz * (180 / Math.PI) * 10 : 0;
+
+    // Calcular aceleración total en g (donde 9.8 m/s² = 1g)
+    const ax = data.ax || 0;
+    const ay = data.ay || 0;
+    const az = data.az || 9.8; // Default a gravedad si no hay datos
+    const totalAccel = Math.sqrt(ax * ax + ay * ay + az * az) / 9.8;
+
+    this.gyroData = {
+      pitch,
+      roll,
+      yaw,
+      accelX: ax / 9.8,
+      accelY: ay / 9.8,
+      accelZ: az / 9.8,
+      totalAccel: Number(totalAccel.toFixed(2)),
+      timestamp: new Date(data.timestamp)
+    };
   }
 
   simulateMPU6050Data(): void {
@@ -287,8 +336,10 @@ export class GyroscopeOrientationComponent implements OnInit, OnDestroy {
 
   toggleManualMode(): void {
     if (this.manualMode) {
+      // Volver a modo automático con datos reales
       this.startAutoMode();
     } else {
+      // Cambiar a modo manual
       this.stopAutoMode();
       this.manualMode = true;
       this.pitchControl = this.gyroData.pitch;

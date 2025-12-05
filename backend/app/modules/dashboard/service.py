@@ -283,3 +283,23 @@ class DashboardService:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Error interno del servidor al crear incidente"
             )
+
+    def get_my_latest_reading(self, user_id: int):
+        """Obtiene la última lectura del usuario autenticado"""
+        try:
+            from app.modules.reading.models import ReadingSchema
+            reading = self.repository.get_my_latest_reading(user_id)
+            if not reading:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="No se encontraron lecturas para el usuario"
+                )
+            return ReadingSchema.from_orm(reading)
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error(f"Error al obtener última lectura del usuario {user_id}: {str(e)}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Error interno del servidor al obtener lectura"
+            )

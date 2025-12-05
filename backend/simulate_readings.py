@@ -8,7 +8,7 @@ import random
 from datetime import datetime
 
 # Configuración
-API_BASE_URL = "http://127.0.0.1:8000"
+API_BASE_URL = "https://mineguard-api-staging-fxhyfyanhacjf7g5.mexicocentral-01.azurewebsites.net"
 USERS = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
 INTERVAL_SECONDS = 11
 
@@ -18,19 +18,27 @@ LOGIN_PASSWORD = "12345678"
 
 def login():
     """Obtiene el token de autenticación"""
+    headers = {
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "employee_number": LOGIN_EMPLOYEE_NUMBER,
+        "password": LOGIN_PASSWORD
+    }
+    
     response = requests.post(
         f"{API_BASE_URL}/auth/login",
-        json={
-            "employee_number": LOGIN_EMPLOYEE_NUMBER,
-            "password": LOGIN_PASSWORD
-        }
+        json=payload,
+        headers=headers
     )
+    
     if response.status_code == 200:
         token = response.json().get("access_token")
         print(f"Autenticación exitosa")
         return token
     else:
         print(f"Error en login: {response.status_code}")
+        print(f"Response: {response.text}")
         return None
 
 def generate_reading_data(user_id):
@@ -40,12 +48,9 @@ def generate_reading_data(user_id):
     trigger_alert = random.random() < 0.1
     
     if trigger_alert:
-        alert_type = random.choice(['temperature', 'heart_rate', 'co'])
+        alert_type = random.choice(['heart_rate', 'co'])
         
-        if alert_type == 'temperature':
-            # Temperatura crítica (>39.2°C) o warning (>38.4°C)
-            body_temp = random.uniform(38.5, 40.5)
-        elif alert_type == 'heart_rate':
+        if alert_type == 'heart_rate':
             # Ritmo cardíaco alto (>140) o bajo (<45)
             if random.random() < 0.5:
                 pulse = random.randint(145, 180)  # Alto
@@ -62,7 +67,6 @@ def generate_reading_data(user_id):
     data = {
         "user_id": user_id,
         "device_id": user_id,  # Asumiendo que device_id == user_id
-        "body_temp": round(random.uniform(36.0, 37.8), 2) if alert_type != 'temperature' else round(body_temp, 2),
         "pulse": random.randint(60, 100) if alert_type != 'heart_rate' else pulse,
         "mq7": round(random.uniform(10, 40), 2) if alert_type != 'co' else round(mq7, 2),
         # Acelerómetro (valores normales de reposo/movimiento leve)
@@ -87,7 +91,7 @@ def send_reading(token, user_id):
     }
     
     response = requests.post(
-        f"{API_BASE_URL}/readings",
+        f"{API_BASE_URL}/readings/",
         json=reading_data,
         headers=headers
     )
@@ -97,7 +101,7 @@ def send_reading(token, user_id):
     alert_info = f" [{alert_type.upper()}]" if alert_type else ""
     
     if response.status_code in [200, 201]:
-        print(f"{alert_icon} {timestamp} - User {user_id}: Temp={reading_data['body_temp']}°C, "
+        print(f"{alert_icon} {timestamp} - User {user_id}: "
               f"HR={reading_data['pulse']}bpm, CO={reading_data['mq7']}ppm{alert_info}")
         return True
     else:
@@ -109,10 +113,10 @@ def main():
     print("=" * 80)
     print("🔄 SIMULADOR DE LECTURAS DE SENSORES")
     print("=" * 80)
-    print(f"📍 API: {API_BASE_URL}")
+    print("📍 API: {API_BASE_URL}")
     print(f"👥 Usuarios: {USERS}")
     print(f"⏱️  Intervalo: {INTERVAL_SECONDS} segundos")
-    print(f"🎯 Probabilidad de alerta: ~30%")
+    print(f"🎯 Probabilidad de alerta: ~10%")
     print("=" * 80)
     print()
     

@@ -159,3 +159,14 @@ def get_supervisor_assigned_users(
 ):
     """Obtiene la lista de usuarios asignados al supervisor para selección en formularios."""
     return _dashboard_service.get_miners_by_supervisor(current_user.id)
+
+
+@dashboard_router.get("/my-readings")
+def get_my_latest_reading(
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Obtiene la última lectura de sensores del usuario autenticado.
+    Devuelve todos los valores: mq7, pulse, body_temp, ax, ay, az, gx, gy, gz
+    """
+    return _dashboard_service.get_my_latest_reading(current_user.id)
