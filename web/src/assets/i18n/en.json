@@ -479,7 +479,6 @@
     "CYPRESS": "Cypress E2E",
     "GITLAB": "GitLab CI/CD"
   },
- 
   "SYSTEM_COMPONENTS": [
     {
       "id": 1,
@@ -550,7 +549,6 @@
     { "id": 4, "color": "primary", "icon": "mdi:file-document-multiple", "title": "Regulatory Compliance", "description": "Full compliance with NOM-032-STPS and international mining safety regulations" }
   ]
 },
-
   "TECHNOLOGIES": [
     "Biometric Sensors",
     "Bluetooth 5.0",
@@ -715,7 +713,6 @@
   "TOOLTIP_DEACTIVATE": "Deactivate sensor",
   "TOOLTIP_REACTIVATE": "Reactivate sensor"
 },
-
   "SHIFTS": {
     "TITLE": "Shifts",
     "SEARCH_PLACEHOLDER": "Search Shift",
@@ -808,7 +805,6 @@
     "PERFORMED_BY": "Performed By",
     "CREATED_AT": "Created At"
   },
-
   "ACTIVE_WORKERS": {
     "TITLE": "Active Workers",
     "SEARCH_PLACEHOLDER": "Search Worker",
@@ -871,6 +867,5 @@
       "MANUAL": "Manual",
       "RESET": "Reset"
     }
-
 }
 }

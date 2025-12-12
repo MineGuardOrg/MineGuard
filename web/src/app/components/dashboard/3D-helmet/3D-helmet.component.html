@@ -1,12 +1,10 @@
 <mat-card class="cardWithShadow helmet-card">
   <mat-card-content>
-
     <!-- Header -->
     <div class="card-header">
       <div>
         <mat-card-title>{{ 'HELMET.TITLE' | translate }}</mat-card-title>
       </div>
-
       <div class="status-badge" 
            [style.background-color]="safetyStatus.color + '20'" 
            [style.border-color]="safetyStatus.color">
@@ -17,15 +15,12 @@
         </span>
       </div>
     </div>
-
     <!-- Main Container -->
     <div class="helmet-container">
-      
       <!-- Left: 3D Visualization -->
       <div class="visualization-area">
         <canvas #canvas3d class="canvas-3d" [style.box-shadow]="getHelmetGlow()"></canvas>
       </div>
-
       <!-- Right: Live Data -->
       <div class="data-panel">
         <div class="data-grid">
@@ -40,7 +35,6 @@
               <span class="data-value">{{ (gyroData?.pitch || 0).toFixed(1) }}°</span>
             </div>
           </div>
-
           <!-- Roll -->
           <div class="data-item roll">
             <div class="data-icon">
@@ -51,7 +45,6 @@
               <span class="data-value">{{ (gyroData?.roll || 0).toFixed(1) }}°</span>
             </div>
           </div>
-
           <!-- Yaw -->
           <div class="data-item yaw">
             <div class="data-icon">
@@ -62,7 +55,6 @@
               <span class="data-value">{{ (gyroData?.yaw || 0).toFixed(1) }}°</span>
             </div>
           </div>
-
           <!-- Acceleration -->
           <div class="data-item accel">
             <div class="data-icon">
@@ -73,14 +65,11 @@
               <span class="data-value">{{ (gyroData?.totalAccel || 0).toFixed(2) }}g</span>
             </div>
           </div>
-
         </div>
       </div>
     </div>
-
     <!-- Controls -->
     <div class="control-section" *ngIf="manualMode">
-
       <!-- Pitch Slider -->
       <div class="control-item">
         <label>
@@ -91,7 +80,6 @@
           <input matSliderThumb>
         </mat-slider>
       </div>
-
       <!-- Roll Slider -->
       <div class="control-item">
         <label>
@@ -102,7 +90,6 @@
           <input matSliderThumb>
         </mat-slider>
       </div>
-
       <!-- Yaw Slider -->
       <div class="control-item">
         <label>
@@ -113,10 +100,6 @@
           <input matSliderThumb>
         </mat-slider>
       </div>
-
     </div>
-
-    
-
   </mat-card-content>
 </mat-card>
