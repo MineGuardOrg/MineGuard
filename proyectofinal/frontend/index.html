@@ -9,14 +9,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+    <!-- ========================================
+         NAVIGATION BAR
+    ======================================== -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <i class="bi bi-shield-check"></i> MineGuard
@@ -27,187 +30,240 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#dashboard">Dashboard</a>
+                        <a class="nav-link active" href="#dashboard">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#estudiantes">Estudiantes</a>
+                        <a class="nav-link" href="#estudiantes">
+                            <i class="bi bi-people"></i> Estudiantes
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#predicciones">Predicciones</a>
+                        <a class="nav-link" href="#predicciones">
+                            <i class="bi bi-graph-up-arrow"></i> Predicciones
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#analisis">Análisis</a>
+                        <a class="nav-link" href="#analisis">
+                            <i class="bi bi-bar-chart-line"></i> Análisis
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
+    <!-- ========================================
+         MAIN CONTENT
+    ======================================== -->
     <div class="container-fluid mt-4">
-        <!-- Dashboard Section -->
+
+        <!-- ========================================
+             DASHBOARD SECTION
+        ======================================== -->
         <section id="dashboard">
-            <h2 class="mb-4">Dashboard</h2>
+            <h2 class="section-title mb-4">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </h2>
             
-            <!-- Stats Cards -->
-            <div class="row mb-4">
+            <!-- Statistics Cards -->
+            <div class="row mb-4 g-4">
+                <!-- Total Students Card -->
                 <div class="col-md-3">
-                    <div class="card text-white bg-primary mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="bi bi-people-fill"></i> Total Estudiantes
-                            </h5>
+                    <div class="stat-card card-primary">
+                        <div class="stat-icon">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h5>Total Estudiantes</h5>
                             <h2 id="total-students">0</h2>
                         </div>
                     </div>
                 </div>
+
+                <!-- At Risk Students Card -->
                 <div class="col-md-3">
-                    <div class="card text-white bg-warning mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="bi bi-exclamation-triangle-fill"></i> En Riesgo
-                            </h5>
+                    <div class="stat-card card-warning">
+                        <div class="stat-icon">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h5>En Riesgo</h5>
                             <h2 id="students-at-risk">0</h2>
                         </div>
                     </div>
                 </div>
+
+                <!-- Average Attendance Card -->
                 <div class="col-md-3">
-                    <div class="card text-white bg-success mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="bi bi-graph-up"></i> Asistencia Promedio
-                            </h5>
+                    <div class="stat-card card-success">
+                        <div class="stat-icon">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h5>Asistencia Promedio</h5>
                             <h2 id="avg-attendance">0%</h2>
                         </div>
                     </div>
                 </div>
+
+                <!-- Average Grade Card -->
                 <div class="col-md-3">
-                    <div class="card text-white bg-info mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="bi bi-trophy-fill"></i> Calificación Promedio
-                            </h5>
+                    <div class="stat-card card-info">
+                        <div class="stat-icon">
+                            <i class="bi bi-trophy-fill"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h5>Calificación Promedio</h5>
                             <h2 id="avg-grade">0</h2>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Charts Section -->
-            <div class="row mb-4">
+            <!-- Charts Row 1 -->
+            <div class="row mb-4 g-4">
+                <!-- Risk Distribution Chart -->
                 <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="bi bi-bar-chart-fill"></i> Distribución por Riesgo Académico</h5>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h5><i class="bi bi-bar-chart-fill"></i> Distribución por Riesgo Académico</h5>
+                        </div>
+                        <div class="chart-body">
                             <canvas id="riesgoChart"></canvas>
                         </div>
                     </div>
                 </div>
+
+                <!-- Modality Distribution Chart -->
                 <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="bi bi-pie-chart-fill"></i> Distribución por Modalidad</h5>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h5><i class="bi bi-pie-chart-fill"></i> Distribución por Modalidad</h5>
+                        </div>
+                        <div class="chart-body">
                             <canvas id="modalidadChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row mb-4">
+            <!-- Charts Row 2 -->
+            <div class="row mb-4 g-4">
+                <!-- Campus Distribution Chart -->
                 <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="bi bi-graph-up"></i> Distribución por Campus</h5>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h5><i class="bi bi-graph-up"></i> Distribución por Campus</h5>
+                        </div>
+                        <div class="chart-body">
                             <canvas id="campusChart"></canvas>
                         </div>
                     </div>
                 </div>
+
+                <!-- Shift Distribution Chart -->
                 <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title"><i class="bi bi-clock-fill"></i> Distribución por Turno</h5>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h5><i class="bi bi-clock-fill"></i> Distribución por Turno</h5>
+                        </div>
+                        <div class="chart-body">
                             <canvas id="turnoChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Upload Dataset Section -->
-            <div class="row mb-4">
+            <!-- Upload Dataset & Train Models Section -->
+            <div class="row mb-4 g-4">
+                <!-- Upload Dataset Card -->
                 <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="bi bi-upload"></i> Cargar Dataset Académico
-                            </h5>
-                            <p class="text-muted">Sube el archivo con las evaluaciones estudiantiles (.xlsx, .csv, .txt)</p>
-                            <form id="upload-form">
-                                <div class="mb-3">
-                                    <input class="form-control" type="file" id="dataset-file" accept=".csv,.xlsx,.xls,.txt">
-                                    <small class="form-text text-muted">
-                                        Formatos aceptados: Excel (.xlsx), CSV (.csv) o TXT separado por tabulaciones
-                                    </small>
-                                </div>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-cloud-upload"></i> Subir Dataset
-                                </button>
-                            </form>
-                            <div id="upload-result" class="mt-3"></div>
+                    <div class="upload-card">
+                        <div class="upload-icon">
+                            <i class="bi bi-cloud-upload"></i>
                         </div>
+                        <h5>Cargar Dataset Académico</h5>
+                        <p class="text-muted">
+                            Sube el archivo con las evaluaciones estudiantiles (.xlsx, .csv, .txt)
+                        </p>
+                        <form id="upload-form">
+                            <div class="mb-3">
+                                <input class="form-control" type="file" id="dataset-file" accept=".csv,.xlsx,.xls,.txt">
+                                <small class="form-text text-muted d-block mt-2">
+                                    Formatos aceptados: Excel (.xlsx), CSV (.csv) o TXT separado por tabulaciones
+                                </small>
+                            </div>
+                            <button type="submit" class="btn btn-gradient-primary">
+                                <i class="bi bi-cloud-upload"></i> Subir Dataset
+                            </button>
+                        </form>
+                        <div id="upload-result" class="mt-3"></div>
                     </div>
                 </div>
+
+                <!-- Train Models Card -->
                 <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="bi bi-cpu"></i> Entrenar Modelos ML
-                            </h5>
-                            <p>Entrena los modelos de clasificación y regresión con los datos actuales.</p>
-                            <button id="train-models-btn" class="btn btn-success">
-                                <i class="bi bi-gear-fill"></i> Entrenar Modelos
-                            </button>
-                            <div id="train-result" class="mt-3"></div>
+                    <div class="upload-card card-success-bg">
+                        <div class="upload-icon">
+                            <i class="bi bi-cpu"></i>
                         </div>
+                        <h5>Entrenar Modelos ML</h5>
+                        <p class="text-muted">
+                            Entrena los modelos de clasificación y regresión con los datos actuales.
+                        </p>
+                        <button id="train-models-btn" class="btn btn-gradient-success">
+                            <i class="bi bi-gear-fill"></i> Entrenar Modelos
+                        </button>
+                        <div id="train-result" class="mt-3"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Students Section -->
+        <!-- ========================================
+             STUDENTS SECTION
+        ======================================== -->
         <section id="estudiantes" class="mt-5">
-            <h2 class="mb-4">Lista de Estudiantes</h2>
+            <h2 class="section-title mb-4">
+                <i class="bi bi-people"></i> Lista de Estudiantes
+            </h2>
             
-            <!-- Filtros Avanzados -->
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-funnel-fill"></i> Filtros Avanzados</h5>
+            <!-- Advanced Filters Card -->
+            <div class="filter-card mb-4">
+                <div class="filter-header">
+                    <h5><i class="bi bi-funnel-fill"></i> Filtros Avanzados</h5>
+                </div>
+                <div class="filter-body">
+                    <!-- Filter Row 1 -->
                     <div class="row g-3">
                         <div class="col-md-3">
-                            <label for="filter-campus" class="form-label">Campus</label>
+                            <label class="form-label">Campus</label>
                             <select class="form-select" id="filter-campus">
                                 <option value="">Todos</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label for="filter-programa" class="form-label">Programa</label>
+                            <label class="form-label">Programa</label>
                             <select class="form-select" id="filter-programa">
                                 <option value="">Todos</option>
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label for="filter-turno" class="form-label">Turno</label>
+                            <label class="form-label">Turno</label>
                             <select class="form-select" id="filter-turno">
                                 <option value="">Todos</option>
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label for="filter-modalidad" class="form-label">Modalidad</label>
+                            <label class="form-label">Modalidad</label>
                             <select class="form-select" id="filter-modalidad">
                                 <option value="">Todas</option>
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label for="filter-riesgo" class="form-label">Riesgo</label>
+                            <label class="form-label">Riesgo</label>
                             <select class="form-select" id="filter-riesgo">
                                 <option value="">Todos</option>
                                 <option value="BAJO">BAJO</option>
@@ -216,21 +272,23 @@
                             </select>
                         </div>
                     </div>
+
+                    <!-- Filter Row 2 -->
                     <div class="row g-3 mt-2">
                         <div class="col-md-4">
-                            <label for="filter-docente" class="form-label">Docente</label>
+                            <label class="form-label">Docente</label>
                             <select class="form-select" id="filter-docente">
                                 <option value="">Todos</option>
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <label for="filter-curso" class="form-label">Curso</label>
+                            <label class="form-label">Curso</label>
                             <select class="form-select" id="filter-curso">
                                 <option value="">Todos</option>
                             </select>
                         </div>
                         <div class="col-md-4 d-flex align-items-end">
-                            <button id="apply-filters-btn" class="btn btn-primary w-100">
+                            <button id="apply-filters-btn" class="btn btn-gradient-primary w-100">
                                 <i class="bi bi-search"></i> Aplicar Filtros
                             </button>
                         </div>
@@ -238,130 +296,142 @@
                 </div>
             </div>
             
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-3">
-                        <div>
-                            <h5 class="mb-0">Evaluaciones cargadas del dataset</h5>
-                            <small class="text-muted">Los datos se cargan desde el archivo subido en la sección anterior</small>
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#modalIngresoManual">
-                                <i class="bi bi-plus-circle"></i> Agregar Registro
-                            </button>
-                            <button id="refresh-students-btn" class="btn btn-secondary">
-                                <i class="bi bi-arrow-clockwise"></i> Actualizar
-                            </button>
-                        </div>
+            <!-- Students Table Card -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h5><i class="bi bi-table"></i> Evaluaciones Cargadas</h5>
+                    <div>
+                        <button class="btn btn-gradient-success me-2" data-bs-toggle="modal" data-bs-target="#modalIngresoManual">
+                            <i class="bi bi-plus-circle"></i> Agregar
+                        </button>
+                        <button id="refresh-students-btn" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-clockwise"></i> Actualizar
+                        </button>
                     </div>
-                    
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="students-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Alumno</th>
-                                    <th>Matrícula</th>
-                                    <th>Campus</th>
-                                    <th>Calificación</th>
-                                    <th>Curso</th>
-                                    <th>Riesgo</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="students-tbody">
-                                <!-- Evaluaciones will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table modern-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Alumno</th>
+                                <th>Matrícula</th>
+                                <th>Campus</th>
+                                <th>Calificación</th>
+                                <th>Curso</th>
+                                <th>Riesgo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-tbody">
+                            <!-- Data will be loaded here dynamically -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
 
-        <!-- Predictions Section -->
+        <!-- ========================================
+             PREDICTIONS SECTION
+        ======================================== -->
         <section id="predicciones" class="mt-5 mb-5">
-            <h2 class="mb-4">Realizar Predicción</h2>
+            <h2 class="section-title mb-4">
+                <i class="bi bi-graph-up-arrow"></i> Realizar Predicción
+            </h2>
             
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-filter"></i> Filtros de Predicción</h5>
-                    <p class="text-muted">Selecciona los criterios para realizar la predicción</p>
-                    
+            <!-- Prediction Filters Card -->
+            <div class="prediction-card">
+                <div class="prediction-header">
+                    <h5><i class="bi bi-sliders"></i> Configuración de Predicción</h5>
+                </div>
+                <div class="prediction-body">
+                    <!-- Filter Row 1 -->
                     <div class="row g-3 mb-3">
                         <div class="col-md-4">
-                            <label for="pred-estudiante" class="form-label">Estudiante (Matrícula)</label>
+                            <label class="form-label">Estudiante (Matrícula)</label>
                             <select class="form-select" id="pred-estudiante">
                                 <option value="">-- Todos los estudiantes --</option>
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <label for="pred-curso" class="form-label">Materia/Curso</label>
+                            <label class="form-label">Materia/Curso</label>
                             <select class="form-select" id="pred-curso">
                                 <option value="">-- Todos los cursos --</option>
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <label for="pred-docente" class="form-label">Docente</label>
+                            <label class="form-label">Docente</label>
                             <select class="form-select" id="pred-docente">
                                 <option value="">-- Todos los docentes --</option>
                             </select>
                         </div>
                     </div>
-                    <div class="row g-3 mb-3">
+
+                    <!-- Filter Row 2 -->
+                    <div class="row g-3 mb-4">
                         <div class="col-md-3">
-                            <label for="pred-modalidad" class="form-label">Modalidad</label>
+                            <label class="form-label">Modalidad</label>
                             <select class="form-select" id="pred-modalidad">
                                 <option value="">-- Todas --</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label for="pred-turno" class="form-label">Turno</label>
+                            <label class="form-label">Turno</label>
                             <select class="form-select" id="pred-turno">
                                 <option value="">-- Todos --</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label for="pred-programa" class="form-label">Programa</label>
+                            <label class="form-label">Programa</label>
                             <select class="form-select" id="pred-programa">
                                 <option value="">-- Todos --</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label for="pred-campus" class="form-label">Campus</label>
+                            <label class="form-label">Campus</label>
                             <select class="form-select" id="pred-campus">
                                 <option value="">-- Todos --</option>
                             </select>
                         </div>
                     </div>
+
+                    <!-- Prediction Button -->
                     <div class="row">
-                        <div class="col-12">
-                            <button id="btn-predecir-filtros" class="btn btn-primary btn-lg">
+                        <div class="col-12 text-center">
+                            <button id="btn-predecir-filtros" class="btn btn-gradient-primary btn-lg">
                                 <i class="bi bi-graph-up-arrow"></i> Realizar Predicción
                             </button>
                         </div>
                     </div>
                     
+                    <!-- Prediction Results -->
                     <div id="prediction-result" class="mt-4"></div>
                 </div>
             </div>
         </section>
 
-        <!-- Análisis Comparativo Section -->
+        <!-- ========================================
+             COMPARATIVE ANALYSIS SECTION
+        ======================================== -->
         <section id="analisis" class="mt-5 mb-5">
-            <h2 class="mb-4"><i class="bi bi-bar-chart-line"></i> Análisis Comparativo</h2>
+            <h2 class="section-title mb-4">
+                <i class="bi bi-bar-chart-line"></i> Análisis Comparativo
+            </h2>
             
-            <div class="row mb-4">
-                <!-- Análisis por Docente -->
+            <!-- Analysis Cards Row -->
+            <div class="row mb-4 g-4">
+                <!-- Teacher Analysis Card -->
                 <div class="col-md-4">
-                    <div class="card h-100">
-                        <div class="card-header bg-primary text-white">
-                            <i class="bi bi-person-badge"></i> Análisis por Docente
+                    <div class="analysis-card card-primary-gradient">
+                        <div class="analysis-header">
+                            <i class="bi bi-person-badge"></i>
+                            <h5>Análisis por Docente</h5>
                         </div>
-                        <div class="card-body">
+                        <div class="analysis-body">
                             <select class="form-select mb-3" id="analisis-docente-select">
                                 <option value="">-- Seleccionar Docente --</option>
                             </select>
-                            <button class="btn btn-outline-primary w-100" id="btn-analisis-docente">
+                            <button class="btn btn-gradient-primary w-100" id="btn-analisis-docente">
                                 <i class="bi bi-search"></i> Analizar
                             </button>
                             <div id="resultado-docente" class="mt-3"></div>
@@ -369,17 +439,18 @@
                     </div>
                 </div>
                 
-                <!-- Análisis por Curso -->
+                <!-- Course Analysis Card -->
                 <div class="col-md-4">
-                    <div class="card h-100">
-                        <div class="card-header bg-success text-white">
-                            <i class="bi bi-book"></i> Análisis por Curso
+                    <div class="analysis-card card-success-gradient">
+                        <div class="analysis-header">
+                            <i class="bi bi-book"></i>
+                            <h5>Análisis por Curso</h5>
                         </div>
-                        <div class="card-body">
+                        <div class="analysis-body">
                             <select class="form-select mb-3" id="analisis-curso-select">
                                 <option value="">-- Seleccionar Curso --</option>
                             </select>
-                            <button class="btn btn-outline-success w-100" id="btn-analisis-curso">
+                            <button class="btn btn-gradient-success w-100" id="btn-analisis-curso">
                                 <i class="bi bi-search"></i> Analizar
                             </button>
                             <div id="resultado-curso" class="mt-3"></div>
@@ -387,17 +458,18 @@
                     </div>
                 </div>
                 
-                <!-- Análisis por Estudiante -->
+                <!-- Student Analysis Card -->
                 <div class="col-md-4">
-                    <div class="card h-100">
-                        <div class="card-header bg-info text-white">
-                            <i class="bi bi-person"></i> Análisis por Estudiante
+                    <div class="analysis-card card-info-gradient">
+                        <div class="analysis-header">
+                            <i class="bi bi-person"></i>
+                            <h5>Análisis por Estudiante</h5>
                         </div>
-                        <div class="card-body">
+                        <div class="analysis-body">
                             <select class="form-select mb-3" id="analisis-estudiante-select">
                                 <option value="">-- Seleccionar Estudiante --</option>
                             </select>
-                            <button class="btn btn-outline-info w-100" id="btn-analisis-estudiante">
+                            <button class="btn btn-gradient-info w-100" id="btn-analisis-estudiante">
                                 <i class="bi bi-search"></i> Analizar
                             </button>
                             <div id="resultado-estudiante" class="mt-3"></div>
@@ -406,28 +478,34 @@
                 </div>
             </div>
 
-            <!-- Gráfico Comparativo -->
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-graph-up"></i> Comparativa de Rendimiento</h5>
+            <!-- Comparative Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h5><i class="bi bi-graph-up"></i> Comparativa de Rendimiento</h5>
+                </div>
+                <div class="chart-body">
                     <canvas id="comparativaChart" height="100"></canvas>
                 </div>
             </div>
         </section>
+
     </div>
 
-    <!-- Modal Ingreso Manual -->
-    <div class="modal fade" id="modalIngresoManual" tabindex="-1" aria-labelledby="modalIngresoManualLabel" aria-hidden="true">
+    <!-- ========================================
+         MODAL - MANUAL ENTRY
+    ======================================== -->
+    <div class="modal fade" id="modalIngresoManual" tabindex="-1">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="modalIngresoManualLabel">
+            <div class="modal-content modern-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title">
                         <i class="bi bi-plus-circle"></i> Agregar Registro Manual
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <form id="form-ingreso-manual">
+                        <!-- Form Row 1 -->
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <label class="form-label">Matrícula *</label>
@@ -442,6 +520,8 @@
                                 <input type="number" step="0.1" min="0" max="10" class="form-control" id="manual-calificacion" required>
                             </div>
                         </div>
+
+                        <!-- Form Row 2 -->
                         <div class="row g-3 mt-1">
                             <div class="col-md-4">
                                 <label class="form-label">Curso/Materia</label>
@@ -456,6 +536,8 @@
                                 <input type="text" class="form-control" id="manual-campus">
                             </div>
                         </div>
+
+                        <!-- Form Row 3 -->
                         <div class="row g-3 mt-1">
                             <div class="col-md-3">
                                 <label class="form-label">Programa</label>
@@ -484,14 +566,16 @@
                                 <input type="text" class="form-control" id="manual-periodo" placeholder="Ej: 01/2025">
                             </div>
                         </div>
+
+                        <!-- Form Result -->
                         <div id="manual-result" class="mt-3"></div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                         <i class="bi bi-x-circle"></i> Cancelar
                     </button>
-                    <button type="submit" form="form-ingreso-manual" class="btn btn-success">
+                    <button type="submit" form="form-ingreso-manual" class="btn btn-gradient-success">
                         <i class="bi bi-check-circle"></i> Guardar Registro
                     </button>
                 </div>
@@ -499,62 +583,15 @@
         </div>
     </div>
 
-    <!-- Add Student Modal -->
-    <div class="modal fade" id="addStudentModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Agregar Nuevo Estudiante</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="add-student-form">
-                        <div class="mb-3">
-                            <label for="student-name" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="student-name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="student-age" class="form-label">Edad</label>
-                            <input type="number" class="form-control" id="student-age">
-                        </div>
-                        <div class="mb-3">
-                            <label for="student-gender" class="form-label">Género</label>
-                            <select class="form-select" id="student-gender">
-                                <option value="">Seleccionar...</option>
-                                <option value="Masculino">Masculino</option>
-                                <option value="Femenino">Femenino</option>
-                                <option value="Otro">Otro</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="student-prev-avg" class="form-label">Promedio Anterior</label>
-                            <input type="number" step="0.1" class="form-control" id="student-prev-avg">
-                        </div>
-                        <div class="mb-3">
-                            <label for="student-attendance" class="form-label">Asistencia (%)</label>
-                            <input type="number" step="0.1" class="form-control" id="student-attendance">
-                        </div>
-                        <div class="mb-3">
-                            <label for="student-study-hours" class="form-label">Horas de Estudio</label>
-                            <input type="number" step="0.1" class="form-control" id="student-study-hours">
-                        </div>
-                        <div class="mb-3">
-                            <label for="student-participation" class="form-label">Participación (%)</label>
-                            <input type="number" step="0.1" class="form-control" id="student-participation">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="save-student-btn">Guardar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <!-- ========================================
+         SCRIPTS
+    ======================================== -->
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <!-- Custom JS -->
     <script src="assets/main.js"></script>
+
 </body>
 </html>

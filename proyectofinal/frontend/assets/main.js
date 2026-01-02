@@ -902,6 +902,28 @@ document.getElementById('form-ingreso-manual')?.addEventListener('submit', async
     }
 });
 
+function animateCounter(id, target, suffix = "") {
+    let count = 0;
+    const element = document.getElementById(id);
+    const step = Math.ceil(target / 60);
+
+    const interval = setInterval(() => {
+        count += step;
+        if (count >= target) {
+            count = target;
+            clearInterval(interval);
+        }
+        element.textContent = count + suffix;
+    }, 20);
+}
+
+// Ejemplo de uso
+animateCounter("total-students", 320);
+animateCounter("students-at-risk", 48);
+animateCounter("avg-attendance", 87, "%");
+animateCounter("avg-grade", 8.4);
+
+
 // Inicializar filtros de predicción al cargar
 document.addEventListener('DOMContentLoaded', () => {
     setupPredictionFilters();
