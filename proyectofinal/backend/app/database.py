@@ -10,14 +10,15 @@ load_dotenv()
 # Configuración de la base de datos
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "mysql+pymysql://admin:0322103782A@localhost:3306/final"
+    "mysql+pymysql://admin:0322103782A@localhost:3306/final?charset=utf8mb4"
 )
 
-# Crear engine de SQLAlchemy
+# Crear engine de SQLAlchemy con codificación UTF-8
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
-    echo=True  # Cambiar a False en producción
+    echo=True,  # Cambiar a False en producción
+    connect_args={"charset": "utf8mb4"}
 )
 
 # Crear SessionLocal

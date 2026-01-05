@@ -13,8 +13,8 @@ def predict_student(student_id: int, db: Session):
     """
     
     # Verificar que los modelos existan
-    clf_path = 'models/model_clasificacion.joblib'
-    reg_path = 'models/model_regresion.joblib'
+    clf_path = 'models/model_clasificacion_students.joblib'
+    reg_path = 'models/model_regresion_students.joblib'
     
     if not os.path.exists(clf_path) or not os.path.exists(reg_path):
         raise HTTPException(

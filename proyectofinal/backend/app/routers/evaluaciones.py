@@ -5,6 +5,7 @@ import pandas as pd
 from datetime import date
 from app.database import get_db
 from app.models.evaluacion import Evaluacion
+from app.models.student import Student
 from app.schemas.evaluacion import (
     EvaluacionResponse, 
     EstadisticasResponse,
@@ -37,8 +38,14 @@ async def upload_dataset_academico(
         if file.filename.endswith('.csv'):
             df = pd.read_csv(BytesIO(contents))
         elif file.filename.endswith('.txt'):
-            # Dataset separado por tabulaciones
-            df = pd.read_csv(StringIO(contents.decode('utf-8')), sep='\t')
+            # Dataset separado por tabulaciones - intentar múltiples codificaciones
+            try:
+                df = pd.read_csv(StringIO(contents.decode('utf-8')), sep='\t')
+            except UnicodeDecodeError:
+                try:
+                    df = pd.read_csv(StringIO(contents.decode('latin1')), sep='\t')
+                except UnicodeDecodeError:
+                    df = pd.read_csv(StringIO(contents.decode('iso-8859-1')), sep='\t')
         else:
             df = pd.read_excel(BytesIO(contents))
         
@@ -123,9 +130,66 @@ async def upload_dataset_academico(
         
         db.commit()
         
+        # Procesar estudiantes únicos y guardar en tabla students
+        students_added = 0
+        students_updated = 0
+        
+        # Agrupar evaluaciones por estudiante para calcular estadísticas
+        estudiantes_unicos = df.groupby('Matricula').agg({
+            'Alumno': 'first',
+            'Calificacion': ['mean', 'count'],
+            'Campus': 'first',
+            'Programa': 'first',
+            'Estado Alumno': 'first'
+        }).reset_index()
+        
+        estudiantes_unicos.columns = ['matricula', 'nombre', 'promedio_calificaciones', 
+                                      'total_evaluaciones', 'campus', 'programa', 'estado_alumno']
+        
+        for _, estudiante in estudiantes_unicos.iterrows():
+            matricula = str(estudiante['matricula'])
+            
+            # Calcular reprobo (si el promedio < 8.4 - umbral ajustado basado en mediana)
+            promedio = float(estudiante['promedio_calificaciones'])
+            reprobo = 1 if promedio < 8.4 else 0
+            
+            # Buscar si el estudiante ya existe
+            existing_student = db.query(Student).filter(
+                Student.nombre == str(estudiante['nombre'])
+            ).first()
+            
+            if existing_student:
+                # Actualizar datos existentes
+                existing_student.promedio_anterior = promedio
+                existing_student.calificacion_actual = promedio
+                existing_student.reprobo = reprobo
+                existing_student.updated_at = date.today()
+                students_updated += 1
+            else:
+                # Crear nuevo estudiante con valores por defecto para campos no disponibles
+                student_data = {
+                    'nombre': str(estudiante['nombre']),
+                    'edad': None,  # No disponible en dataset académico
+                    'genero': None,  # No disponible en dataset académico
+                    'promedio_anterior': promedio,
+                    'asistencia': 85.0,  # Valor por defecto
+                    'horas_estudio': 15.0,  # Valor por defecto
+                    'participacion': 75.0,  # Valor por defecto
+                    'calificacion_actual': promedio,
+                    'reprobo': reprobo
+                }
+                
+                db_student = Student(**student_data)
+                db.add(db_student)
+                students_added += 1
+        
+        db.commit()
+        
         return {
             "message": "Dataset académico cargado exitosamente",
             "evaluaciones_added": evaluaciones_added,
+            "students_added": students_added,
+            "students_updated": students_updated,
             "registros_eliminados": registros_eliminados,
             "fecha_carga": str(fecha_hoy),
             "total_rows": len(df),

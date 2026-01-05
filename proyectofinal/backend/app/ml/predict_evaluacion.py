@@ -1,10 +1,12 @@
 import pandas as pd
 import numpy as np
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 import joblib
 import os
 from fastapi import HTTPException
 from app.models.evaluacion import Evaluacion
+from app.models.student import Student
 
 def predict_evaluacion(evaluacion_id: int, db: Session):
     """
@@ -94,11 +96,14 @@ def predict_evaluacion(evaluacion_id: int, db: Session):
     # Regresión: calificación estimada
     calificacion_estimada = reg_model.predict(features)[0]
     
-    # Determinar nivel de riesgo
-    if prob_reprobar >= 0.7 or calificacion_estimada < 7:
+    # Determinar nivel de riesgo con umbrales ajustados
+    # ALTO: Alta probabilidad de reprobar O calificación estimada reprobatoria
+    if prob_reprobar >= 0.6 or calificacion_estimada < 7.0:
         riesgo = "ALTO"
-    elif prob_reprobar >= 0.4 or calificacion_estimada < 8:
+    # MEDIO: Probabilidad moderada O calificación justa (7-8)
+    elif prob_reprobar >= 0.35 or calificacion_estimada < 8.0:
         riesgo = "MEDIO"
+    # BAJO: Baja probabilidad y buena calificación
     else:
         riesgo = "BAJO"
     
@@ -107,6 +112,9 @@ def predict_evaluacion(evaluacion_id: int, db: Session):
     evaluacion.calificacion_estimada = float(calificacion_estimada)
     evaluacion.riesgo_academico = riesgo
     db.commit()
+    
+    # Actualizar tabla students con el promedio de predicciones
+    actualizar_predicciones_estudiante(evaluacion.matricula, db)
     
     return {
         "evaluacion_id": evaluacion.id,
@@ -157,3 +165,30 @@ def predict_por_matricula(matricula: str, db: Session):
         "promedio_probabilidad_reprobacion": round(promedio_prob_reprobacion, 4),
         "evaluaciones": resultados
     }
+
+def actualizar_predicciones_estudiante(matricula: str, db: Session):
+    """
+    Actualizar la tabla students con el promedio de predicciones de sus evaluaciones
+    Se llama automáticamente después de predecir una evaluación
+    """
+    # Obtener todas las evaluaciones del estudiante que tienen predicciones
+    evaluaciones = db.query(Evaluacion).filter(
+        Evaluacion.matricula == matricula,
+        Evaluacion.prediccion_reprobacion.isnot(None)
+    ).all()
+    
+    if not evaluaciones:
+        return  # No hay predicciones aún
+    
+    # Calcular promedios
+    promedio_prob_reprobar = sum(e.prediccion_reprobacion for e in evaluaciones) / len(evaluaciones)
+    promedio_calif_estimada = sum(e.calificacion_estimada for e in evaluaciones) / len(evaluaciones)
+    
+    # Buscar o crear el estudiante en la tabla students
+    estudiante = db.query(Student).filter(Student.nombre == evaluaciones[0].alumno).first()
+    
+    if estudiante:
+        # Actualizar predicciones en students
+        estudiante.prediccion_reprobacion = float(promedio_prob_reprobar)
+        estudiante.calificacion_estimada = float(promedio_calif_estimada)
+        db.commit()

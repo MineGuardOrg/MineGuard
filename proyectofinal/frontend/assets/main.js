@@ -118,15 +118,31 @@ document.getElementById('train-models-btn')?.addEventListener('click', async () 
         if (response.ok && data.message) {
             const resultHTML = `
                 <div class="alert alert-success">
-                    <strong>${data.message}</strong><br><br>
-                    <strong>Random Forest:</strong> Accuracy = ${data.clasificacion_random_forest.accuracy}<br>
-                    <strong>Logistic Regression:</strong> Accuracy = ${data.clasificacion_logistic_regression.accuracy}<br>
-                    <strong>Regresión:</strong> R² = ${data.regresion.r2_score}, RMSE = ${data.regresion.rmse}<br>
-                    <strong>Total registros:</strong> ${data.total_records}<br><br>
-                    <strong>Variables más importantes:</strong><br>
-                    ${data.feature_importance.slice(0, 5).map(f => 
-                        `• ${f.feature}: ${(f.importance * 100).toFixed(2)}%`
-                    ).join('<br>')}
+                    <h5><i class="bi bi-check-circle-fill"></i> ${data.message}</h5>
+                    <hr>
+                    <p><strong><i class="bi bi-journal-code"></i> Notebooks ejecutados:</strong></p>
+                    <ul>
+                        ${data.notebooks_ejecutados.map(n => `<li>${n}</li>`).join('')}
+                    </ul>
+                    <p><strong><i class="bi bi-file-earmark-binary"></i> Total de modelos creados: ${data.total_modelos}</strong></p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Modelos de Evaluaciones:</strong></p>
+                            <ul class="small">
+                                <li>model_clasificacion_rf.joblib</li>
+                                <li>model_clasificacion_lr.joblib</li>
+                                <li>model_regresion.joblib</li>
+                                <li>label_encoders.joblib</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Modelos de Students:</strong></p>
+                            <ul class="small">
+                                <li>model_clasificacion_students.joblib</li>
+                                <li>model_regresion_students.joblib</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             `;
             document.getElementById('train-result').innerHTML = resultHTML;
@@ -149,73 +165,147 @@ document.getElementById('refresh-students-btn')?.addEventListener('click', () =>
 });
 
 // Función para cargar evaluaciones (nuevo)
+// Variables globales para paginación
+let currentPage = 1;
+let recordsPerPage = 25;
+let allEvaluaciones = [];
+
+// Función para cargar evaluaciones (nuevo)
 async function loadEvaluaciones() {
     try {
-        const response = await fetch(`${API_URL}/evaluaciones?limit=100`);
-        const evaluaciones = await response.json();
+        const response = await fetch(`${API_URL}/evaluaciones?limit=1000`);
+        allEvaluaciones = await response.json();
         
-        console.log('Evaluaciones cargadas:', evaluaciones.length);
+        console.log('Evaluaciones cargadas:', allEvaluaciones.length);
         
-        const tbody = document.getElementById('students-tbody');
+        // Reiniciar a página 1 cuando se cargan nuevos datos
+        currentPage = 1;
+        renderEvaluacionesPage();
+        
+        // Llenar select de predicciones con estudiantes únicos
         const select = document.getElementById('pred-estudiante');
-        
-        if (tbody) tbody.innerHTML = '';
-        if (select) select.innerHTML = '<option value="">-- Todos los estudiantes --</option>';
-        
-        // Usar Set para estudiantes únicos
-        const estudiantesUnicos = new Map();
-        
-        evaluaciones.forEach(ev => {
-            if (!estudiantesUnicos.has(ev.matricula)) {
-                estudiantesUnicos.set(ev.matricula, {
-                    id: ev.id,
-                    matricula: ev.matricula,
-                    alumno: ev.alumno,
-                    campus: ev.campus,
-                    programa: ev.programa,
-                    calificacion: ev.calificacion,
-                    riesgo: ev.riesgo_academico
-                });
-            }
-            
-            // Agregar fila a la tabla
-            if (tbody) {
-                const row = `
-                    <tr>
-                        <td>${ev.id}</td>
-                        <td>${ev.alumno}</td>
-                        <td>${ev.matricula}</td>
-                        <td>${ev.campus || 'N/A'}</td>
-                        <td>${ev.calificacion}</td>
-                        <td>${ev.curso || 'N/A'}</td>
-                        <td>
-                            ${ev.riesgo_academico 
-                                ? `<span class="badge bg-${ev.riesgo_academico === 'ALTO' ? 'danger' : ev.riesgo_academico === 'MEDIO' ? 'warning' : 'success'}">${ev.riesgo_academico}</span>` 
-                                : '<span class="badge bg-secondary">Sin calcular</span>'}
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-primary" onclick="predecirEvaluacion(${ev.id})">
-                                <i class="bi bi-graph-up"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
-            }
-        });
-        
-        // Llenar select con estudiantes únicos
         if (select) {
+            select.innerHTML = '<option value="">-- Todos los estudiantes --</option>';
+            const estudiantesUnicos = new Map();
+            
+            allEvaluaciones.forEach(ev => {
+                if (!estudiantesUnicos.has(ev.matricula)) {
+                    estudiantesUnicos.set(ev.matricula, {
+                        matricula: ev.matricula,
+                        alumno: ev.alumno
+                    });
+                }
+            });
+            
             estudiantesUnicos.forEach(est => {
                 select.innerHTML += `<option value="${est.matricula}">${est.alumno} - ${est.matricula}</option>`;
             });
         }
         
     } catch (error) {
-        console.error('Error loading evaluaciones:', error);
+        console.error('Error cargando evaluaciones:', error);
     }
 }
 
+// Renderizar página actual de evaluaciones
+function renderEvaluacionesPage() {
+    const tbody = document.getElementById('students-tbody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    // Calcular índices
+    const startIndex = (currentPage - 1) * recordsPerPage;
+    const endIndex = Math.min(startIndex + recordsPerPage, allEvaluaciones.length);
+    const pageData = allEvaluaciones.slice(startIndex, endIndex);
+    
+    // Renderizar filas
+    pageData.forEach(ev => {
+        const row = `
+            <tr>
+                <td>${ev.id}</td>
+                <td>${ev.alumno}</td>
+                <td>${ev.matricula}</td>
+                <td>${ev.campus || 'N/A'}</td>
+                <td>${ev.calificacion}</td>
+                <td>${ev.curso || 'N/A'}</td>
+                <td>
+                    ${ev.riesgo_academico 
+                        ? `<span class="badge bg-${ev.riesgo_academico === 'ALTO' ? 'danger' : ev.riesgo_academico === 'MEDIO' ? 'warning' : 'success'}">${ev.riesgo_academico}</span>` 
+                        : '<span class="badge bg-secondary">Sin calcular</span>'}
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-primary" onclick="predecirEvaluacion(${ev.id})" title="Predecir">
+                        <i class="bi bi-graph-up"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+        tbody.innerHTML += row;
+    });
+    
+    // Actualizar información de registros
+    document.getElementById('showing-from').textContent = allEvaluaciones.length > 0 ? startIndex + 1 : 0;
+    document.getElementById('showing-to').textContent = endIndex;
+    document.getElementById('total-records').textContent = allEvaluaciones.length;
+    
+    // Renderizar controles de paginación
+    renderPaginationControls();
+}
+
+// Renderizar controles de paginación
+function renderPaginationControls() {
+    const totalPages = Math.ceil(allEvaluaciones.length / recordsPerPage);
+    const paginationControls = document.getElementById('pagination-controls');
+    
+    if (!paginationControls) return;
+    
+    paginationControls.innerHTML = '';
+    
+    // Botón anterior
+    const prevLi = document.createElement('li');
+    prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+    prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage - 1}); return false;">Anterior</a>`;
+    paginationControls.appendChild(prevLi);
+    
+    // Números de página (mostrar máximo 5 páginas)
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, startPage + 4);
+    
+    for (let i = startPage; i <= endPage; i++) {
+        const li = document.createElement('li');
+        li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+        li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a>`;
+        paginationControls.appendChild(li);
+    }
+    
+    // Botón siguiente
+    const nextLi = document.createElement('li');
+    nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+    nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage + 1}); return false;">Siguiente</a>`;
+    paginationControls.appendChild(nextLi);
+}
+
+// Cambiar página
+function changePage(page) {
+    const totalPages = Math.ceil(allEvaluaciones.length / recordsPerPage);
+    if (page < 1 || page > totalPages) return;
+    
+    currentPage = page;
+    renderEvaluacionesPage();
+}
+
+// Event listener para cambio de registros por página
+document.addEventListener('DOMContentLoaded', () => {
+    const recordsSelect = document.getElementById('records-per-page');
+    if (recordsSelect) {
+        recordsSelect.addEventListener('change', (e) => {
+            recordsPerPage = parseInt(e.target.value);
+            currentPage = 1; // Resetear a primera página
+            renderEvaluacionesPage();
+        });
+    }
+});
 // Función para predecir evaluación específica
 async function predecirEvaluacion(evaluacionId) {
     try {
@@ -239,21 +329,41 @@ async function predecirEvaluacion(evaluacionId) {
         console.log('Respuesta del servidor:', data);
         
         if (response.ok) {
-            showAlert(
-                `✅ Predicción realizada<br>
-                <strong>Alumno:</strong> ${data.alumno}<br>
-                <strong>Probabilidad reprobación:</strong> ${(data.prediccion_reprobacion * 100).toFixed(2)}%<br>
-                <strong>Calificación estimada:</strong> ${data.calificacion_estimada}<br>
-                <strong>Riesgo:</strong> <span class="badge bg-${data.riesgo_academico === 'ALTO' ? 'danger' : data.riesgo_academico === 'MEDIO' ? 'warning' : 'success'}">${data.riesgo_academico}</span>`,
-                'success'
-            );
+            // Mostrar resultado en el contenedor de predicciones
+            const resultHTML = `
+                <div class="alert alert-success">
+                    <h5><i class="bi bi-check-circle-fill"></i> Predicción realizada exitosamente</h5>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong><i class="bi bi-person-fill"></i> Alumno:</strong> ${data.alumno}</p>
+                            <p><strong><i class="bi bi-credit-card"></i> Matrícula:</strong> ${data.matricula}</p>
+                            <p><strong><i class="bi bi-journal-check"></i> Estado:</strong> ${data.estado_evaluacion}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong><i class="bi bi-clipboard-data"></i> Calificación actual:</strong> ${data.calificacion_actual}</p>
+                            <p><strong><i class="bi bi-graph-up"></i> Calificación estimada:</strong> ${data.calificacion_estimada.toFixed(2)}</p>
+                            <p><strong><i class="bi bi-percent"></i> Probabilidad de reprobación:</strong> ${(data.prediccion_reprobacion * 100).toFixed(2)}%</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 p-3 bg-light rounded">
+                        <h6><i class="bi bi-exclamation-triangle-fill"></i> Nivel de Riesgo Académico:</h6>
+                        <h3><span class="badge bg-${data.riesgo_academico === 'ALTO' ? 'danger' : data.riesgo_academico === 'MEDIO' ? 'warning' : 'success'} fs-4">${data.riesgo_academico}</span></h3>
+                    </div>
+                </div>
+            `;
+            document.getElementById('prediction-result').innerHTML = resultHTML;
+            
+            // Scroll suave hacia el resultado
+            document.getElementById('prediction-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
             loadEvaluaciones();
         } else {
             // Mensaje específico si los modelos no están entrenados
             if (data.detail && data.detail.includes('no han sido entrenados')) {
-                showAlert(`<strong>Modelos no entrenados</strong><br>Primero debes entrenar los modelos haciendo clic en el botón "Entrenar Modelos" en la sección de arriba.`, 'warning');
+                showAlert(`<strong>Modelos no entrenados</strong><br>Primero debes entrenar los modelos haciendo clic en el botón "Entrenar Modelos" en la sección de arriba.`, 'warning', 'prediction-result');
             } else {
-                showAlert(`Error: ${data.detail || JSON.stringify(data)}`, 'danger');
+                showAlert(`Error: ${data.detail || JSON.stringify(data)}`, 'danger', 'prediction-result');
             }
         }
     } catch (error) {
@@ -880,7 +990,7 @@ document.getElementById('form-ingreso-manual')?.addEventListener('submit', async
         if (response.ok) {
             const riesgoBadge = data.riesgo_academico === 'ALTO' ? 'danger' : data.riesgo_academico === 'MEDIO' ? 'warning' : 'success';
             showAlert(
-                `✅ Evaluación agregada exitosamente<br>
+                `Evaluación agregada exitosamente<br>
                 <strong>ID:</strong> ${data.evaluacion_id}<br>
                 <strong>Riesgo:</strong> <span class="badge bg-${riesgoBadge}">${data.riesgo_academico}</span>`,
                 'success',

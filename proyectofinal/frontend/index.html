@@ -274,6 +274,27 @@
                             </tbody>
                         </table>
                     </div>
+                    
+                    <!-- Controles de paginación -->
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            <span class="text-muted">Mostrando <span id="showing-from">0</span> a <span id="showing-to">0</span> de <span id="total-records">0</span> registros</span>
+                        </div>
+                        <nav>
+                            <ul class="pagination mb-0" id="pagination-controls">
+                                <!-- Pagination buttons will be generated here -->
+                            </ul>
+                        </nav>
+                        <div>
+                            <label for="records-per-page" class="me-2">Registros por página:</label>
+                            <select class="form-select form-select-sm d-inline-block w-auto" id="records-per-page">
+                                <option value="10">10</option>
+                                <option value="25" selected>25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
